@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Turtle Desk — Python for beginners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;700&family=Atkinson+Hyperlegible+Next:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+  --ui:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"Atkinson Hyperlegible Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+
+  --bg:#E6ECF2; --surface:#FFFFFF; --surface-2:#F3F6F9; --ink:#1A2633; --muted:#5A6A7A; --line:#D2DBE5;
+  --accent:#2457A6; --focus:#2457A6; --focus-soft:rgba(36,87,166,.18);
+  --go:#1E7F55; --on-go:#FFFFFF; --stop:#B83227;
+  --warn:#8A5A00; --warn-bg:#FFF1CC; --ok-ink:#1B5E3F; --ok-bg:#DDF3E7;
+  --band:rgba(36,87,166,.06); --err-band:rgba(184,50,39,.13); --sel:rgba(36,87,166,.24);
+  --caret:#1A2633; --guide:rgba(26,38,51,.12);
+  --kw:#7A36B0; --str:#1C7547; --num:#B0510A; --com:#7A8796; --fn:#2457A6; --bi:#0B6F86; --self:#B0245A; --dec:#9A6B00; --op:#556677;
+  --b0:#2457A6; --b1:#B0510A; --b2:#7A36B0;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#10161D; --surface:#17202A; --surface-2:#1D2834; --ink:#E2E9F1; --muted:#93A3B4; --line:#2A3745;
+    --accent:#86ABF0; --focus:#86ABF0; --focus-soft:rgba(134,171,240,.22);
+    --go:#3DB57E; --on-go:#06170F; --stop:#F07A6E;
+    --warn:#F2C766; --warn-bg:#3A2F14; --ok-ink:#9BE0BC; --ok-bg:#163327;
+    --band:rgba(134,171,240,.07); --err-band:rgba(240,122,110,.17); --sel:rgba(134,171,240,.30);
+    --caret:#E2E9F1; --guide:rgba(226,233,241,.10);
+    --kw:#C79BF5; --str:#8FD3A4; --num:#F2A867; --com:#7E8C9B; --fn:#8DB3FF; --bi:#5FCBDB; --self:#F58BB2; --dec:#E5C46B; --op:#9AABBC;
+    --b0:#8DB3FF; --b1:#F2A867; --b2:#C79BF5;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#10161D; --surface:#17202A; --surface-2:#1D2834; --ink:#E2E9F1; --muted:#93A3B4; --line:#2A3745;
+  --accent:#86ABF0; --focus:#86ABF0; --focus-soft:rgba(134,171,240,.22);
+  --go:#3DB57E; --on-go:#06170F; --stop:#F07A6E;
+  --warn:#F2C766; --warn-bg:#3A2F14; --ok-ink:#9BE0BC; --ok-bg:#163327;
+  --band:rgba(134,171,240,.07); --err-band:rgba(240,122,110,.17); --sel:rgba(134,171,240,.30);
+  --caret:#E2E9F1; --guide:rgba(226,233,241,.10);
+  --kw:#C79BF5; --str:#8FD3A4; --num:#F2A867; --com:#7E8C9B; --fn:#8DB3FF; --bi:#5FCBDB; --self:#F58BB2; --dec:#E5C46B; --op:#9AABBC;
+  --b0:#8DB3FF; --b1:#F2A867; --b2:#C79BF5;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.45;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+button,select,input{font:inherit;color:inherit}
+
+/* Top bar */
+.bar{display:flex;align-items:center;gap:10px;padding:8px 14px;flex-wrap:wrap;min-height:58px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.brand h1{font-size:20px;line-height:1.1;margin:0;font-weight:700;letter-spacing:-.01em}
+.brand p{margin:0;color:var(--muted);font-size:13.5px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 14px;border-radius:9px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14.5px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn.run{background:var(--go);color:var(--on-go);border-color:transparent;padding-inline:18px}
+.btn.run:hover{filter:brightness(1.06)}
+.btn.stop{color:var(--stop)}
+.btn.small{min-height:32px;padding:4px 10px;font-size:13.5px;border-radius:7px}
+.btn svg{flex:none}
+select.btn{appearance:none;-webkit-appearance:none;padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+.badge{display:inline-block;min-width:22px;text-align:center;border-radius:999px;padding:0 7px;font-size:12.5px;font-weight:700;background:var(--warn-bg);color:var(--warn)}
+.badge[hidden]{display:none}
+:is(button,select,input,a):focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* Layout */
+.desk{flex:1;min-height:0;display:grid;grid-template-columns:minmax(250px,300px) minmax(360px,1.05fr) minmax(320px,1fr);gap:12px;padding:0 12px 12px}
+@media (max-width:1180px) and (min-width:961px){.desk{grid-template-columns:minmax(230px,250px) minmax(0,1fr) minmax(0,.9fr);gap:10px;padding:0 10px 10px}.lock-text,#coords,.keys .opt{display:none}.lock{padding:4px 8px}}
+.pane{background:var(--surface);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.pane-head{display:flex;align-items:center;gap:10px;padding:6px 8px 6px 14px;border-bottom:1px solid var(--line);min-height:46px}
+.pane-head .title{font-weight:700;font-size:15px}
+.pane-head .meta{color:var(--muted);font-size:13.5px;margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.right{display:grid;grid-template-rows:minmax(0,1.65fr) minmax(150px,1fr);gap:12px;min-height:0}
+.pane-head .run-group{display:flex;gap:6px;margin-left:4px}
+.keys[hidden]{display:none}
+#clearTurtle{margin-left:auto}
+#coords{margin-left:auto}
+#coords + #clearTurtle{margin-left:0}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:600;font-size:14.5px}
+.field .search{margin:0}
+.small-note{margin:0;color:var(--muted);font-size:13.5px;max-width:60ch}
+.editor-pane:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--focus-soft)}
+.lock{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:2px 10px 2px 8px}
+
+/* Editor */
+.editor{flex:1;min-height:0;display:flex;position:relative}
+.gutter{flex:none;width:54px;overflow:hidden;background:var(--surface-2);border-right:1px solid var(--line);color:var(--muted);font:16px/24px var(--mono);text-align:right;user-select:none}
+#gutterInner{padding:12px 12px 12px 0;will-change:transform}
+#gutterInner div.on{color:var(--ink);font-weight:700}
+#gutterInner div.err{color:var(--stop);font-weight:700}
+.code{flex:1;position:relative;overflow:hidden;min-width:0}
+.code textarea,.code pre{font:16px/24px var(--mono);padding:12px 18px;margin:0;tab-size:4;white-space:pre;letter-spacing:0;font-variant-ligatures:none;font-kerning:none}
+.code textarea{position:absolute;inset:0;width:100%;height:100%;resize:none;border:0;outline:none;background:transparent;color:transparent;caret-color:var(--caret);overflow:auto;z-index:2;overflow-wrap:normal}
+.code textarea::selection{background:var(--sel);color:transparent}
+#layer{position:absolute;top:0;left:0;z-index:1;pointer-events:none;will-change:transform}
+#layer pre{color:var(--ink)}
+.band{position:absolute;left:0;right:0;top:0;height:24px;background:var(--band);pointer-events:none;z-index:0}
+.band.err{background:var(--err-band)}
+.band[hidden]{display:none}
+.kw{color:var(--kw);font-weight:700}.str{color:var(--str)}.num{color:var(--num)}.com{color:var(--com);font-style:italic}
+.fn,.cls{color:var(--fn);font-weight:700}.bi{color:var(--bi)}.self{color:var(--self)}.dec{color:var(--dec)}.op{color:var(--op)}
+.b0{color:var(--b0)}.b1{color:var(--b1)}.b2{color:var(--b2)}
+.ig{box-shadow:inset 1px 0 0 var(--guide)}
+.keys{display:flex;flex-wrap:wrap;gap:6px 16px;padding:7px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+kbd{font:600 12px var(--ui);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--surface-2);color:var(--ink)}
+
+/* Turtle stage: always paper, in both themes */
+.stage{flex:1;min-height:0;overflow:auto;display:grid;place-items:center;padding:8px;background:var(--surface-2)}
+#turtle{position:relative;background-color:#FBFCFD;border-radius:3px;box-shadow:0 0 0 1px #C9D3DE,0 2px 10px rgba(20,35,55,.08);
+  --axis:#AEBBCA; --grid:#E6ECF2;
+  background-image:
+    linear-gradient(to right,transparent calc(50% - .5px),var(--axis) calc(50% - .5px),var(--axis) calc(50% + .5px),transparent calc(50% + .5px)),
+    linear-gradient(to bottom,transparent calc(50% - .5px),var(--axis) calc(50% - .5px),var(--axis) calc(50% + .5px),transparent calc(50% + .5px)),
+    linear-gradient(to right,var(--grid) 1px,transparent 1px),
+    linear-gradient(to bottom,var(--grid) 1px,transparent 1px);
+  background-size:100% 100%,100% 100%,25px 25px,25px 25px}
+#turtle canvas{max-width:none}
+
+/* Console */
+.console{flex:1;min-height:0;overflow:auto;padding:10px 14px;font:15px/1.5 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere}
+.console .err{color:var(--stop)}
+.console .sys{color:var(--muted)}
+.console .echo{color:var(--accent)}
+.console .errbox{display:block;white-space:normal;font:15px/1.45 var(--ui);border-left:3px solid var(--stop);padding:4px 0 4px 12px;margin:4px 0 8px}
+.console .err-main b{color:var(--stop)}
+.console .err-main code{font:700 .92em var(--mono);color:var(--stop)}
+.console .err-note{color:var(--muted);font-size:13.5px}
+.console .errbox details{margin-top:4px;font-size:13.5px}
+.console .errbox summary{color:var(--muted);cursor:pointer;width:max-content}
+.console .errbox details pre{margin:4px 0 0;font:13.5px/1.5 var(--mono);color:var(--muted);white-space:pre-wrap}
+.inrow{display:flex;gap:8px;align-items:center;padding:8px 10px;border-top:1px solid var(--line)}
+.inrow[hidden]{display:none}
+.inrow label{font:15px var(--mono);color:var(--muted);max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.inrow input{flex:1;min-width:0;font:16px var(--mono);padding:7px 10px;border:1px solid var(--accent);border-radius:7px;background:var(--surface-2)}
+
+/* Record drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,18,28,.35);opacity:0;pointer-events:none;transition:opacity .2s;z-index:19}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:-14px 0 40px rgba(10,18,28,.22);transform:translateX(102%);transition:transform .22s ease;z-index:20;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.drawer.open{transform:none}
+.drawer-head{display:flex;align-items:center;gap:10px;padding:14px 16px 12px 20px;border-bottom:1px solid var(--line)}
+.drawer-head h2{margin:0;font-size:19px;margin-right:auto}
+.drawer-body{overflow:auto;padding:16px 20px 28px;display:flex;flex-direction:column;gap:18px}
+.drawer-body h3{margin:0 0 8px;font-size:15.5px}
+.lede{margin:0;color:var(--muted);max-width:60ch}
+.verdict{padding:12px 14px;border-radius:10px;background:var(--ok-bg);color:var(--ok-ink);font-weight:600}
+.verdict.flag{background:var(--warn-bg);color:var(--warn)}
+dl.stats{display:grid;grid-template-columns:1fr auto;gap:7px 16px;margin:0}
+dl.stats dt{color:var(--muted)}
+dl.stats dd{margin:0;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+dl.stats dd.hot{color:var(--warn)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.replay[hidden]{display:none}
+.replay pre{max-height:280px;overflow:auto;font:14px/21px var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0 0 8px;white-space:pre;tab-size:4}
+.replay input[type=range]{width:100%;accent-color:var(--accent)}
+.replay .rmeta{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13.5px;font-variant-numeric:tabular-nums}
+.replay .rmeta span{margin-left:auto}
+ol.log{list-style:none;margin:0;padding:0}
+ol.log li{display:grid;grid-template-columns:76px 1fr;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+ol.log time{color:var(--muted);font-variant-numeric:tabular-nums}
+ol.log li.flag span{color:var(--warn);font-weight:600}
+.danger{color:var(--stop)}
+
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:10px;max-width:min(520px,calc(100% - 32px));font-weight:600;font-size:14.5px;z-index:40;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 8px 28px rgba(10,18,28,.3)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Learn panel */
+.tabs{display:flex;gap:4px;padding:6px;border-bottom:1px solid var(--line)}
+.tab{flex:1;border:0;background:transparent;padding:8px 10px;border-radius:8px;font-weight:600;color:var(--muted);cursor:pointer;min-height:38px}
+.tab[aria-selected="true"]{background:var(--surface-2);color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
+.learn-body{flex:1;min-height:0;overflow:auto;padding:14px 16px 22px}
+.learn-body[hidden]{display:none}
+.learn-body h3{margin:4px 0 10px;font-size:18px;line-height:1.25}
+.learn-body h4{margin:0 0 6px;font-size:15.5px}
+.learn-body p{margin:0 0 10px;max-width:60ch}
+.learn-body code{font:600 .92em var(--mono);background:var(--surface-2);border:1px solid var(--line);padding:0 4px;border-radius:4px}
+.learn-body pre{font:14px/21px var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0 0 10px;overflow-x:auto;white-space:pre;tab-size:4}
+.lessons{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.lesson-row{width:100%;display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;text-align:left;background:transparent;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.lesson-row:hover{border-color:var(--muted)}
+.lesson-row .ln{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);font-weight:700;font-size:14px}
+.lesson-row.done .ln{background:var(--go);color:var(--on-go)}
+.lesson-row b{display:block;font-size:15px}
+.lesson-row small{display:block;color:var(--muted);font-size:13.5px}
+.lesson-row .prog{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.link{border:0;background:none;color:var(--accent);font-weight:600;cursor:pointer;padding:4px 0;font-size:14px}
+.steps{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}
+.steps button{min-width:34px;height:34px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:700;cursor:pointer;font-size:14px}
+.steps button.done{background:var(--ok-bg);color:var(--ok-ink);border-color:transparent}
+.steps button[aria-current="step"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--focus-soft)}
+.note{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13.5px;margin:0 0 6px;min-height:32px}
+.note .btn{margin-left:auto}
+.learn-body details{margin:0 0 12px}
+.learn-body summary{cursor:pointer;font-weight:600;color:var(--accent);font-size:14px}
+.learn-body details p{margin:6px 0 0}
+.refs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13.5px;color:var(--muted);margin:0 0 12px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:2px 10px;font:700 13px var(--mono);cursor:pointer;color:var(--fn)}
+.chip.plain{font:600 13px var(--ui);color:var(--accent)}
+.status{border-radius:10px;padding:10px 12px;margin:0 0 12px;background:var(--surface-2);color:var(--muted);font-size:14.5px}
+.status.pass{background:var(--ok-bg);color:var(--ok-ink);font-weight:600}
+.status.fail{background:var(--warn-bg);color:var(--warn)}
+.status.advice{background:var(--surface-2);color:var(--ink);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;margin-top:-4px}
+.status code{background:transparent;border-color:currentColor}
+.search{width:100%;font:16px var(--ui);padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);margin:0 0 12px}
+.ref-group{margin:0 0 14px}
+.ref-group h4{color:var(--muted);font-size:13.5px;font-weight:600;margin:0 0 4px}
+.ref-item{display:block;width:100%;text-align:left;background:transparent;border:0;border-radius:7px;padding:6px 8px;cursor:pointer}
+.ref-item:hover{background:var(--surface-2)}
+.ref-item b{display:block;font:700 14.5px var(--mono);color:var(--fn)}
+.ref-item span{display:block;font-size:13.5px;color:var(--muted)}
+.learn-body pre.sig{color:var(--fn);font-weight:700}
+/* In-editor tip */
+.tip{display:flex;align-items:center;gap:10px;padding:6px 8px 6px 14px;border-top:1px solid var(--line);background:var(--surface-2);font-size:14px;min-height:42px}
+.tip[hidden]{display:none}
+.tip code{font:700 14px var(--mono);color:var(--fn);white-space:nowrap}
+.tip span{color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+@media (prefers-reduced-motion:reduce){.drawer,.scrim,.toast{transition:none}}
+@media (max-width:960px){
+  html,body{height:auto}
+  .desk{grid-template-columns:1fr;flex:none}
+  .editor-pane{height:62vh;min-height:340px}
+  .right{grid-template-rows:auto auto}
+  .stage-pane{height:430px}
+  .console-pane{height:260px}
+  .brand p{display:none}
+  .hide-sm{display:none}
+  .learn-pane{height:min(560px,70vh)}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="brand">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+      <ellipse cx="16" cy="18" rx="10" ry="8" fill="#1E7F55"/>
+      <path d="M10 14l6 4 6-4M10 22l6-4 6 4" stroke="#BDE8CF" stroke-width="1.6" fill="none"/>
+      <circle cx="28.5" cy="18" r="3.6" fill="#2E9C69"/>
+      <circle cx="9" cy="10.5" r="2.4" fill="#2E9C69"/><circle cx="23" cy="10.5" r="2.4" fill="#2E9C69"/>
+      <circle cx="9" cy="25.5" r="2.4" fill="#2E9C69"/><circle cx="23" cy="25.5" r="2.4" fill="#2E9C69"/>
+    </svg>
+    <div>
+      <h1>Turtle Desk</h1>
+      <p>Type Python, run it, watch the turtle draw.</p>
+    </div>
+  </div>
+  <select id="examples" class="btn" aria-label="Load an example program">
+    <option value="">Examples</option>
+  </select>
+  <button id="recordBtn" class="btn" aria-haspopup="dialog" aria-controls="drawer">
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h7l3 3v9H3z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 8h5M5.5 11h5" stroke="currentColor" stroke-width="1.5"/></svg>
+    Typing record <span id="badge" class="badge" hidden>0</span>
+  </button>
+</header>
+
+<main class="desk" id="desk">
+  <section class="pane learn-pane" id="learn" aria-label="Lessons and reference">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tabLessons" aria-selected="true" aria-controls="lessonsView">Lessons</button>
+      <button class="tab" role="tab" id="tabRef" aria-selected="false" aria-controls="refView">Reference</button>
+    </div>
+    <div class="learn-body" id="lessonsView" role="tabpanel" aria-labelledby="tabLessons"></div>
+    <div class="learn-body" id="refView" role="tabpanel" aria-labelledby="tabRef" hidden>
+      <div id="refSearchWrap"><input class="search" type="search" id="refSearch" placeholder="Search, for example circle or loop" aria-label="Search the reference" autocomplete="off"></div>
+      <div id="refList"></div>
+    </div>
+  </section>
+  <section class="pane editor-pane" aria-label="Code editor">
+    <div class="pane-head">
+      <span class="title">main.py</span>
+      <span class="lock" title="Pasting from outside is blocked. You can still copy and paste lines that are already in this file.">
+        <svg width="12" height="14" viewBox="0 0 12 14" aria-hidden="true"><rect x="1" y="6" width="10" height="7.5" rx="1.5" fill="currentColor"/><path d="M3.3 6V4.2a2.7 2.7 0 0 1 5.4 0V6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        <span class="lock-text">Typing only</span>
+      </span>
+      <span class="meta" id="pos">Ln 1, Col 1</span>
+      <div class="run-group">
+        <button id="stopBtn" class="btn stop" disabled>
+          <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="2" width="10" height="10" rx="2" fill="currentColor"/></svg>Stop
+        </button>
+        <button id="runBtn" class="btn run" title="Run (Ctrl+Enter)">
+          <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9.5-5.5z" fill="currentColor"/></svg>Run
+        </button>
+      </div>
+    </div>
+    <div class="editor">
+      <div class="gutter" aria-hidden="true"><div id="gutterInner"></div></div>
+      <div class="code">
+        <div class="band" id="band"></div>
+        <div class="band err" id="errBand" hidden></div>
+        <div id="layer"><pre id="hl" aria-hidden="true"></pre></div>
+        <textarea id="src" wrap="off" aria-label="Python code" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" translate="no" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lt-active="false"></textarea>
+      </div>
+    </div>
+    <div class="tip" id="tip" hidden aria-live="polite">
+      <code id="tipSig"></code><span id="tipText"></span>
+      <button class="btn small" id="tipMore">Learn more</button>
+    </div>
+    <div class="keys" id="keys">
+      <span><kbd>Tab</kbd> indent</span>
+      <span><kbd>Shift</kbd>+<kbd>Tab</kbd> move back</span>
+      <span class="opt"><kbd>Ctrl</kbd>+<kbd>/</kbd> comment</span>
+      <span><kbd>Ctrl</kbd>+<kbd>Enter</kbd> run</span>
+      <span class="hide-sm opt"><kbd>Esc</kbd> <kbd>Tab</kbd> leave editor</span>
+    </div>
+  </section>
+
+  <div class="right">
+    <section class="pane stage-pane" aria-label="Turtle drawing">
+      <div class="pane-head">
+        <span class="title">Turtle</span>
+        <span class="meta" id="coords">Point at the paper for x and y</span>
+        <button class="btn small" id="clearTurtle">Clear drawing</button>
+      </div>
+      <div class="stage" id="stage"><div id="turtle"></div></div>
+    </section>
+    <section class="pane console-pane" aria-label="Program output">
+      <div class="pane-head">
+        <span class="title">Output</span>
+        <button class="btn small" id="clearOut" style="margin-left:auto">Clear output</button>
+      </div>
+      <div class="console" id="out" role="log" aria-live="polite"></div>
+      <div class="inrow" id="inRow" hidden>
+        <label id="inPrompt" for="inBox"></label>
+        <input id="inBox" autocomplete="off" spellcheck="false" placeholder="Type your answer, then press Enter">
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" inert>
+  <div class="drawer-head">
+    <h2 id="drawerTitle">Typing record</h2>
+    <button class="btn small" id="closeDrawer">Close</button>
+  </div>
+  <div class="drawer-body">
+    <p class="lede">This record shows how the code in main.py was written. Download it to hand in with your work. Your teacher can open it in any browser and watch the code being typed.</p>
+    <div class="field">
+      <label for="studentName">Your name</label>
+      <input id="studentName" class="search" autocomplete="name" placeholder="So your teacher knows whose work this is">
+    </div>
+    <div class="row">
+      <button class="btn run" id="downloadReport">Download report</button>
+      <button class="btn" id="copyReport">Copy as text</button>
+    </div>
+    <p class="small-note">The report is one web page file. Email it to your teacher or upload it to your class page.</p>
+    <div class="verdict" id="verdict"></div>
+    <dl class="stats" id="stats"></dl>
+    <div class="row">
+      <button class="btn" id="replayBtn">Watch replay</button>
+    </div>
+    <div class="replay" id="replay" hidden>
+      <h3>Replay</h3>
+      <pre id="replayPre"></pre>
+      <input type="range" id="replaySlider" min="0" max="0" value="0" aria-label="Replay position">
+      <div class="rmeta"><button class="btn small" id="replayPlay">Play</button><span id="replayInfo"></span></div>
+    </div>
+    <div>
+      <h3>What happened</h3>
+      <ol class="log" id="log"></ol>
+    </div>
+    <div>
+      <button class="btn small danger" id="resetBtn">Start a new session</button>
+    </div>
+  </div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const ta = $('src'), hl = $('hl'), layer = $('layer'), gutterInner = $('gutterInner');
+const band = $('band'), errBand = $('errBand'), out = $('out');
+const LH = 24, PAD = 12, BULK = 15, STORE = 'turtledesk:v1';
+
+/* ---------- Examples ---------- */
+const STARTER = `# Draw a square with the turtle.
+# Change the numbers, then press Run.
+import turtle
+
+t = turtle.Turtle()
+t.color("blue")
+
+for side in range(4):
+    t.forward(100)
+    t.left(90)
+`;
+const EXAMPLES = [
+  {name:'Square', code:STARTER},
+  {name:'Colour spiral', code:`import turtle
+
+t = turtle.Turtle()
+t.speed(0)
+colors = ["red", "orange", "green", "blue", "purple"]
+
+for i in range(60):
+    t.pencolor(colors[i % 5])
+    t.forward(i * 3)
+    t.left(91)
+`},
+  {name:'Star', code:`import turtle
+
+t = turtle.Turtle()
+t.color("orange")
+
+for point in range(5):
+    t.forward(150)
+    t.right(144)
+`},
+  {name:'Flower', code:`import turtle
+
+t = turtle.Turtle()
+t.speed(0)
+t.color("purple")
+
+for petal in range(36):
+    t.circle(60)
+    t.left(10)
+`},
+  {name:'Ask a question', code:`name = input("What is your name? ")
+age = int(input("How old are you? "))
+
+print("Hello, " + name + "!")
+print("Next year you will be", age + 1)
+`},
+  {name:'Blank file', code:''}
+];
+EXAMPLES.forEach((ex,i)=>{ const o=document.createElement('option'); o.value=String(i); o.textContent=ex.name; $('examples').appendChild(o); });
+
+/* ---------- Syntax highlighting ---------- */
+const KW = new Set('False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield'.split(' '));
+const BI = new Set('print input range len int str float list dict set tuple abs min max sum round sorted enumerate zip type bool map filter reversed any all chr ord isinstance'.split(' '));
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const TOKEN = /(#[^\n]*)|((?:\b[rRbBfFuU]{1,2})?(?:"""[\s\S]*?(?:"""|$)|'''[\s\S]*?(?:'''|$)|"(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?))|(\b\d[\d_]*(?:\.\d+)?(?:[eE][+-]?\d+)?\b)|(@[A-Za-z_]\w*)|([A-Za-z_]\w*)|([()[\]{}])|([+\-*/%=<>!&|^~:.,]+)/g;
+function gap(text, atLineStart){
+  let h = esc(text);
+  const guides = sp => sp.match(/ {4}/g).map(()=>'<span class="ig">    </span>').join('');
+  h = h.replace(/\n((?: {4})+)/g, (_, sp) => '\n' + guides(sp));
+  if (atLineStart) h = h.replace(/^((?: {4})+)/, (_, sp) => guides(sp));
+  return h;
+}
+function highlight(src){
+  let html = '', last = 0, m, prevWord = '', depth = 0;
+  TOKEN.lastIndex = 0;
+  while ((m = TOKEN.exec(src))) {
+    html += gap(src.slice(last, m.index), last === 0 || src[last-1] === '\n');
+    const tok = m[0]; let cls = '';
+    if (m[1]) cls = 'com';
+    else if (m[2]) cls = 'str';
+    else if (m[3]) cls = 'num';
+    else if (m[4]) cls = 'dec';
+    else if (m[5]) {
+      if (prevWord === 'def') cls = 'fn';
+      else if (prevWord === 'class') cls = 'cls';
+      else if (KW.has(tok)) cls = 'kw';
+      else if (BI.has(tok)) cls = 'bi';
+      else if (tok === 'self') cls = 'self';
+    } else if (m[6]) {
+      if ('([{'.includes(tok)) { cls = 'b' + (depth % 3); depth++; }
+      else { depth = Math.max(0, depth-1); cls = 'b' + (depth % 3); }
+    } else cls = 'op';
+    prevWord = m[5] ? tok : '';
+    html += cls ? `<span class="${cls}">${esc(tok)}</span>` : esc(tok);
+    last = TOKEN.lastIndex;
+  }
+  html += gap(src.slice(last), last === 0 || src[last-1] === '\n');
+  return html;
+}
+
+/* ---------- Rendering ---------- */
+let lineCount = 0, errLine = 0, curLine = 1;
+function render(){
+  hl.innerHTML = highlight(ta.value) + '\n ';
+  const n = ta.value.split('\n').length;
+  if (n !== lineCount) {
+    lineCount = n;
+    let g = '';
+    for (let i = 1; i <= n; i++) g += `<div>${i}</div>`;
+    gutterInner.innerHTML = g;
+  }
+  markGutter();
+  updateCaret();
+}
+function markGutter(){
+  const kids = gutterInner.children;
+  for (let i = 0; i < kids.length; i++) {
+    kids[i].className = (i+1 === errLine ? 'err' : (i+1 === curLine ? 'on' : ''));
+  }
+}
+function updateCaret(){
+  const before = ta.value.slice(0, ta.selectionStart);
+  const line = before.split('\n').length;
+  const col = before.length - before.lastIndexOf('\n');
+  $('pos').textContent = `Ln ${line}, Col ${col}`;
+  if (line !== curLine) { curLine = line; markGutter(); }
+  syncScroll();
+  updateTip();
+}
+function syncScroll(){
+  const x = ta.scrollLeft, y = ta.scrollTop;
+  layer.style.transform = `translate(${-x}px, ${-y}px)`;
+  gutterInner.style.transform = `translateY(${-y}px)`;
+  band.style.transform = `translateY(${PAD + (curLine-1)*LH - y}px)`;
+  if (errLine) errBand.style.transform = `translateY(${PAD + (errLine-1)*LH - y}px)`;
+}
+function setErrLine(n){
+  errLine = n || 0;
+  errBand.hidden = !errLine;
+  markGutter(); syncScroll();
+  if (errLine) {
+    const top = PAD + (errLine-1)*LH;
+    if (top < ta.scrollTop || top > ta.scrollTop + ta.clientHeight - LH*2) ta.scrollTop = Math.max(0, top - LH*3);
+  }
+}
+
+/* ---------- Record (integrity) state ---------- */
+let state, snaps = [], ownClips = [];
+function newState(){
+  return { sid: Math.random().toString(36).slice(2,8).toUpperCase(), started: Date.now(),
+    keys:0, blockedPaste:0, blockedBulk:0, blockedSynthetic:0, ownPastes:0,
+    awayCount:0, awayMs:0, fastBursts:0, runs:0, examples:0, events:[] };
+}
+function log(type, msg){
+  state.events.push({t: Date.now(), type, msg});
+  if (state.events.length > 400) state.events.splice(0, state.events.length - 400);
+  scheduleSave();
+  if (drawerOpen) renderRecord();
+}
+function flags(){ return state.blockedPaste + state.blockedBulk + state.blockedSynthetic + state.fastBursts; }
+function updateBadge(){
+  const f = flags();
+  $('badge').hidden = f === 0;
+  $('badge').textContent = f;
+}
+function snap(force){
+  const now = Date.now(), last = snaps[snaps.length-1];
+  if (last && last[1] === ta.value) return;
+  if (!force && last && now - last[0] < 400) last[1] = ta.value;
+  else snaps.push([now, ta.value]);
+  if (snaps.length > 4000) snaps.splice(0, snaps.length - 4000);
+}
+let saveTimer = null;
+function scheduleSave(){ clearTimeout(saveTimer); saveTimer = setTimeout(save, 600); }
+function save(){
+  const data = () => JSON.stringify({code: ta.value, state, snaps, progress});
+  try { localStorage.setItem(STORE, data()); }
+  catch (e) {
+    try { snaps = snaps.slice(-800); localStorage.setItem(STORE, data()); } catch (e2) {}
+  }
+}
+function load(){
+  try {
+    const raw = localStorage.getItem(STORE);
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    if (!d || !d.state) return false;
+    state = Object.assign(newState(), d.state);
+    snaps = Array.isArray(d.snaps) ? d.snaps : [];
+    progress = Object.assign(defaultProgress(), d.progress || {});
+    ta.value = typeof d.code === 'string' ? d.code : STARTER;
+    return true;
+  } catch (e) { return false; }
+}
+
+/* ---------- Toast ---------- */
+let toastTimer = null;
+function toast(msg){
+  const el = $('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>el.classList.remove('show'), 3800);
+}
+
+function blocked(kind, n){
+  if (kind === 'paste') { state.blockedPaste++; toast('Pasting is turned off. Type the code yourself — copying lines within this file still works.'); log('flag', 'Paste blocked' + (n ? ` (${n} characters)` : '')); }
+  else if (kind === 'drop') { state.blockedPaste++; toast('Dropping text into the editor is turned off.'); log('flag', 'Dropped-in text blocked'); }
+  else if (kind === 'bulk') { state.blockedBulk++; toast('That text arrived all at once, so it wasn’t added. Type it in instead.'); log('flag', `Blocked ${n ? n + ' characters' : 'text'} arriving all at once`); }
+  else if (kind === 'synthetic') { state.blockedSynthetic++; toast('Typing sent by another program was blocked.'); log('flag', 'Blocked typing sent by a script or extension'); }
+  updateBadge();
+}
+
+/* ---------- Editing helpers ---------- */
+let internal = false, prevValue = '', prevSel = 0, escTab = false;
+const OPEN = {'(':')','[':']','{':'}'};
+function internalDo(fn){ internal = true; try { fn(); } finally { internal = false; } }
+function insert(text){
+  internalDo(()=>{
+    let ok = false;
+    try { ok = text === '' ? document.execCommand('delete') : document.execCommand('insertText', false, text); } catch (e) {}
+    if (!ok) { ta.setRangeText(text, ta.selectionStart, ta.selectionEnd, 'end'); handleInput({inputType:'internal'}); }
+  });
+}
+const lineStartOf = (v, i) => v.lastIndexOf('\n', i-1) + 1;
+function setCaret(p){ ta.setSelectionRange(p, p); updateCaret(); }
+
+function blockEdit(fn){
+  const v = ta.value, s = ta.selectionStart, e = ta.selectionEnd;
+  const ls = lineStartOf(v, s);
+  const endRef = (e > s && v[e-1] === '\n') ? e-1 : e;
+  let le = v.indexOf('\n', endRef); if (le === -1) le = v.length;
+  const outText = fn(v.slice(ls, le).split('\n')).join('\n');
+  ta.setSelectionRange(ls, le);
+  insert(outText);
+  ta.setSelectionRange(ls, ls + outText.length);
+  updateCaret();
+}
+function indent(){
+  const v = ta.value, s = ta.selectionStart, e = ta.selectionEnd;
+  if (s === e) { const col = s - lineStartOf(v, s); insert(' '.repeat(4 - (col % 4))); }
+  else blockEdit(lines => lines.map(l => l.length ? '    ' + l : l));
+}
+function dedent(){
+  const v = ta.value, s = ta.selectionStart, e = ta.selectionEnd;
+  if (s === e) {
+    const ls = lineStartOf(v, s), m = v.slice(ls).match(/^ {1,4}/);
+    if (!m) return;
+    ta.setSelectionRange(ls, ls + m[0].length); insert('');
+    setCaret(Math.max(ls, s - m[0].length));
+  } else blockEdit(lines => lines.map(l => l.replace(/^ {1,4}/, '')));
+}
+function toggleComment(){
+  blockEdit(lines => {
+    const filled = lines.filter(l => l.trim());
+    const all = filled.length && filled.every(l => /^\s*#/.test(l));
+    if (all) return lines.map(l => l.replace(/^(\s*)# ?/, '$1'));
+    const min = Math.min(...filled.map(l => l.match(/^ */)[0].length));
+    return lines.map(l => l.trim() ? l.slice(0, min) + '# ' + l.slice(min) : l);
+  });
+}
+function newline(){
+  const v = ta.value, s = ta.selectionStart;
+  const before = v.slice(lineStartOf(v, s), s);
+  const ind = before.match(/^ */)[0];
+  let ni = ind;
+  const codePart = before.replace(/#.*$/, '').trimEnd();
+  if (codePart.endsWith(':')) ni += '    ';
+  else if (/^\s*(return|pass|break|continue|raise)\b/.test(before)) ni = ind.slice(0, Math.max(0, ind.length-4));
+  if (s === ta.selectionEnd && OPEN[v[s-1]] && OPEN[v[s-1]] === v[s]) {
+    insert('\n' + ni + '    ' + '\n' + ni);
+    setCaret(s + 1 + ni.length + 4);
+  } else { insert('\n' + ni); updateCaret(); }
+}
+
+/* ---------- Keyboard ---------- */
+let keyTimes = [], lastFast = 0;
+ta.addEventListener('keydown', e => {
+  if (!e.isTrusted) { e.preventDefault(); blocked('synthetic'); return; }
+  prevSel = ta.selectionStart;
+  if (e.key.length === 1 || ['Enter','Backspace','Delete','Tab'].includes(e.key)) {
+    state.keys++;
+    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+      const now = Date.now();
+      keyTimes.push(now);
+      while (keyTimes.length && now - keyTimes[0] > 2000) keyTimes.shift();
+      if (keyTimes.length >= 40 && now - lastFast > 10000) {
+        lastFast = now; state.fastBursts++; updateBadge();
+        log('flag', '40+ characters in 2 seconds, faster than people usually type');
+      }
+    }
+  }
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && e.key === 'Enter') { e.preventDefault(); run(); return; }
+  if (mod && e.key === '/') { e.preventDefault(); toggleComment(); return; }
+  if (e.key === 'Escape') { escTab = true; return; }
+  if (e.key === 'Tab') {
+    if (escTab) { escTab = false; return; }
+    e.preventDefault(); e.shiftKey ? dedent() : indent(); return;
+  }
+  escTab = false;
+  if (mod || e.altKey || e.isComposing) return;
+
+  const v = ta.value, s = ta.selectionStart, en = ta.selectionEnd;
+  const next = v[s] || '';
+  const freeAfter = /^[\s)\]}:,]?$/.test(next);
+  if (e.key === 'Enter') { e.preventDefault(); newline(); return; }
+  if (e.key === 'Backspace' && s === en && s > 0) {
+    const before = v.slice(lineStartOf(v, s), s);
+    if (before.length && /^ +$/.test(before)) {
+      const n = before.length % 4 || 4;
+      e.preventDefault(); ta.setSelectionRange(s-n, s); insert(''); updateCaret(); return;
+    }
+    const pairs = {'(':')','[':']','{':'}','"':'"',"'":"'"};
+    if (pairs[v[s-1]] && next === pairs[v[s-1]]) { e.preventDefault(); ta.setSelectionRange(s-1, s+1); insert(''); updateCaret(); return; }
+  }
+  if (OPEN[e.key] && s === en && freeAfter) { e.preventDefault(); insert(e.key + OPEN[e.key]); setCaret(s+1); return; }
+  if (')]}'.includes(e.key) && s === en && next === e.key) { e.preventDefault(); setCaret(s+1); return; }
+  if ((e.key === '"' || e.key === "'") && s === en) {
+    if (next === e.key) { e.preventDefault(); setCaret(s+1); return; }
+    const p1 = v[s-1] || '', p2 = v[s-2] || '';
+    const okBefore = !/\w/.test(p1) || (/[fFrRbB]/.test(p1) && !/\w/.test(p2));
+    if (okBefore && freeAfter) { e.preventDefault(); insert(e.key + e.key); setCaret(s+1); return; }
+  }
+});
+
+/* ---------- Anti-paste / anti-bulk guards ---------- */
+ta.addEventListener('beforeinput', e => {
+  if (internal) return;
+  if (!e.isTrusted) { e.preventDefault(); blocked('synthetic'); return; }
+  const t = e.inputType || '';
+  if (t.startsWith('insertFrom')) {
+    e.preventDefault();
+    blocked(t === 'insertFromDrop' ? 'drop' : (t.startsWith('insertFromPaste') ? 'paste' : 'bulk'));
+    return;
+  }
+  if ((t === 'insertText' || t === 'insertReplacementText') && e.data && !e.isComposing &&
+      (e.data.length > BULK || e.data.includes('\n'))) {
+    e.preventDefault(); blocked('bulk', e.data.length);
+  }
+});
+const norm = s => s.replace(/\r\n?/g, '\n');
+ta.addEventListener('paste', e => {
+  e.preventDefault();
+  if (!e.isTrusted) { blocked('synthetic'); return; }
+  const txt = norm(e.clipboardData ? e.clipboardData.getData('text/plain') : '');
+  if (!txt) return;
+  const own = ownClips.includes(txt) || ta.value.includes(txt);
+  if (own) {
+    insert(txt.replace(/\t/g, '    '));
+    state.ownPastes++;
+    log('info', `Pasted ${txt.length} characters copied from this file`);
+  } else blocked('paste', txt.length);
+});
+function rememberClip(){
+  const sel = ta.value.slice(ta.selectionStart, ta.selectionEnd);
+  if (sel) { ownClips.push(norm(sel)); if (ownClips.length > 25) ownClips.shift(); }
+}
+ta.addEventListener('copy', rememberClip);
+ta.addEventListener('cut', rememberClip);
+ta.addEventListener('drop', e => { e.preventDefault(); blocked('drop'); });
+
+function handleInput(e){
+  const t = (e && e.inputType) || '';
+  if (!internal && t.startsWith('insert') && t !== 'insertCompositionText' && t !== 'internal') {
+    const delta = ta.value.length - prevValue.length;
+    if (delta > BULK) {
+      ta.value = prevValue; ta.setSelectionRange(prevSel, prevSel);
+      blocked('bulk', delta); render(); return;
+    }
+  }
+  prevValue = ta.value;
+  if (errLine) setErrLine(0);
+  render(); snap(); scheduleSave();
+}
+ta.addEventListener('input', handleInput);
+ta.addEventListener('scroll', syncScroll);
+document.addEventListener('selectionchange', () => { if (document.activeElement === ta) { prevSel = ta.selectionStart; updateCaret(); } });
+ta.addEventListener('click', updateCaret);
+ta.addEventListener('keyup', updateCaret);
+
+/* ---------- Leaving the page ---------- */
+let awayStart = null;
+function goAway(){ if (awayStart === null) awayStart = Date.now(); }
+function comeBack(){
+  if (awayStart === null) return;
+  const d = Date.now() - awayStart; awayStart = null;
+  if (d > 1500) { state.awayCount++; state.awayMs += d; log('away', `Left the page for ${fmtDur(d)}`); }
+}
+document.addEventListener('visibilitychange', () => document.hidden ? goAway() : comeBack());
+window.addEventListener('blur', goAway);
+window.addEventListener('focus', comeBack);
+window.addEventListener('pagehide', save);
+
+/* ---------- Formatting ---------- */
+function fmtDur(ms){
+  const s = Math.round(ms/1000);
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s/60), r = s % 60;
+  if (m < 60) return `${m}m ${r}s`;
+  return `${Math.floor(m/60)}h ${m%60}m`;
+}
+const fmtTime = t => new Date(t).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+const fmtDate = t => new Date(t).toLocaleString([], {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'});
+
+/* ---------- Console ---------- */
+let hasOutput = false, runOutput = '';
+function outWrite(text, cls){
+  if (cls !== 'sys' && cls !== 'err') runOutput += text;
+  if (!hasOutput) { out.textContent = ''; hasOutput = true; }
+  const span = document.createElement('span');
+  if (cls) span.className = cls;
+  span.textContent = text;
+  out.appendChild(span);
+  out.scrollTop = out.scrollHeight;
+}
+function clearOut(){
+  hasOutput = false;
+  out.innerHTML = '<span class="sys">Your program’s output appears here. Press Run to start.</span>';
+}
+let pendingInput = null;
+function askInput(prompt){
+  return new Promise((resolve, reject) => {
+    pendingInput = {resolve, reject, prompt: String(prompt || '')};
+    $('inPrompt').textContent = pendingInput.prompt || 'Input:';
+    $('inRow').hidden = false;
+    const box = $('inBox'); box.value = ''; box.focus();
+  });
+}
+$('inBox').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' || !pendingInput) return;
+  const val = $('inBox').value, p = pendingInput; pendingInput = null;
+  $('inRow').hidden = true;
+  outWrite(p.prompt, ''); outWrite(val + '\n', 'echo');
+  p.resolve(val);
+  ta.focus({preventScroll:true});
+});
+function hideInput(){ $('inRow').hidden = true; if (pendingInput) { const p = pendingInput; pendingInput = null; p.reject(new Error('stopped')); } }
+
+/* ---------- Turtle stage ---------- */
+const turtleDiv = $('turtle'), stage = $('stage');
+let tw = 400, th = 300;
+function sizeTurtle(){
+  tw = Math.max(240, Math.floor(stage.clientWidth - 18));
+  th = Math.max(220, Math.floor(stage.clientHeight - 18));
+  turtleDiv.style.width = tw + 'px'; turtleDiv.style.height = th + 'px';
+  const ox = (tw/2) % 25, oy = (th/2) % 25;
+  turtleDiv.style.backgroundPosition = `0 0, 0 0, ${ox}px ${oy}px, ${ox}px ${oy}px`;
+}
+function resetTurtle(){
+  if (typeof Sk !== 'undefined' && Sk.TurtleGraphics && typeof Sk.TurtleGraphics.reset === 'function') {
+    try { Sk.TurtleGraphics.reset(); } catch (e) {}
+  }
+  turtleDiv.innerHTML = '';
+}
+turtleDiv.addEventListener('mousemove', e => {
+  const r = turtleDiv.getBoundingClientRect();
+  const x = Math.round(e.clientX - r.left - r.width/2), y = Math.round(r.height/2 - (e.clientY - r.top));
+  $('coords').textContent = `x: ${x}, y: ${y}`;
+});
+turtleDiv.addEventListener('mouseleave', () => { $('coords').textContent = 'Point at the paper for x and y'; });
+$('clearTurtle').addEventListener('click', () => { if (!running) { resetTurtle(); sizeTurtle(); } });
+
+/* ---------- Running Python ---------- */
+/* ---------- Turtle tracking for lesson checks ---------- */
+// Set TRACK_TURTLE to false to switch tracking off; lessons then fall back to checking the code text only.
+const TRACK_TURTLE = true;
+const TRACKED = ['forward','fd','backward','bk','back','left','lt','right','rt','goto','setpos','setposition','setx','sety','setheading','seth','home','circle','dot','penup','pu','up','pendown','pd','down','color','pencolor','fillcolor','pensize','width','begin_fill','end_fill'];
+const TRACKER = [
+  'try:',
+  '    import turtle as _tdk_t',
+  '    _tdk_log = []',
+  '    def _tdk_wrap(_tdk_name):',
+  '        _tdk_f = getattr(_tdk_t.Turtle, _tdk_name)',
+  '        def _tdk_w(self, *a, **k):',
+  '            if len(_tdk_log) < 5000:',
+  '                b = a[0] if len(a) == 1 and isinstance(a[0], tuple) else a',
+  '                _tdk_log.append([_tdk_name] + [x if isinstance(x, (int, float, str)) else 0 for x in b])',
+  '            return _tdk_f(self, *a, **k)',
+  '        setattr(_tdk_t.Turtle, _tdk_name, _tdk_w)',
+  '    for _tdk_name in ' + JSON.stringify(TRACKED) + ':',
+  '        if hasattr(_tdk_t.Turtle, _tdk_name):',
+  '            _tdk_wrap(_tdk_name)',
+  'except Exception:',
+  '    _tdk_log = None',
+  ''
+].join('\n');
+const TRACKER_LINES = TRACKER.split('\n').length - 1;
+let lineOffset = 0;
+
+function readTrace(mod){
+  try {
+    if (!mod) return null;
+    let v = mod.$d ? mod.$d._tdk_log : undefined;
+    if (v === undefined && mod.tp$getattr) v = mod.tp$getattr(new Sk.builtin.str('_tdk_log'));
+    if (!v || v === Sk.builtin.none.none$) return null;
+    const js = Sk.ffi.remapToJs(v);
+    return Array.isArray(js) ? js : null;
+  } catch (e) { return null; }
+}
+
+// Replays the logged turtle commands to measure what was drawn.
+function turtleMetrics(log){
+  if (!log) return null;
+  const num = v => (typeof v === 'number' && isFinite(v)) ? v : 0;
+  const m = {calls: log.length, segs: 0, length: 0, maxSeg: 0, turns: [], closed: 0, closedSides: [], fills: 0,
+             jumps: 0, circles: 0, segLens: new Set(), colors: new Set(), fillColors: new Set(), pensize: 1, width: 0, height: 0};
+  let x = 0, y = 0, h = 0, down = true, inked = false, minX = 0, maxX = 0, minY = 0, maxY = 0;
+  let start = {x: 0, y: 0}, pathSegs = 0, fillOpen = false, fillWork = 0;
+  const ink = (px, py) => {
+    if (!inked) { minX = maxX = px; minY = maxY = py; inked = true; }
+    else { minX = Math.min(minX, px); maxX = Math.max(maxX, px); minY = Math.min(minY, py); maxY = Math.max(maxY, py); }
+  };
+  const moveTo = (nx, ny) => {
+    const d = Math.hypot(nx - x, ny - y);
+    if (d > 0.5) {
+      if (down) {
+        ink(x, y); ink(nx, ny);
+        m.segs++; m.length += d; m.maxSeg = Math.max(m.maxSeg, d); m.segLens.add(Math.round(d)); pathSegs++;
+        if (fillOpen) fillWork++;
+        if (pathSegs >= 3 && Math.hypot(nx - start.x, ny - start.y) < 2) { m.closed++; m.closedSides.push(pathSegs); pathSegs = 0; start = {x: nx, y: ny}; }
+      } else m.jumps++;
+    }
+    x = nx; y = ny;
+    if (!down) { start = {x, y}; pathSegs = 0; }
+  };
+  const turn = a => { if (a) { h += a; m.turns.push(a); } };
+  for (const call of log) {
+    const [name, ...a] = call;
+    const a0 = num(a[0]), a1 = num(a[1]);
+    switch (name) {
+      case 'forward': case 'fd': { const r = h * Math.PI / 180; moveTo(x + a0 * Math.cos(r), y + a0 * Math.sin(r)); break; }
+      case 'backward': case 'bk': case 'back': { const r = h * Math.PI / 180; moveTo(x - a0 * Math.cos(r), y - a0 * Math.sin(r)); break; }
+      case 'left': case 'lt': turn(a0); break;
+      case 'right': case 'rt': turn(-a0); break;
+      case 'goto': case 'setpos': case 'setposition': moveTo(a0, a1); break;
+      case 'setx': moveTo(a0, y); break;
+      case 'sety': moveTo(x, a0); break;
+      case 'setheading': case 'seth': h = a0; break;
+      case 'home': moveTo(0, 0); h = 0; break;
+      case 'circle': {
+        const r = a0, ext = a.length > 1 ? a1 : 360;
+        if (!r) break;
+        const hr = h * Math.PI / 180, cx = x - r * Math.sin(hr), cy = y + r * Math.cos(hr);
+        const turnDeg = ext * Math.sign(r), end = (h + turnDeg) * Math.PI / 180;
+        const nx = cx + r * Math.sin(end), ny = cy - r * Math.cos(end);
+        if (down) { ink(cx - Math.abs(r), cy - Math.abs(r)); ink(cx + Math.abs(r), cy + Math.abs(r)); m.circles++; m.length += Math.abs(2 * Math.PI * r * ext / 360); if (fillOpen) fillWork += 3; }
+        x = nx; y = ny; h += turnDeg;
+        break;
+      }
+      case 'dot': ink(x, y); break;
+      case 'penup': case 'pu': case 'up': down = false; break;
+      case 'pendown': case 'pd': case 'down': if (!down) { start = {x, y}; pathSegs = 0; } down = true; break;
+      case 'color':
+        if (typeof a[0] === 'string') m.colors.add(a[0].toLowerCase()); else if (a.length >= 3) m.colors.add('rgb');
+        if (typeof a[1] === 'string') m.fillColors.add(a[1].toLowerCase()); else if (typeof a[0] === 'string' && a.length === 1) m.fillColors.add(a[0].toLowerCase());
+        break;
+      case 'pencolor': if (typeof a[0] === 'string') m.colors.add(a[0].toLowerCase()); else if (a.length) m.colors.add('rgb'); break;
+      case 'fillcolor': if (typeof a[0] === 'string') m.fillColors.add(a[0].toLowerCase()); else if (a.length) m.fillColors.add('rgb'); break;
+      case 'pensize': case 'width': if (a.length) m.pensize = a0; break;
+      case 'begin_fill': fillOpen = true; fillWork = 0; break;
+      case 'end_fill': if (fillOpen && fillWork >= 2) m.fills++; fillOpen = false; break;
+    }
+  }
+  m.width = inked ? maxX - minX : 0; m.height = inked ? maxY - minY : 0;
+  m.drew = m.segs > 0 || m.circles > 0;
+  return m;
+}
+
+let running = false, stopRequested = false;
+function setRunUI(on){ $('runBtn').disabled = on; $('stopBtn').disabled = !on; }
+function builtinRead(x){
+  if (Sk.builtinFiles === undefined || Sk.builtinFiles.files[x] === undefined) throw "File not found: '" + x + "'";
+  return Sk.builtinFiles.files[x];
+}
+function friendlyHint(msg){
+  const name = (msg.match(/(?:attribute|name) '([A-Za-z_0-9]+)'/) || [])[1];
+  const guess = name ? closestName(name) : '';
+  const tryThis = guess ? ` Did you mean \`${guess}\`?` : '';
+  if (/IndentationError|indented block|unindent|indent/i.test(msg)) return 'Check the indentation of this line and the line above it.';
+  if (/SyntaxError|TokenError|bad input/i.test(msg)) return 'Python couldn’t read this line. Look for a missing colon, bracket or quote here or on the line above.';
+  if (/NameError/.test(msg)) return name ? `Python doesn’t know \`${name}\`.` + (tryThis || ' Check the spelling, or create it before you use it.') : 'Python doesn’t know that name.';
+  if (/AttributeError/.test(msg)) return name ? `\`${name}\` isn’t a command here.` + (tryThis || ' Check the spelling.') : 'That command doesn’t exist here. Check the spelling.';
+  if (/TypeError/.test(msg)) return 'Two kinds of values got mixed up, like adding a number to text. Use `str()` or `int()` to convert.';
+  if (/ValueError/.test(msg)) return 'That value has the wrong content, for example `int("hello")`.';
+  if (/ZeroDivisionError/.test(msg)) return 'You can’t divide by zero.';
+  if (/IndexError/.test(msg)) return 'That list position doesn’t exist. Positions start at 0.';
+  if (/ImportError|ModuleNotFound/.test(msg)) return 'That module isn’t available here. Try turtle, math, random or time.';
+  return '';
+}
+function showError(err){
+  const shift = n => n - lineOffset;
+  const raw = ((err && err.toString) ? err.toString() : String(err)).replace(/line (\d+)/g, (m, n) => 'line ' + Math.max(1, shift(+n)));
+  let line = 0;
+  for (const tb of (err && err.traceback) || []) { const n = shift(tb.lineno); if (n > 0) { line = n; break; } }
+  if (!line) { const m = raw.match(/line (\d+)/); if (m) line = +m[1]; }
+  let text = '', note = '';
+  // Python often reports structure problems a line late, so ask the checker where the real cause is.
+  if (/SyntaxError|IndentationError|TokenError|EOF|indent|bad input/i.test(raw)) {
+    const issues = lintCode(ta.value);
+    if (issues.length) {
+      const x = issues.find(i => i.line <= (line || Infinity)) || issues[0];
+      if (line && x.line !== line) note = `Python reported line ${line}.`;
+      line = x.line; text = x.msg;
+    }
+  }
+  if (!text) text = friendlyHint(raw);
+  if (!hasOutput) { out.textContent = ''; hasOutput = true; }
+  const box = document.createElement('div'); box.className = 'errbox';
+  const main = document.createElement('div'); main.className = 'err-main';
+  main.innerHTML = (line ? `<b>Line ${line}:</b> ` : '') + (text ? md(text) : esc(raw));
+  box.appendChild(main);
+  if (note) { const n = document.createElement('div'); n.className = 'err-note'; n.textContent = note; box.appendChild(n); }
+  if (text) {
+    const d = document.createElement('details');
+    d.innerHTML = '<summary>Show Python’s message</summary><pre></pre>';
+    d.querySelector('pre').textContent = raw;
+    box.appendChild(d);
+  }
+  out.appendChild(box); out.scrollTop = out.scrollHeight;
+  if (line) setErrLine(line);
+}
+async function run(){
+  if (running) return;
+  if (typeof Sk === 'undefined') { clearOut(); outWrite('Python didn’t load. Check your internet connection and reload the page.\n', 'err'); return; }
+  running = true; stopRequested = false; setRunUI(true);
+  clearOut(); setErrLine(0); runOutput = '';
+  sizeTurtle(); resetTurtle();
+  Sk.TurtleGraphics = Sk.TurtleGraphics || {};
+  Sk.TurtleGraphics.target = 'turtle';
+  Sk.TurtleGraphics.width = tw;
+  Sk.TurtleGraphics.height = th;
+  Sk.configure({
+    output: t => outWrite(t), read: builtinRead, __future__: Sk.python3,
+    inputfun: askInput, inputfunTakesPrompt: true,
+    killableWhile: true, killableFor: true, yieldLimit: 100
+  });
+  const code = ta.value;
+  state.runs++;
+  // For turtle programs, a hidden prefix records what the turtle does so lessons can check the drawing.
+  const track = TRACK_TURTLE && /\bturtle\b/.test(code);
+  lineOffset = track ? TRACKER_LINES : 0;
+  let ok = true, mod = null;
+  try {
+    mod = await Sk.misceval.asyncToPromise(() => Sk.importMainWithBody('<stdin>', false, (track ? TRACKER : '') + code, true),
+      {'*': () => { if (stopRequested) throw new Error('stopped'); }});
+  } catch (err) {
+    ok = false;
+    if (stopRequested) outWrite((hasOutput ? '\n' : '') + 'Stopped.\n', 'sys');
+    else showError(err);
+  } finally {
+    running = false; setRunUI(false); hideInput();
+  }
+  if (ok) outWrite((hasOutput ? '\n' : '') + 'Program finished.\n', 'sys');
+  log('run', ok ? `Ran the program (${code.split('\n').length} lines)` : 'Ran the program and got an error');
+  const turtleDid = ok && track ? turtleMetrics(readTrace(mod)) : null;
+  if (!stopRequested) checkLesson({code, ok, output: runOutput, turtle: turtleDid && turtleDid.calls ? turtleDid : null});
+}
+$('runBtn').addEventListener('click', run);
+$('stopBtn').addEventListener('click', () => { stopRequested = true; hideInput(); });
+$('clearOut').addEventListener('click', clearOut);
+
+/* ---------- Examples ---------- */
+$('examples').addEventListener('change', e => {
+  const i = e.target.value; e.target.value = '';
+  if (i === '') return;
+  const ex = EXAMPLES[+i];
+  ta.focus();
+  ta.setSelectionRange(0, ta.value.length);
+  insert(ex.code);
+  setCaret(ex.code.length);
+  ta.scrollTop = 0;
+  state.examples++;
+  log('info', `Loaded the “${ex.name}” example`);
+  snap(true);
+});
+
+/* ---------- Record drawer ---------- */
+let drawerOpen = false, clockTimer = null;
+function openDrawer(){
+  drawerOpen = true;
+  $('drawer').inert = false; $('drawer').classList.add('open'); $('scrim').classList.add('open');
+  renderRecord(); clockTimer = setInterval(renderRecord, 5000);
+  $('closeDrawer').focus();
+}
+function closeDrawer(){
+  drawerOpen = false; stopReplay(); clearInterval(clockTimer);
+  $('drawer').classList.remove('open'); $('scrim').classList.remove('open'); $('drawer').inert = true;
+  $('recordBtn').focus();
+}
+$('recordBtn').addEventListener('click', openDrawer);
+$('closeDrawer').addEventListener('click', closeDrawer);
+$('scrim').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawerOpen) closeDrawer(); });
+
+function statRows(){
+  return [
+    ['Session', state.sid],
+    ['Started', fmtDate(state.started)],
+    ['Keys pressed', state.keys.toLocaleString()],
+    ['Pastes from outside blocked', state.blockedPaste, state.blockedPaste > 0],
+    ['Text arriving all at once blocked', state.blockedBulk, state.blockedBulk > 0],
+    ['Script or extension typing blocked', state.blockedSynthetic, state.blockedSynthetic > 0],
+    ['Very fast typing bursts', state.fastBursts, state.fastBursts > 0],
+    ['Times the page was left', state.awayCount],
+    ['Total time away', fmtDur(state.awayMs)],
+    ['Pastes of code from this file', state.ownPastes],
+    ['Examples loaded', state.examples],
+    ['Programs run', state.runs],
+  ];
+}
+function verdictText(){
+  const f = flags();
+  return f === 0 ? 'No paste attempts or unusual typing so far. The code looks hand-typed.'
+                 : `${f} thing${f === 1 ? '' : 's'} worth a look. Each was blocked or noted, and the details are below.`;
+}
+function renderRecord(){
+  const v = $('verdict'); v.textContent = verdictText(); v.classList.toggle('flag', flags() > 0);
+  $('stats').innerHTML = statRows().map(([k, val, hot]) => `<dt>${esc(k)}</dt><dd${hot ? ' class="hot"' : ''}>${esc(String(val))}</dd>`).join('');
+  const ev = state.events.slice(-60).reverse();
+  $('log').innerHTML = ev.length ? ev.map(e => `<li class="${e.type === 'flag' ? 'flag' : ''}"><time>${fmtTime(e.t)}</time><span>${esc(e.msg)}</span></li>`).join('')
+                                 : '<li><time></time><span>Nothing yet.</span></li>';
+}
+function reportText(){
+  const lines = ['Turtle Desk typing record', 'Student: ' + ((state.studentName || '').trim() || 'not given'), ''];
+  statRows().forEach(([k, v]) => lines.push(`${k}: ${v}`));
+  lines.push('', verdictText(), '', 'Recent events:');
+  state.events.slice(-30).forEach(e => lines.push(`  ${fmtDate(e.t)}  ${e.msg}`));
+  lines.push('', '---- main.py ----', ta.value);
+  return lines.join('\n');
+}
+$('copyReport').addEventListener('click', async () => {
+  const text = reportText();
+  try { await navigator.clipboard.writeText(text); toast('Report copied.'); return; } catch (e) {}
+  const tmp = document.createElement('textarea'); tmp.value = text; tmp.style.position = 'fixed'; tmp.style.opacity = '0';
+  document.body.appendChild(tmp); tmp.select();
+  let ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+  tmp.remove(); toast(ok ? 'Report copied.' : 'Couldn’t copy. Select the text in the record and copy it by hand.');
+});
+
+/* Replay */
+let replayTimer = null;
+function showSnap(i){
+  if (!snaps.length) { $('replayPre').textContent = 'Nothing typed yet.'; $('replayInfo').textContent = ''; return; }
+  i = Math.max(0, Math.min(snaps.length-1, i));
+  $('replaySlider').value = i;
+  $('replayPre').innerHTML = highlight(snaps[i][1]) + '\n';
+  $('replayInfo').textContent = `Step ${i+1} of ${snaps.length}, ${fmtDate(snaps[i][0])}`;
+}
+function stopReplay(){ clearInterval(replayTimer); replayTimer = null; $('replayPlay').textContent = 'Play'; }
+$('replayBtn').addEventListener('click', () => {
+  const r = $('replay'); r.hidden = !r.hidden;
+  if (!r.hidden) { snap(true); $('replaySlider').max = Math.max(0, snaps.length-1); showSnap(0); }
+  else stopReplay();
+});
+$('replaySlider').addEventListener('input', e => { stopReplay(); showSnap(+e.target.value); });
+$('replayPlay').addEventListener('click', () => {
+  if (replayTimer) { stopReplay(); return; }
+  let i = +$('replaySlider').value;
+  if (i >= snaps.length-1) i = 0;
+  $('replayPlay').textContent = 'Pause';
+  const stepMs = Math.max(25, Math.min(120, 12000 / Math.max(1, snaps.length)));
+  replayTimer = setInterval(() => { showSnap(i); i++; if (i >= snaps.length) stopReplay(); }, stepMs);
+});
+
+/* Reset */
+let resetArmed = null;
+$('resetBtn').addEventListener('click', () => {
+  const b = $('resetBtn');
+  if (!resetArmed) {
+    b.textContent = 'Click again to erase the code and this record';
+    resetArmed = setTimeout(() => { resetArmed = null; b.textContent = 'Start a new session'; }, 4000);
+    return;
+  }
+  clearTimeout(resetArmed); resetArmed = null; b.textContent = 'Start a new session';
+  const keepName = state.studentName || '';
+  state = newState(); state.studentName = keepName; snaps = []; ownClips = [];
+  ta.value = STARTER; prevValue = ta.value;
+  log('start', 'New session started with the starter code');
+  snap(true); render(); updateBadge(); save(); renderRecord();
+  $('replay').hidden = true;
+  toast('New session started.');
+});
+
+/* ---------- Reference documentation ---------- */
+const GROUPS = ['Turtle: getting started','Turtle: moving','Turtle: pen and colour','Turtle: shapes and text','Python basics','Loops and decisions','Functions and lists','Modules'];
+const DOCS = [
+ {id:'Turtle', g:0, keys:['Turtle','turtle'], name:'turtle.Turtle()', sig:'t = turtle.Turtle()', desc:'Makes a new turtle and names it t. Every turtle program needs import turtle at the top first.', ex:'import turtle\n\nt = turtle.Turtle()\nt.forward(100)'},
+ {id:'Screen', g:0, keys:['Screen','bgcolor'], name:'Screen().bgcolor()', sig:'turtle.Screen().bgcolor(color)', desc:'Changes the background colour of the drawing area.', ex:'import turtle\n\nturtle.Screen().bgcolor("lightblue")'},
+ {id:'speed', g:0, keys:['speed'], name:'speed()', sig:'t.speed(n)', desc:'Sets how fast the turtle moves: 1 is slowest, 10 is fast and 0 is instant. Use 0 for big drawings.', ex:'t.speed(0)'},
+ {id:'shape', g:0, keys:['shape'], name:'shape()', sig:'t.shape(name)', desc:'Changes how the turtle looks: "turtle", "arrow", "circle", "square", "triangle" or "classic".', ex:'t.shape("turtle")'},
+ {id:'hideturtle', g:0, keys:['hideturtle','ht','showturtle','st'], name:'hideturtle() and showturtle()', sig:'t.hideturtle()', desc:'Hides the turtle so only the drawing shows. showturtle() brings it back.', ex:'t.hideturtle()'},
+ {id:'forward', g:1, keys:['forward','fd'], name:'forward()', sig:'t.forward(distance)', desc:'Moves the turtle forward by that many steps in the direction it faces. One step is one pixel. The short name is fd().', ex:'t.forward(100)'},
+ {id:'backward', g:1, keys:['backward','back','bk'], name:'backward()', sig:'t.backward(distance)', desc:'Moves the turtle backwards without turning around. The short name is bk().', ex:'t.backward(50)'},
+ {id:'left', g:1, keys:['left','lt'], name:'left()', sig:'t.left(angle)', desc:'Turns the turtle left (anticlockwise) by that many degrees. 90 is a quarter turn and 360 is a full turn.', ex:'t.left(90)'},
+ {id:'right', g:1, keys:['right','rt'], name:'right()', sig:'t.right(angle)', desc:'Turns the turtle right (clockwise) by that many degrees.', ex:'t.right(45)'},
+ {id:'goto', g:1, keys:['goto','setpos','setposition'], name:'goto()', sig:'t.goto(x, y)', desc:'Moves straight to the point (x, y). The centre of the paper is (0, 0), x grows to the right and y grows upwards. It draws a line unless the pen is up.', ex:'t.penup()\nt.goto(-100, 50)\nt.pendown()'},
+ {id:'setheading', g:1, keys:['setheading','seth'], name:'setheading()', sig:'t.setheading(angle)', desc:'Points the turtle in an exact direction: 0 is right, 90 is up, 180 is left and 270 is down.', ex:'t.setheading(90)'},
+ {id:'home', g:1, keys:['home'], name:'home()', sig:'t.home()', desc:'Sends the turtle back to the centre, facing right.', ex:'t.home()'},
+ {id:'position', g:1, keys:['position','pos','xcor','ycor'], name:'position()', sig:'t.position()', desc:'Gives back where the turtle is as (x, y). xcor() and ycor() give just one of them.', ex:'print(t.position())'},
+ {id:'penup', g:2, keys:['penup','pu','pendown','pd'], name:'penup() and pendown()', sig:'t.penup()', desc:'penup() lifts the pen so the turtle moves without drawing. pendown() puts the pen back on the paper.', ex:'t.penup()\nt.forward(50)\nt.pendown()\nt.forward(50)'},
+ {id:'color', g:2, keys:['color','pencolor','fillcolor'], name:'color()', sig:'t.color(line, fill)', desc:'Sets the line colour, and optionally a fill colour. Use names like "red" or codes like "#3366ff". pencolor() and fillcolor() set just one of them.', ex:'t.color("navy", "gold")'},
+ {id:'pensize', g:2, keys:['pensize','width'], name:'pensize()', sig:'t.pensize(width)', desc:'Sets how thick the line is. 1 is thin; try 5 or 10 for bold lines.', ex:'t.pensize(5)'},
+ {id:'begin_fill', g:2, keys:['begin_fill','end_fill'], name:'begin_fill() and end_fill()', sig:'t.begin_fill()', desc:'Fills a shape with colour. Call begin_fill(), draw a closed shape, then call end_fill().', ex:'t.color("black", "yellow")\nt.begin_fill()\nfor side in range(4):\n    t.forward(80)\n    t.left(90)\nt.end_fill()'},
+ {id:'circle', g:3, keys:['circle'], name:'circle()', sig:'t.circle(radius)', desc:'Draws a circle whose centre is radius steps to the turtle’s left. Add a second number to draw part of one: circle(50, 180) draws half.', ex:'t.circle(50)'},
+ {id:'dot', g:3, keys:['dot'], name:'dot()', sig:'t.dot(size, color)', desc:'Draws a filled dot where the turtle is standing.', ex:'t.dot(20, "red")'},
+ {id:'stamp', g:3, keys:['stamp'], name:'stamp()', sig:'t.stamp()', desc:'Leaves a copy of the turtle’s shape on the paper.', ex:'t.shape("turtle")\nt.stamp()'},
+ {id:'write', g:3, keys:['write'], name:'write()', sig:'t.write(text)', desc:'Writes text on the paper where the turtle is.', ex:'t.write("Hello!")'},
+ {id:'print', g:4, keys:['print'], name:'print()', sig:'print(value, ...)', desc:'Shows values in the Output panel. Separate several values with commas and print puts spaces between them.', ex:'print("Score:", 10)'},
+ {id:'input', g:4, keys:['input'], name:'input()', sig:'input(question)', desc:'Asks a question and waits for an answer typed in the box under Output. The answer is always text, so use int() to turn it into a number.', ex:'age = int(input("How old are you? "))'},
+ {id:'variables', g:4, keys:[], name:'Variables', sig:'name = value', desc:'A variable is a name that stores a value. Use one = to store something, then use the name later without quotes.', ex:'size = 100\nt.forward(size)'},
+ {id:'int', g:4, keys:['int','str','float'], name:'int(), str() and float()', sig:'int(value)', desc:'Converts between types. int("5") makes the number 5, str(5) makes the text "5", and float("2.5") makes a decimal number.', ex:'answer = int(input("Pick a number: "))\nprint("Double is " + str(answer * 2))'},
+ {id:'indentation', g:4, keys:['pass'], name:'Indentation', sig:'    4 spaces', desc:'Indentation is the spaces at the start of a line. Lines inside a for, while, if or def are indented 4 spaces more than the line with the colon, and lines in the same block line up exactly. When an error mentions indentation, check the line above too: a missing colon there is the most common cause. Use pass as a placeholder for an empty block.', ex:'for i in range(3):\n    if i == 1:\n        print("middle")\n    else:\n        pass\nprint("done")'},
+ {id:'comments', g:4, keys:[], name:'Comments', sig:'# a note', desc:'Python ignores anything after # on a line. Use comments to explain your code. Ctrl+/ turns lines into comments and back.', ex:'# Draw the roof\nt.left(45)'},
+ {id:'for', g:5, keys:['for'], name:'for loop', sig:'for item in sequence:', desc:'Repeats the indented lines once for each item. With range(4), the lines run 4 times.', ex:'for side in range(4):\n    t.forward(100)\n    t.left(90)'},
+ {id:'range', g:5, keys:['range'], name:'range()', sig:'range(start, stop, step)', desc:'Makes counting numbers. range(5) gives 0, 1, 2, 3, 4 and stops before the stop number. range(2, 10, 2) gives 2, 4, 6, 8.', ex:'for i in range(1, 6):\n    print(i)'},
+ {id:'while', g:5, keys:['while'], name:'while loop', sig:'while condition:', desc:'Repeats the indented lines as long as the condition is True. Make sure something changes, or it loops forever (press Stop if it does).', ex:'count = 3\nwhile count > 0:\n    print(count)\n    count = count - 1'},
+ {id:'if', g:5, keys:['if','elif','else'], name:'if, elif and else', sig:'if condition:', desc:'Runs the indented lines only when the condition is True. elif checks another condition and else runs when nothing above matched. Compare with == (equal), != (not equal), <, >, <= and >=.', ex:'if score >= 10:\n    print("You win!")\nelif score > 5:\n    print("Close!")\nelse:\n    print("Try again")'},
+ {id:'def', g:6, keys:['def'], name:'def (functions)', sig:'def name(parameters):', desc:'Makes your own command. The indented lines are what it does, and they only run when you call the function by name.', ex:'def square(size):\n    for side in range(4):\n        t.forward(size)\n        t.left(90)\n\nsquare(50)'},
+ {id:'return', g:6, keys:['return'], name:'return', sig:'return value', desc:'Sends a value back from a function, so you can store it or print it.', ex:'def double(n):\n    return n * 2\n\nprint(double(4))'},
+ {id:'lists', g:6, keys:['append','len'], name:'Lists', sig:'items = [a, b, c]', desc:'A list stores several values in order. items[0] is the first one, items.append(x) adds to the end and len(items) counts them.', ex:'colors = ["red", "green"]\ncolors.append("blue")\nprint(len(colors))'},
+ {id:'import', g:7, keys:['import'], name:'import', sig:'import module', desc:'Loads extra tools. In this editor you can use turtle, random, math and time.', ex:'import turtle\nimport random'},
+ {id:'random', g:7, keys:['random','randint','choice'], name:'random', sig:'random.randint(a, b)', desc:'randint(a, b) picks a whole number from a to b, including both. choice(list) picks one item from a list.', ex:'import random\n\nroll = random.randint(1, 6)\ncolor = random.choice(["red", "blue"])'},
+ {id:'math', g:7, keys:['math','sqrt','pi'], name:'math', sig:'math.sqrt(x)', desc:'Maths tools: math.sqrt() finds a square root and math.pi is 3.14159…', ex:'import math\n\nprint(math.sqrt(16))'}
+];
+const DOC_BY_ID = new Map(DOCS.map(d => [d.id, d]));
+const KEYMAP = new Map();
+DOCS.forEach(d => d.keys.forEach(k => KEYMAP.set(k, d)));
+const firstSentence = s => (s.match(/^.*?\.(?=\s|$)/) || [s])[0];
+const md = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+
+/* In-editor tip: explains the function under (or around) the cursor */
+function contextWord(){
+  const v = ta.value, s = ta.selectionStart;
+  if (s !== ta.selectionEnd) return '';
+  const ls = lineStartOf(v, s);
+  let a = s, b = s;
+  while (a > ls && /\w/.test(v[a-1])) a--;
+  while (b < v.length && /\w/.test(v[b])) b++;
+  if (b > a) return v.slice(a, b);
+  const line = v.slice(ls, s); let depth = 0;
+  for (let i = line.length - 1; i >= 0; i--) {
+    const c = line[i];
+    if (c === ')') depth++;
+    else if (c === '(') {
+      if (depth === 0) { const m = line.slice(0, i).match(/(\w+)\s*$/); return m ? m[1] : ''; }
+      depth--;
+    }
+  }
+  return '';
+}
+let tipDoc = null;
+function updateTip(){
+  const d = KEYMAP.get(contextWord()) || null;
+  if (d === tipDoc) return;
+  tipDoc = d;
+  $('tip').hidden = !d;
+  $('keys').hidden = !!d;
+  if (d) { $('tipSig').textContent = d.sig; $('tipText').textContent = firstSentence(d.desc); }
+}
+$('tipMore').addEventListener('click', () => { if (tipDoc) openRef(tipDoc.id); });
+
+/* "Did you mean…" for misspelled names */
+function lev(a, b){
+  const d = Array.from({length: a.length + 1}, (_, i) => [i]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+  return d[a.length][b.length];
+}
+function closestName(w){
+  if (w.length < 3) return '';
+  let best = '', bd = 3;
+  for (const c of new Set([...KEYMAP.keys(), ...BI])) {
+    if (c === w) continue;
+    const x = lev(w, c);
+    if (x < bd) { bd = x; best = c; }
+  }
+  return bd <= 2 ? best : '';
+}
+
+/* ---------- Lessons ---------- */
+const strip = c => c.split('\n').map(l => l.replace(/#.*$/, '')).join('\n');
+const has = (c, re) => re.test(strip(c));
+const countOf = (c, re) => (strip(c).match(re) || []).length;
+function loopBodyHas(code, re){
+  const lines = strip(code).split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^(\s*)(for|while)\b.*:\s*$/);
+    if (!m) continue;
+    for (let j = i + 1; j < lines.length; j++) {
+      if (!lines[j].trim()) continue;
+      if (lines[j].match(/^\s*/)[0].length <= m[1].length) break;
+      if (re.test(lines[j])) return true;
+    }
+  }
+  return false;
+}
+function loopVar(code){ const m = strip(code).match(/for\s+([A-Za-z_]\w*)\s+in\s+range/); return m ? m[1] : ''; }
+function funcName(code){ const m = strip(code).match(/^\s*def\s+([A-Za-z_]\w*)\s*\(/m); return m ? m[1] : ''; }
+function callsOf(code, n){ const re = new RegExp('\\b' + n + '\\s*\\('); return strip(code).split('\n').filter(l => !/^\s*def\s/.test(l) && re.test(l)).length; }
+function topCalls(code, n){ const re = new RegExp('^' + n + '\\s*\\('); return strip(code).split('\n').filter(l => re.test(l)).length; }
+function printsVariable(code){
+  const c = strip(code);
+  const names = [...c.matchAll(/^\s*([A-Za-z_]\w*)\s*=(?!=)/gm)].map(m => m[1]);
+  return names.some(n => new RegExp('print\\s*\\((?:[^)"\']|"[^"]*"|\'[^\']*\')*\\b' + n + '\\b').test(c));
+}
+const FWD = /\.(forward|fd)\s*\(/;
+const TURN = /\.(left|right|lt|rt)\s*\(/;
+// The count in the first for-loop's range(), e.g. 40 for range(40); 0 if unknown.
+function loopCount(code){ const m = strip(code).match(/for\s+\w+\s+in\s+range\s*\(\s*(\d+)\s*\)/); return m ? +m[1] : 0; }
+const deg = a => Math.round(Math.abs(a));
+// Each step: check(r) returns '' to pass or a reason; note(r) (optional) returns advice shown with a pass.
+// r = {code, output, ok, turtle}. r.turtle holds what the turtle actually did, or null when it isn't known.
+const LESSONS = [
+ {id:'hello', title:'Say hello', intro:'Show messages and store answers.', steps:[
+  {title:'Print a message', text:'`print()` shows text in the Output panel. Text goes inside quotes. Clear the editor, type this, then press Run.', sample:'print("Hello, world!")', hint:'Quotes and brackets come in pairs: `print("...")`. Check that both are closed.', refs:['print'],
+   check:r => !has(r.code, /\bprint\s*\(/) ? 'Use `print()` to show a message.' : !r.output.trim() ? 'Nothing appeared in Output. Put some text inside the brackets.' : ''},
+  {title:'Store it in a variable', text:'A variable is a name for a value. Make one with `=`, then use its name inside `print()` without quotes.', sample:'name = "Sam"\nprint("Hi " + name)', hint:'Text needs quotes but variable names don’t: `print(name)` prints Sam, while `print("name")` prints the word name.', refs:['variables','print'],
+   check:r => printsVariable(r.code) ? '' : 'Make a variable with `=`, then print it without quotes around its name.'},
+  {title:'Ask a question', text:'`input()` waits for someone to type an answer. Store the answer in a variable and print it back.', sample:'name = input("What is your name? ")\nprint("Nice to meet you, " + name)', hint:'When it runs, type your answer in the box under Output and press Enter.', refs:['input'],
+   check:r => !has(r.code, /\binput\s*\(/) ? 'Use `input()` to ask a question.' : !printsVariable(r.code) ? 'Store the answer in a variable, then print it.' : ''}
+ ]},
+ {id:'move', title:'Move the turtle', intro:'Make the turtle walk and turn.', steps:[
+  {title:'Take a first step', text:'Every turtle program starts by importing turtle and making a turtle called `t`. Then `t.forward(150)` walks it 150 steps.', sample:'import turtle\n\nt = turtle.Turtle()\nt.forward(150)', hint:'The second Turtle in `turtle.Turtle()` starts with a capital T.', refs:['Turtle','forward'],
+   check:r => !has(r.code, /^\s*import\s+turtle/m) ? 'Start with `import turtle` on the first line.'
+     : !has(r.code, FWD) ? 'Use `t.forward()` to move the turtle.'
+     : (r.turtle && !r.turtle.drew) ? 'The turtle didn’t draw a line. Check that the number in `t.forward()` isn’t 0.' : '',
+   note:r => r.turtle && r.turtle.maxSeg < 40 ? 'That line is very short. Try a bigger number, like 150, to see it clearly.' : ''},
+  {title:'Turn a corner', text:'`t.left(90)` turns a quarter turn. Draw an L shape: forward, turn, then forward again.', sample:'import turtle\n\nt = turtle.Turtle()\nt.forward(100)\nt.left(90)\nt.forward(100)', hint:'`left()` and `right()` take degrees. 90 degrees makes a square corner.', refs:['left','right'],
+   check:r => {
+     if (r.turtle) {
+       const T = r.turtle;
+       if (T.segs < 2) return 'Draw at least two lines, with a turn between them.';
+       if (!T.turns.length || T.width < 5 || T.height < 5) return 'Both lines go the same way. Add a turn with `t.left()` or `t.right()` between the moves.';
+       return '';
+     }
+     return countOf(r.code, /\.(forward|fd)\s*\(/g) < 2 ? 'Move forward at least twice.' : !has(r.code, TURN) ? 'Add a turn with `t.left()` or `t.right()` between the moves.' : '';
+   },
+   note:r => { const a = r.turtle && r.turtle.turns[0]; return a && deg(a) !== 90 ? `Your corner turns ${deg(a)}°. A square corner like the letter L is 90°.` : ''; }},
+  {title:'Draw a triangle', text:'A triangle has three sides. At each corner the turtle turns 120 degrees, because three turns of 120 add up to a full 360.', sample:'import turtle\n\nt = turtle.Turtle()\nt.forward(120)\nt.left(120)\nt.forward(120)\nt.left(120)\nt.forward(120)\nt.left(120)', hint:'If the shape doesn’t close, check that every turn is 120, not 60.', refs:['left'],
+   check:r => {
+     if (r.turtle) {
+       const T = r.turtle;
+       if (T.segs < 3) return 'A triangle needs three sides. Draw three lines.';
+       if (!T.closed) return 'The shape doesn’t close yet, so the turtle doesn’t end where it started. Turn 120° at each corner (3 × 120 = 360).';
+       return '';
+     }
+     return (countOf(r.code, /\.(forward|fd)\s*\(/g) >= 3 || loopBodyHas(r.code, FWD)) && has(r.code, /\(\s*120\s*\)/) ? '' : 'Draw three sides with a 120-degree turn after each one.';
+   },
+   note:r => r.turtle && r.turtle.closedSides[0] > 3 ? `Your shape closed after ${r.turtle.closedSides[0]} sides, so it isn’t a triangle yet. Three sides with 120° turns makes one.` : ''}
+ ]},
+ {id:'loops', title:'Repeat with loops', intro:'Let Python do the repeating for you.', steps:[
+  {title:'A square in four lines', text:'A `for` loop repeats the indented lines under it, and `range(4)` means four times. Press Enter after the colon and the editor indents the next line for you.', sample:'import turtle\n\nt = turtle.Turtle()\n\nfor side in range(4):\n    t.forward(100)\n    t.left(90)', hint:'The lines you want repeated must be indented by 4 spaces. Lines that aren’t indented run once, after the loop.', refs:['for','range'],
+   check:r => {
+     if (!has(r.code, /^\s*for\s.+:\s*$/m)) return 'Use a `for` loop, like `for side in range(4):`, to repeat the moves.';
+     if (!loopBodyHas(r.code, FWD)) return 'Indent `t.forward()` and `t.left()` under the loop so they repeat.';
+     if (r.turtle && !r.turtle.closed) return 'The square doesn’t close. The loop should run 4 times with a 90° turn each time.';
+     if (!r.turtle && !has(r.code, /range\s*\(\s*4\s*\)/)) return 'A square needs 4 sides, so use `range(4)`.';
+     return '';
+   },
+   note:r => { const n = loopCount(r.code); return n > 4 && (!r.turtle || r.turtle.closed) ? `Your loop runs ${n} times, so the turtle goes round the square more than once. \`range(4)\` is enough.` : ''; }},
+  {title:'Use the loop counter', text:'The loop variable counts up each time round: 0, 1, 2… Use it inside `forward()` so every line is longer than the last.', sample:'import turtle\n\nt = turtle.Turtle()\nt.speed(0)\n\nfor i in range(40):\n    t.forward(i * 5)\n    t.left(90)', hint:'`i` is 0 the first time, then 1, then 2, so `i * 5` grows by 5 each time. Try 91 instead of 90 for a twist.', refs:['for','speed'],
+   check:r => {
+     const v = loopVar(r.code);
+     if (!v) return 'Write a `for` loop with `range()`.';
+     if (!loopBodyHas(r.code, new RegExp('\\.(forward|fd)\\s*\\([^)]*\\b' + v + '\\b'))) return 'Use the loop variable `' + v + '` inside `t.forward()`, so each line is a different length.';
+     if (r.turtle && !r.turtle.drew) return 'Nothing was drawn. Check the numbers inside `range()` and `t.forward()`.';
+     return '';
+   },
+   note:r => {
+     const n = loopCount(r.code), T = r.turtle;
+     const small = T ? Math.max(T.width, T.height) < 120 : (n && n < 20);
+     return small ? `The lines grow each time round, but ${n ? `your loop only runs ${n} times` : 'the drawing is small'}, so the spiral is tiny. Try \`range(40)\` to watch it grow.` : '';
+   }},
+  {title:'Any shape you like', text:'Change your loop to draw a hexagon: 6 sides with 60-degree turns. For any shape, the turn is 360 divided by the number of sides.', sample:'for side in range(6):\n    t.forward(80)\n    t.left(60)', hint:'Keep `import turtle` and `t = turtle.Turtle()` at the top. Only the loop changes.', refs:['range','left'],
+   check:r => {
+     if (!has(r.code, /^\s*for\s.+:\s*$/m) || !loopBodyHas(r.code, TURN)) return 'Use a `for` loop with a move and a turn inside it.';
+     if (r.turtle) return r.turtle.closed ? '' : 'The shape doesn’t close. The turn should be 360 divided by the number of sides: with `range(6)`, turn 60.';
+     return has(r.code, /range\s*\(\s*6\s*\)/) && loopBodyHas(r.code, /\.(left|right|lt|rt)\s*\(\s*60\s*\)/) ? '' : 'Loop with `range(6)` and turn 60 degrees inside the loop.';
+   },
+   note:r => { const s = r.turtle && r.turtle.closedSides[0]; return s && s !== 6 ? `Nice ${s}-sided shape! The step suggested a hexagon (6 sides, 60°), and any shape works when the turn is 360 ÷ sides.` : ''; }}
+ ]},
+ {id:'pens', title:'Colour and pens', intro:'Change colours, fill shapes and move without drawing.', steps:[
+  {title:'Pick a colour', text:'`t.color("red")` sets the line colour and `t.pensize(5)` makes the line thicker. Set them before the turtle draws.', sample:'import turtle\n\nt = turtle.Turtle()\nt.color("red")\nt.pensize(5)\nt.circle(60)', hint:'Colour names go in quotes. Try "orange", "purple" or "teal".', refs:['color','pensize','circle'],
+   check:r => !has(r.code, /\.(color|pencolor)\s*\(/) ? 'Set a colour with `t.color()`.' : !has(r.code, /\.(pensize|width)\s*\(/) ? 'Change the line thickness with `t.pensize()`.' : (r.turtle && !r.turtle.drew) ? 'Set the colour, then draw something, like `t.circle(60)`.' : '',
+   note:r => {
+     const T = r.turtle; if (!T) return '';
+     if (T.colors.size && [...T.colors].every(c => c === 'black')) return 'Black is the normal colour, so you won’t see a change. Try "red" or "teal".';
+     if (T.pensize <= 1) return '`pensize(1)` is the normal thickness. Try 5 to see the difference.';
+     return '';
+   }},
+  {title:'Fill a shape', text:'Draw a closed shape between `t.begin_fill()` and `t.end_fill()` to fill it. `t.color("black", "yellow")` gives a black line and a yellow fill.', sample:'import turtle\n\nt = turtle.Turtle()\nt.color("black", "yellow")\nt.begin_fill()\nfor side in range(4):\n    t.forward(100)\n    t.left(90)\nt.end_fill()', hint:'`end_fill()` goes after the loop, not inside it, so it isn’t indented.', refs:['begin_fill','color'],
+   check:r => {
+     const c = strip(r.code), b = c.search(/\.begin_fill\s*\(/), e = c.search(/\.end_fill\s*\(/);
+     if (b < 0) return 'Start the shape with `t.begin_fill()`.';
+     if (e < b) return 'Finish with `t.end_fill()` after the shape.';
+     if (r.turtle && !r.turtle.fills) return 'Nothing got filled. Draw the whole shape between `begin_fill()` and `end_fill()`.';
+     return '';
+   },
+   note:r => { const T = r.turtle; return T && T.fills && !T.fillColors.size ? 'The fill uses the normal colour. Give `color()` two colours, like `t.color("black", "yellow")`.' : ''; }},
+  {title:'Jump without drawing', text:'`t.penup()` lifts the pen so the turtle moves without drawing, and `t.pendown()` puts it back. Use `t.goto(x, y)` to jump. Point at the paper to read x and y.', sample:'import turtle\n\nt = turtle.Turtle()\nt.penup()\nt.goto(-120, 0)\nt.pendown()\nt.circle(40)\n\nt.penup()\nt.goto(80, 0)\nt.pendown()\nt.circle(40)', hint:'The centre of the paper is (0, 0). Negative x is to the left and negative y is down.', refs:['penup','goto'],
+   check:r => {
+     if (!has(r.code, /\.(penup|pu|up)\s*\(/) || !has(r.code, /\.(pendown|pd|down)\s*\(/)) return 'Use `t.penup()` before moving and `t.pendown()` before drawing again.';
+     if (r.turtle) return !r.turtle.jumps ? 'The turtle didn’t move while the pen was up. Use `t.goto()` between `penup()` and `pendown()`.' : !r.turtle.drew ? 'Put the pen down and draw something after the jump.' : '';
+     return has(r.code, /\.(goto|setpos|setposition|forward|fd)\s*\(/) ? '' : 'Move the turtle with `t.goto()` while the pen is up.';
+   }}
+ ]},
+ {id:'functions', title:'Make your own command', intro:'Name a piece of code and reuse it.', steps:[
+  {title:'Define a function', text:'`def` makes a new command. The indented lines are what it does, and nothing happens until you call it by name.', sample:'import turtle\n\nt = turtle.Turtle()\n\ndef square(size):\n    for side in range(4):\n        t.forward(size)\n        t.left(90)\n\nsquare(80)', hint:'The call `square(80)` isn’t indented. It sits outside the function, at the left edge.', refs:['def'],
+   check:r => { const n = funcName(r.code); return !n ? 'Define a function with `def`.' : !topCalls(r.code, n) ? 'Call your function, for example `' + n + '(80)`, on a line that isn’t indented.' : (r.turtle && !r.turtle.drew && /turtle/.test(r.code)) ? 'Your function ran but drew nothing. Check what’s inside it.' : ''; }},
+  {title:'Use it again and again', text:'Call your function several times with different sizes. Put the call inside a loop to make a pattern.', sample:'for n in range(5):\n    square(20 + n * 20)', hint:'Keep `def square(size):` above this loop, so Python knows the command before you use it.', refs:['def','for'],
+   check:r => { const n = funcName(r.code); if (!n) return 'You need the function from the last step.'; return callsOf(r.code, n) >= 2 || loopBodyHas(r.code, new RegExp('^\\s*' + n + '\\s*\\(')) ? '' : 'Call `' + n + '()` more than once, or inside a loop.'; },
+   note:r => { const T = r.turtle; return T && T.closed >= 2 && T.segLens.size === 1 ? 'Every call drew the same size, so the shapes sit on top of each other. Try a different size each time, like `square(20 + n * 20)`.' : ''; }}
+ ]},
+ {id:'choices', title:'Make decisions', intro:'Use if, else and random choices.', steps:[
+  {title:'if and else', text:'`if` runs its indented lines only when the condition is true, and `else` runs when it isn’t.', sample:'number = int(input("Pick a number: "))\n\nif number > 10:\n    print("That is a big one!")\nelse:\n    print("That is a small one.")', hint:'`else:` lines up with `if`, not with the indented print above it. Use Shift+Tab to move back.', refs:['if','int','input'],
+   check:r => has(r.code, /^\s*if\s.+:\s*$/m) && has(r.code, /^\s*else\s*:/m) ? '' : 'Write an `if` with an `else` underneath it.',
+   note:r => 'Run it again with a different answer to see the other message.'},
+  {title:'Random surprises', text:'The random module picks by chance. `random.choice()` picks an item from a list, and `random.randint(20, 100)` picks a whole number between 20 and 100.', sample:'import turtle\nimport random\n\nt = turtle.Turtle()\nt.speed(0)\ncolors = ["red", "orange", "green", "blue"]\n\nfor i in range(30):\n    t.color(random.choice(colors))\n    t.forward(random.randint(20, 100))\n    t.left(random.randint(60, 180))', hint:'Each run draws something different, so run it a few times.', refs:['random','lists'],
+   check:r => !has(r.code, /^\s*import\s+random/m) ? 'Add `import random` at the top.' : has(r.code, /random\.(choice|randint)\s*\(/) ? '' : 'Use `random.choice()` or `random.randint()`.',
+   note:r => 'Run it a few more times. Each run draws something different.'}
+ ]}
+];
+const ERR = 'The program stopped with an error. Read the message in Output, fix that line, and run again.';
+function defaultProgress(){ return {done:{}, lesson:null, step:0, learnOpen:null, tab:'lessons'}; }
+let progress = defaultProgress();
+const stepKey = (L, i) => L.id + ':' + i;
+const stepResults = {};
+const lessonDone = L => L.steps.filter((s, i) => progress.done[stepKey(L, i)]).length;
+
+function renderLessons(){
+  const v = $('lessonsView');
+  const L = LESSONS.find(x => x.id === progress.lesson);
+  if (!L) {
+    v.innerHTML = '<h3>Lessons</h3><p>Short lessons that build on each other. Type each example yourself and press Run. The lesson checks your code.</p><ul class="lessons">' +
+      LESSONS.map((x, i) => {
+        const d = lessonDone(x), n = x.steps.length, all = d === n;
+        return `<li><button class="lesson-row${all ? ' done' : ''}" data-lesson="${x.id}"><span class="ln" aria-hidden="true">${all ? '✓' : i + 1}</span><span><b>${esc(x.title)}</b><small>${esc(x.intro)}</small></span><span class="prog">${d} of ${n}</span></button></li>`;
+      }).join('') + '</ul>';
+    return;
+  }
+  const i = Math.min(progress.step, L.steps.length - 1), S = L.steps[i], key = stepKey(L, i);
+  const res = stepResults[key], done = !!progress.done[key];
+  const li = LESSONS.indexOf(L), last = i === L.steps.length - 1, passed = res && res.pass;
+  let status = '<div class="status">Press Run when you’re ready, and this step will check your code.</div>';
+  if (res && !res.pass) status = `<div class="status fail">Not yet. ${md(res.msg)}</div>`;
+  else if (passed) status = `<div class="status pass">${last ? 'Lesson complete. Well done!' : 'That works. On to the next step.'}</div>` +
+    (res.note ? `<div class="status advice">${md(res.note)}</div>` : '');
+  else if (done) status = '<div class="status pass">You’ve finished this step. Move on, or keep experimenting.</div>';
+  const nextBtn = !last ? `<button class="btn${passed ? ' run' : ''}" data-action="next">Next step</button>`
+    : (li < LESSONS.length - 1 ? `<button class="btn${passed ? ' run' : ''}" data-action="nextLesson">Next lesson</button>` : '');
+  const chips = S.refs.map(id => { const d = DOC_BY_ID.get(id); return d ? `<button class="chip" data-ref="${id}">${esc(d.name)}</button>` : ''; }).join('');
+  v.innerHTML = `<button class="link" data-action="back">‹ All lessons</button>
+    <h3>${esc(L.title)}</h3>
+    <div class="steps" role="group" aria-label="Steps">${L.steps.map((s, j) => `<button data-step="${j}" class="${progress.done[stepKey(L, j)] ? 'done' : ''}"${j === i ? ' aria-current="step"' : ''} aria-label="Step ${j + 1}: ${esc(s.title)}">${j + 1}</button>`).join('')}</div>
+    <h4>Step ${i + 1}: ${esc(S.title)}</h4>
+    <p>${md(S.text)}</p>
+    <div class="note">Type this:<button class="btn small" data-action="clear">Clear the editor</button></div>
+    <pre>${highlight(S.sample)}</pre>
+    <details><summary>Need a hint?</summary><p>${md(S.hint)}</p></details>
+    <div class="refs">See also ${chips}</div>
+    ${status}
+    <div class="row">${i > 0 ? '<button class="btn" data-action="prev">Previous</button>' : ''}${nextBtn}</div>`;
+}
+function checkLesson(r){
+  if (!progress.learnOpen) return;
+  const L = LESSONS.find(x => x.id === progress.lesson); if (!L) return;
+  const i = Math.min(progress.step, L.steps.length - 1), key = stepKey(L, i);
+  const S = L.steps[i];
+  const msg = r.ok ? S.check(r) : ERR;
+  let note = '';
+  if (!msg && S.note) { try { note = S.note(r) || ''; } catch (e) {} }
+  stepResults[key] = {pass: !msg, msg, note};
+  if (!msg && !progress.done[key]) { progress.done[key] = Date.now(); log('info', `Finished “${L.title}”, step ${i + 1}`); }
+  renderLessons(); scheduleSave();
+}
+$('lessonsView').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const a = b.dataset.action;
+  if (b.dataset.ref) { openRef(b.dataset.ref); return; }
+  if (b.dataset.lesson) {
+    const L = LESSONS.find(x => x.id === b.dataset.lesson);
+    progress.lesson = L.id;
+    progress.step = Math.max(0, L.steps.findIndex((s, i) => !progress.done[stepKey(L, i)]));
+  } else if (b.dataset.step) progress.step = +b.dataset.step;
+  else if (a === 'back') progress.lesson = null;
+  else if (a === 'prev') progress.step = Math.max(0, progress.step - 1);
+  else if (a === 'next') progress.step++;
+  else if (a === 'nextLesson') { const li = LESSONS.findIndex(x => x.id === progress.lesson); progress.lesson = LESSONS[li + 1].id; progress.step = 0; }
+  else if (a === 'clear') {
+    ta.focus(); ta.setSelectionRange(0, ta.value.length); insert(''); updateCaret();
+    log('info', 'Cleared the editor for a lesson'); snap(true);
+    return;
+  }
+  renderLessons(); scheduleSave(); $('lessonsView').scrollTop = 0;
+});
+
+/* Reference views */
+function renderRefList(q){
+  $('refSearchWrap').hidden = false;
+  q = (q || '').trim().toLowerCase();
+  const items = DOCS.filter(d => !q || (d.name + ' ' + d.sig + ' ' + d.desc + ' ' + d.keys.join(' ') + ' ' + GROUPS[d.g]).toLowerCase().includes(q));
+  if (!items.length) { $('refList').innerHTML = `<p>Nothing matches “${esc(q)}”. Try a shorter word, like circle or loop.</p>`; return; }
+  $('refList').innerHTML = GROUPS.map((g, gi) => {
+    const its = items.filter(d => d.g === gi);
+    if (!its.length) return '';
+    return `<div class="ref-group"><h4>${esc(g)}</h4>${its.map(d => `<button class="ref-item" data-ref="${d.id}"><b>${esc(d.sig)}</b><span>${esc(firstSentence(d.desc))}</span></button>`).join('')}</div>`;
+  }).join('');
+}
+function renderRefDetail(id){
+  const d = DOC_BY_ID.get(id); if (!d) return;
+  $('refSearchWrap').hidden = true;
+  const uses = [];
+  LESSONS.forEach(L => L.steps.forEach((s, i) => { if (s.refs.includes(id)) uses.push(`<button class="chip plain" data-goto="${L.id}:${i}">${esc(L.title)}, step ${i + 1}</button>`); }));
+  $('refList').innerHTML = `<button class="link" data-action="refBack">‹ All topics</button>
+    <h3>${esc(d.name)}</h3>
+    <pre class="sig">${esc(d.sig)}</pre>
+    <p>${md(d.desc)}</p>
+    <div class="note">Example</div>
+    <pre>${highlight(d.ex)}</pre>
+    ${uses.length ? `<div class="refs">Practise it in ${uses.slice(0, 3).join('')}</div>` : ''}`;
+}
+$('refList').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.ref) { renderRefDetail(b.dataset.ref); $('refView').scrollTop = 0; }
+  else if (b.dataset.action === 'refBack') { renderRefList($('refSearch').value); $('refView').scrollTop = 0; }
+  else if (b.dataset.goto) {
+    const [lid, i] = b.dataset.goto.split(':');
+    progress.lesson = lid; progress.step = +i;
+    setTab('lessons'); renderLessons(); scheduleSave();
+  }
+});
+$('refSearch').addEventListener('input', e => renderRefList(e.target.value));
+
+function setTab(t){
+  progress.tab = t;
+  $('tabLessons').setAttribute('aria-selected', String(t === 'lessons'));
+  $('tabRef').setAttribute('aria-selected', String(t === 'ref'));
+  $('lessonsView').hidden = t !== 'lessons';
+  $('refView').hidden = t !== 'ref';
+  scheduleSave();
+}
+function openRef(id){
+  setTab('ref'); renderRefDetail(id); $('refView').scrollTop = 0;
+  if (window.innerWidth <= 960) $('learn').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function initLearn(){
+  progress.learnOpen = true;
+  renderLessons(); renderRefList('');
+  setTab(progress.tab === 'ref' ? 'ref' : 'lessons');
+  updateTip();
+}
+$('tabLessons').addEventListener('click', () => setTab('lessons'));
+$('tabRef').addEventListener('click', () => setTab('ref'));
+
+/* ---------- Indentation and structure checker ---------- */
+const BLOCK_RE = /^(if|elif|else|for|while|def|class|try|except|finally|with)\b/;
+const NEW_STMT_RE = /^(if|elif|else|for|while|def|class|return|import|from|try|except|finally|with|pass|break|continue|print)\b|^[A-Za-z_][\w.]*\s*(\(|=(?!=))/;
+const PAIRS = {'(':')','[':']','{':'}'};
+const CLOSERS = {')':'(',']':'[','}':'{'};
+function scanLine(line, tq){
+  let out = '', i = 0, q = tq || null;
+  while (i < line.length) {
+    const c = line[i];
+    if (q) {
+      if (c === '\\') { i += 2; continue; }
+      if (line.startsWith(q, i)) { i += q.length; q = null; out += '""'; continue; }
+      i++; continue;
+    }
+    if (c === '#') break;
+    if (c === '"' || c === "'") { q = line.startsWith(c + c + c, i) ? c + c + c : c; i += q.length; continue; }
+    out += c; i++;
+  }
+  return {text: out, tq: q && q.length === 3 ? q : null, openQuote: q && q.length === 1 ? q : null};
+}
+function lintCode(code){
+  const lines = code.split('\n'), issues = [];
+  const add = (line, kind, msg, col, eof) => {
+    if (!issues.some(x => x.line === line && x.kind === kind)) issues.push({line, kind, msg, col: col || 'end', eof: !!eof});
+  };
+  const indentOf = s => s.match(/^ */)[0].length;
+  let stack = [0], prev = null, cont = null, tq = null;
+  const lastAt = new Map(), stmts = [];
+
+  function scanBrackets(text, n, stk){
+    for (const c of text) {
+      if (PAIRS[c]) stk.push({c, n});
+      else if (CLOSERS[c]) {
+        if (!stk.length) add(n, 'bracket', `There’s a \`${c}\` with no matching \`${CLOSERS[c]}\` before it.`);
+        else if (stk[stk.length-1].c !== CLOSERS[c]) { const o = stk.pop(); add(n, 'bracket', `A \`${o.c}\` is closed with \`${c}\`. Use \`${PAIRS[o.c]}\` instead.`); }
+        else stk.pop();
+      }
+    }
+  }
+  function finish(s){
+    const t = s.text.trim();
+    const kw = (t.match(/^[A-Za-z_]+/) || [''])[0];
+    let colonAt = -1, d = 0;
+    for (let i = 0; i < t.length; i++) {
+      const c = t[i];
+      if ('([{'.includes(c)) d++;
+      else if (')]}'.includes(c)) d--;
+      else if (c === ':' && d === 0) { colonAt = i; break; }
+    }
+    let opensBlock = false;
+    if (BLOCK_RE.test(t)) {
+      if (colonAt < 0) { add(s.n, 'colon', `\`${kw}\` needs a colon \`:\` at the end of the line.`); opensBlock = true; }
+      else opensBlock = colonAt === t.length - 1;
+    }
+    prev = {n: s.n, indent: s.indent, kw, opensBlock, missingColon: BLOCK_RE.test(t) && colonAt < 0};
+  }
+  function checkIndent(n, indent, t){
+    const kw = (t.match(/^[A-Za-z_]+/) || [''])[0];
+    let misplaced = false;
+    if (!prev) {
+      if (indent > 0) { add(n, 'indent', `The first line of code shouldn’t start with spaces.`, 'start'); stack = [indent]; }
+    } else if (prev.opensBlock) {
+      if (indent > prev.indent) stack.push(indent);
+      else if (prev.missingColon) add(n, 'indent', `This line belongs inside the \`${prev.kw}\` on line ${prev.n}, so indent it with Tab.`, 'start');
+      else add(n, 'indent', `Line ${prev.n} ends with a colon, so this line must be indented. Press Tab at its start.`, 'start');
+    } else if (indent > stack[stack.length-1]) {
+      add(n, 'indent', `This line is indented, but line ${prev.n} doesn’t start a block. Line them up with Shift+Tab.`, 'start');
+      misplaced = true;
+    }
+    if (!misplaced) {
+      let top = stack[stack.length-1];
+      if (indent < top) {
+        let upper = top;
+        while (stack.length > 1 && stack[stack.length-1] > indent) upper = stack.pop();
+        top = stack[stack.length-1];
+        if (top !== indent && !/^(elif|else|except|finally)$/.test(kw)) {
+          const ref = lastAt.get(top), sp = k => k + (k === 1 ? ' space' : ' spaces');
+          add(n, 'indent', ref && upper > indent
+            ? `It has ${sp(indent)}. Use ${sp(upper)} to stay inside the block from line ${ref.n}, or ${sp(top)} to come after it.`
+            : `It has ${sp(indent)}, which doesn’t line up. Use ${sp(top)}.`, 'start');
+        }
+      }
+    }
+    const level = misplaced ? stack[stack.length-1] : indent;
+    if (/^(elif|else|except|finally)$/.test(kw)) {
+      const allowed = kw === 'elif' ? ['if','elif'] : kw === 'else' ? ['if','elif','for','while','try','except'] : ['try','except'];
+      const head = kw === 'elif' || kw === 'else' ? 'if' : 'try';
+      const last = lastAt.get(level);
+      if (!last || !allowed.includes(last.kw)) {
+        let cand = null;
+        for (let i = stmts.length - 1; i >= 0; i--) if (allowed.includes(stmts[i].kw)) { cand = stmts[i]; break; }
+        if (!cand) add(n, 'else', `This \`${kw}\` has no \`${head}\` above it.`, 'start');
+        else if (cand.indent !== level) add(n, 'else', `This \`${kw}\` should line up with the \`${cand.kw}\` on line ${cand.n}.`, 'start');
+        else if (last) add(n, 'else', `Line ${last.n} sits between the \`${cand.kw}\` on line ${cand.n} and this \`${kw}\`. Indent it, or move it below.`, 'start');
+      }
+    }
+    for (const k of [...lastAt.keys()]) if (k > level) lastAt.delete(k);
+    lastAt.set(level, {kw, n});
+    stmts.push({n, indent: level, kw});
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const n = i + 1, raw = lines[i].replace(/\t/g, '    ');
+    const inString = !!tq;
+    const sc = scanLine(raw, tq); tq = sc.tq;
+    if (sc.openQuote) add(n, 'quote', `A quote \`${sc.openQuote}\` isn’t closed. Add another \`${sc.openQuote}\` at the end of the text.`);
+    const t = sc.text.trim();
+    if (inString) {
+      if (cont && t) { scanBrackets(t, n, cont.stk); cont.text += ' ' + t; if (!cont.stk.length) { finish(cont); cont = null; } }
+      continue;
+    }
+    if (cont) {
+      if (t && NEW_STMT_RE.test(t) && indentOf(raw) <= cont.indent) {
+        const o = cont.stk[cont.stk.length-1];
+        add(o.n, 'bracket', `This \`${o.c}\` is never closed. Add \`${PAIRS[o.c]}\` at the end of the line.`);
+        finish(cont); cont = null;
+      } else {
+        if (t) { scanBrackets(t, n, cont.stk); cont.text += ' ' + t; }
+        if (!cont.stk.length) { finish(cont); cont = null; }
+        continue;
+      }
+    }
+    if (!t) continue;
+    const indent = indentOf(raw);
+    checkIndent(n, indent, t);
+    const stk = [];
+    scanBrackets(t, n, stk);
+    if (stk.length) { cont = {n, indent, text: t, stk}; continue; }
+    finish({n, indent, text: t});
+  }
+  if (cont) { const o = cont.stk[cont.stk.length-1]; add(o.n, 'bracket', `This \`${o.c}\` is never closed. Add \`${PAIRS[o.c]}\` to close it.`, 'end', true); finish(cont); }
+  if (prev && prev.opensBlock) add(prev.n, 'empty', `This line ends with a colon, but nothing is indented under it.`, 'end', true);
+  const rank = {quote:0, colon:1, else:2, bracket:3, indent:4, empty:5};
+  const best = new Map();
+  for (const x of issues) { const cur = best.get(x.line); if (!cur || rank[x.kind] < rank[cur.kind]) best.set(x.line, x); }
+  return [...best.values()].sort((a, b) => a.line - b.line);
+}
+
+/* ---------- Downloadable report for the teacher ---------- */
+$('studentName').addEventListener('input', e => { state.studentName = e.target.value.slice(0, 80); scheduleSave(); });
+$('studentName').addEventListener('change', e => { const n = e.target.value.trim(); if (n) log('info', `Name set to ${n}`); });
+
+function lessonsDoneList(){
+  return Object.entries(progress.done).sort((a, b) => a[1] - b[1]).map(([key, t]) => {
+    const [lid, i] = key.split(':'); const L = LESSONS.find(x => x.id === lid);
+    return L ? [t, `${L.title}, step ${+i + 1}: ${L.steps[+i] ? L.steps[+i].title : ''}`] : null;
+  }).filter(Boolean);
+}
+function buildReport(){
+  snap(true);
+  const name = (state.studentName || '').trim() || 'Name not given';
+  const step = Math.max(1, Math.ceil(snaps.length / 1500));
+  const replay = snaps.filter((_, i) => i % step === 0 || i === snaps.length - 1);
+  const data = JSON.stringify({snaps: replay}).replace(/</g, '\\u003c');
+  const f = flags();
+  const rows = statRows().map(([k, v, hot]) => `<tr${hot ? ' class="hot"' : ''}><th>${esc(k)}</th><td>${esc(String(v))}</td></tr>`).join('');
+  const lessons = lessonsDoneList();
+  const events = state.events.map(e => `<tr${e.type === 'flag' ? ' class="hot"' : ''}><td>${esc(fmtDate(e.t))}</td><td>${esc(e.msg)}</td></tr>`).join('');
+  const css = `:root{color-scheme:light;--bg:#F3F6F9;--card:#fff;--ink:#1A2633;--muted:#5A6A7A;--line:#D2DBE5;--warn:#8A5A00;--warn-bg:#FFF1CC;--ok:#1B5E3F;--ok-bg:#DDF3E7;--kw:#7A36B0;--str:#1C7547;--num:#B0510A;--com:#7A8796;--fn:#2457A6;--bi:#0B6F86;--self:#B0245A;--dec:#9A6B00;--op:#556677;--b0:#2457A6;--b1:#B0510A;--b2:#7A36B0;--guide:rgba(26,38,51,.12)}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#10161D;--card:#17202A;--ink:#E2E9F1;--muted:#93A3B4;--line:#2A3745;--warn:#F2C766;--warn-bg:#3A2F14;--ok:#9BE0BC;--ok-bg:#163327;--kw:#C79BF5;--str:#8FD3A4;--num:#F2A867;--com:#7E8C9B;--fn:#8DB3FF;--bi:#5FCBDB;--self:#F58BB2;--dec:#E5C46B;--op:#9AABBC;--b0:#8DB3FF;--b1:#F2A867;--b2:#C79BF5;--guide:rgba(226,233,241,.1)}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 20px 60px}h1{font-size:26px;margin:0 0 4px}h2{font-size:19px;margin:32px 0 10px}
+.sub{color:var(--muted);margin:0 0 20px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow-x:auto}
+.verdict{border-radius:10px;padding:12px 14px;font-weight:600;background:var(--ok-bg);color:var(--ok)}.verdict.flag{background:var(--warn-bg);color:var(--warn)}
+table{border-collapse:collapse;width:100%;font-size:15px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:400;color:var(--muted)}td{font-variant-numeric:tabular-nums}.stats td{text-align:right;font-weight:700}tr.hot td,tr.hot th{color:var(--warn)}
+pre{margin:0;font:14.5px/1.6 ui-monospace,Menlo,Consolas,monospace;white-space:pre;tab-size:4}
+.kw{color:var(--kw);font-weight:700}.str{color:var(--str)}.num{color:var(--num)}.com{color:var(--com);font-style:italic}.fn,.cls{color:var(--fn);font-weight:700}.bi{color:var(--bi)}.self{color:var(--self)}.dec{color:var(--dec)}.op{color:var(--op)}.b0{color:var(--b0)}.b1{color:var(--b1)}.b2{color:var(--b2)}.ig{box-shadow:inset 1px 0 0 var(--guide)}
+.ctrl{display:flex;gap:12px;align-items:center;margin-top:12px;color:var(--muted);font-size:14px}.ctrl input{flex:1}
+button{font:600 14px system-ui,sans-serif;padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+#rp{max-height:420px;overflow:auto}.foot{color:var(--muted);font-size:13.5px;margin-top:36px}`;
+  const script = "var D=JSON.parse(document.getElementById('data').textContent);var pre=document.getElementById('rp'),sl=document.getElementById('rs'),info=document.getElementById('ri'),btn=document.getElementById('rb'),tm=null;" +
+    "sl.max=Math.max(0,D.snaps.length-1);function show(i){var s=D.snaps[i];if(!s)return;pre.textContent=s[1];sl.value=i;info.textContent='Step '+(i+1)+' of '+D.snaps.length+', '+new Date(s[0]).toLocaleString();}" +
+    "function stop(){clearInterval(tm);tm=null;btn.textContent='Play';}" +
+    "btn.onclick=function(){if(tm){stop();return;}var i=+sl.value;if(i>=D.snaps.length-1)i=0;btn.textContent='Pause';var ms=Math.max(25,Math.min(120,12000/Math.max(1,D.snaps.length)));tm=setInterval(function(){show(i++);if(i>=D.snaps.length)stop();},ms);};" +
+    "sl.oninput=function(){stop();show(+sl.value);};show(0);";
+  return `<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Typing record: ${esc(name)}</title><style>${css}</style></head>
+<body><main>
+<h1>Typing record: ${esc(name)}</h1>
+<p class="sub">Made with Turtle Desk on ${esc(new Date().toLocaleString())}. Session ${esc(state.sid)}.</p>
+<div class="verdict${f ? ' flag' : ''}">${esc(verdictText())}</div>
+<h2>Final code</h2>
+<div class="card"><pre>${highlight(ta.value) || '<span class="com"># (empty)</span>'}</pre></div>
+<h2>Replay</h2>
+<div class="card"><pre id="rp"></pre><div class="ctrl"><button id="rb">Play</button><input type="range" id="rs" min="0" max="0" value="0" aria-label="Replay position"><span id="ri"></span></div></div>
+<h2>Summary</h2>
+<div class="card"><table class="stats">${rows}</table></div>
+<h2>Lesson steps completed</h2>
+<div class="card">${lessons.length ? `<table>${lessons.map(([t, s]) => `<tr><td style="width:170px">${esc(fmtDate(t))}</td><td>${esc(s)}</td></tr>`).join('')}</table>` : '<p style="margin:0">None yet.</p>'}</div>
+<h2>Everything that happened</h2>
+<div class="card"><table>${events}</table></div>
+<p class="foot">The editor blocks pasting from outside, text that arrives all at once, and typing sent by scripts. It notes very fast typing and time spent away from the page. These checks run on the student’s own device, so read this record as supporting evidence rather than proof.</p>
+</main>
+<script type="application/json" id="data">${data}<\/script>
+<script>${script}<\/script>
+</body></html>`;
+}
+function slug(s){ return (s || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40); }
+async function saveFile(filename, text){
+  // Inside Claude: use the viewer's downloads capability. Elsewhere (e.g. GitHub Pages): a normal browser download.
+  if (window.claude && typeof window.claude.use === 'function') {
+    let cap = null;
+    try { cap = await window.claude.use('downloads'); } catch (e) {}
+    if (cap) {
+      try { await cap.save({filename, data: new Blob([text], {type: 'text/html'})}); return 'saved'; }
+      catch (e) {
+        const code = e && e.code;
+        if (code === 'declined') return 'declined';
+        if (code === 'rate_limited') return 'busy';
+        return 'failed';
+      }
+    }
+  }
+  try {
+    const url = URL.createObjectURL(new Blob([text], {type: 'text/html'}));
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.style.display = 'none';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    return 'saved';
+  } catch (e) { return 'failed'; }
+}
+$('downloadReport').addEventListener('click', async () => {
+  const name = (state.studentName || '').trim();
+  if (!name) { toast('Add your name first, so your teacher knows whose report it is.'); $('studentName').focus(); return; }
+  const btn = $('downloadReport'); btn.disabled = true;
+  const day = new Date().toISOString().slice(0, 10);
+  const result = await saveFile(`typing-record-${slug(name) || 'student'}-${day}.html`, buildReport());
+  btn.disabled = false;
+  if (result === 'saved') { toast('Report downloaded. Send that file to your teacher.'); log('info', 'Downloaded the typing report'); }
+  else if (result === 'declined') toast('Download cancelled.');
+  else if (result === 'busy') toast('A save prompt is already open.');
+  else toast('Downloads don’t work here. Use Copy as text and paste it into an email instead.');
+});
+
+/* ---------- Boot ---------- */
+if (!load()) {
+  state = newState(); ta.value = STARTER;
+  log('start', 'Session started with the starter code');
+} else {
+  log('start', 'Came back to the session');
+}
+prevValue = ta.value;
+snap(true);
+render(); updateBadge(); clearOut(); initLearn();
+$('studentName').value = state.studentName || '';
+sizeTurtle();
+window.addEventListener('resize', () => { if (!running) sizeTurtle(); });
+if (typeof Sk === 'undefined') outWrite('Python didn’t load. Check your internet connection and reload the page.\n', 'err');
+ta.focus({preventScroll:true});
+setCaret(ta.value.length);
+})();
+</script>
+</body>
+</html>
