@@ -263,6 +263,17 @@ figure.goal figcaption{display:flex;align-items:center;flex-wrap:wrap;gap:6px;fo
 .ref-group h4{color:var(--muted);font-size:13.5px;font-weight:600;margin:0 0 4px}
 .ref-item{display:block;width:100%;text-align:left;background:transparent;border:0;border-radius:7px;padding:6px 8px;cursor:pointer}
 .ref-item:hover{background:var(--surface-2)}
+.ref-links{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+.ref-links a{color:var(--accent);font-weight:600}
+details.quick{border-top:1px solid var(--line);padding-top:12px;margin-top:6px}
+details.quick summary{font-weight:700;font-size:15px;color:var(--ink);cursor:pointer}
+details.quick h4{color:var(--muted);font-size:13.5px;font-weight:600;margin:14px 0 4px}
+details.quick table{border-collapse:collapse;width:100%;font-size:13.5px}
+details.quick td{padding:4px 6px 4px 0;vertical-align:top;border-bottom:1px solid var(--line)}
+details.quick td:first-child{width:52%;overflow-wrap:anywhere}
+details.quick td:last-child{color:var(--muted)}
+.qlink{border:0;background:none;padding:0;cursor:pointer;color:inherit;text-align:left}
+.qlink code{color:var(--fn)}
 .ref-item b{display:block;font:700 14.5px var(--mono);color:var(--fn)}
 .ref-item span{display:block;font-size:13.5px;color:var(--muted)}
 .learn-body pre.sig{color:var(--fn);font-weight:700}
@@ -510,7 +521,7 @@ EXAMPLES.forEach((ex,i)=>{ const o=document.createElement('option'); o.value=Str
 /* ---------- Syntax highlighting ---------- */
 const KW = new Set('False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield'.split(' '));
 const BI = new Set('print input range len int str float list dict set tuple abs min max sum round sorted enumerate zip type bool map filter reversed any all chr ord isinstance'.split(' '));
-const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 const TOKEN = /(#[^\n]*)|((?:\b[rRbBfFuU]{1,2})?(?:"""[\s\S]*?(?:"""|$)|'''[\s\S]*?(?:'''|$)|"(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?))|(\b\d[\d_]*(?:\.\d+)?(?:[eE][+-]?\d+)?\b)|(@[A-Za-z_]\w*)|([A-Za-z_]\w*)|([()[\]{}])|([+\-*/%=<>!&|^~:.,]+)/g;
 function gap(text, atLineStart){
   let h = esc(text);
@@ -634,10 +645,22 @@ function load(){
     if (!raw) return false;
     const d = JSON.parse(raw);
     if (!d || !d.state) return false;
-    state = Object.assign(newState(), d.state);
-    snaps = Array.isArray(d.snaps) ? d.snaps : [];
-    progress = Object.assign(defaultProgress(), d.progress || {});
-    progress.practice = Object.assign(defaultProgress().practice, progress.practice || {});
+    const obj = v => v && typeof v === 'object' && !Array.isArray(v) ? v : {};
+    const fresh = newState();
+    state = Object.assign(fresh, obj(d.state));
+    for (const k of Object.keys(fresh)) if (typeof state[k] !== typeof fresh[k]) state[k] = fresh[k];
+    state.events = Array.isArray(state.events) ? state.events.filter(e => e && typeof e.t === 'number' && typeof e.msg === 'string' && typeof e.type === 'string') : [];
+    snaps = Array.isArray(d.snaps) ? d.snaps.filter(s => Array.isArray(s) && typeof s[0] === 'number' && typeof s[1] === 'string') : [];
+    progress = Object.assign(defaultProgress(), obj(d.progress));
+    progress.practice = Object.assign(defaultProgress().practice, obj(progress.practice));
+    for (const k of ['done']) progress[k] = obj(progress[k]);
+    for (const k of ['attempts', 'hints', 'solved', 'viewed', 'open', 'met']) progress.practice[k] = obj(progress.practice[k]);
+    if (typeof progress.practice.flags !== 'string' || !/^[LFSOC]*$/.test(progress.practice.flags)) progress.practice.flags = '';
+    if (![0, 1, 2].includes(progress.practice.level)) progress.practice.level = 0;
+    if (typeof progress.lesson !== 'string') progress.lesson = null;
+    if (typeof progress.step !== 'number') progress.step = 0;
+    if (typeof progress.learnOpen !== 'boolean') progress.learnOpen = true;
+    if (typeof state.studentName !== 'string') state.studentName = '';
     ta.value = typeof d.code === 'string' ? d.code : STARTER;
     return true;
   } catch (e) { return false; }
@@ -913,7 +936,7 @@ $('clearTurtle').addEventListener('click', () => { if (!running) { resetTurtle()
 /* ---------- Turtle tracking for lesson checks ---------- */
 // Set TRACK_TURTLE to false to switch tracking off; lessons then fall back to checking the code text only.
 const TRACK_TURTLE = true;
-const TRACKED = ['forward','fd','backward','bk','back','left','lt','right','rt','goto','setpos','setposition','setx','sety','setheading','seth','home','circle','dot','penup','pu','up','pendown','pd','down','color','pencolor','fillcolor','pensize','width','begin_fill','end_fill'];
+const TRACKED = ['clear','reset','forward','fd','backward','bk','back','left','lt','right','rt','goto','setpos','setposition','setx','sety','setheading','seth','home','circle','dot','penup','pu','up','pendown','pd','down','color','pencolor','fillcolor','pensize','width','begin_fill','end_fill'];
 const TRACKER = [
   'try:',
   '    import turtle as _tdk_t',
@@ -1016,6 +1039,8 @@ function turtleMetrics(log){
         break;
       }
       case 'dot': ink(x, y); break;
+      case 'clear': m.lines = []; m.polys = []; break;
+      case 'reset': m.lines = []; m.polys = []; x = 0; y = 0; h = 0; down = true; pen = fill = 'black'; break;
       case 'penup': case 'pu': case 'up': down = false; break;
       case 'pendown': case 'pd': case 'down': if (!down) { start = {x, y}; pathSegs = 0; } down = true; break;
       case 'color': {
@@ -1040,9 +1065,17 @@ function turtleMetrics(log){
 
 let running = false, stopRequested = false;
 function setRunUI(on){ $('runBtn').disabled = on; $('stopBtn').disabled = !on; }
+// Skulpt includes modules that can change this page or reach the network (document, urllib and others).
+// Student code doesn't need them, and they could get around the editor's paste protection, so they're blocked.
+const BLOCKED_MODULES = /^src\/lib\/(document|webgl|processing|urllib|urllib2|requests|image|webbrowser|signal|socket|http|anvil)(\/|\.|$)/;
 function builtinRead(x){
+  if (BLOCKED_MODULES.test(x)) throw "File not found: '" + x + "'";
   if (Sk.builtinFiles === undefined || Sk.builtinFiles.files[x] === undefined) throw "File not found: '" + x + "'";
   return Sk.builtinFiles.files[x];
+}
+// jseval runs JavaScript from Python. Remove it so student code stays inside Python.
+function lockDownBuiltins(){
+  try { for (const name of ['jseval']) { if (Sk.builtins && name in Sk.builtins) delete Sk.builtins[name]; } } catch (e) {}
 }
 /* ---------- Explaining runtime errors ---------- */
 // Each known Python message gets a specific explanation. Anything unrecognized shows Python's own
@@ -1182,6 +1215,7 @@ async function run(){
     inputfun: askInput, inputfunTakesPrompt: true,
     killableWhile: true, killableFor: true, yieldLimit: 100
   });
+  lockDownBuiltins();
   const code = ta.value;
   state.runs++;
   // For turtle programs, a hidden prefix records what the turtle does so lessons can check the drawing.
@@ -1341,17 +1375,19 @@ const GROUPS = ['Turtle: getting started','Turtle: moving','Turtle: pen and colo
 const DOCS = [
  {id:'Turtle', g:0, keys:['Turtle','turtle'], name:'turtle.Turtle()', sig:'t = turtle.Turtle()', desc:'Makes a new turtle and names it t. Every turtle program needs import turtle at the top first.', ex:'import turtle\n\nt = turtle.Turtle()\nt.forward(100)'},
  {id:'Screen', g:0, keys:['Screen','bgcolor'], name:'Screen().bgcolor()', sig:'turtle.Screen().bgcolor(color)', desc:'Changes the background color of the drawing area.', ex:'import turtle\n\nturtle.Screen().bgcolor("lightblue")'},
+ {id:'done', g:0, keys:['done','mainloop','exitonclick'], name:'turtle.done()', sig:'turtle.done()', desc:'Keeps the drawing window open at the end of a program. This editor doesn’t need it, but Python on a computer (for example in IDLE) does, or the window closes straight away.', ex:'import turtle\n\nt = turtle.Turtle()\nt.circle(50)\nturtle.done()'},
  {id:'speed', g:0, keys:['speed'], name:'speed()', sig:'t.speed(n)', desc:'Sets how fast the turtle moves: 1 is slowest, 10 is fast and 0 is instant. Use 0 for big drawings.', ex:'t.speed(0)'},
  {id:'shape', g:0, keys:['shape'], name:'shape()', sig:'t.shape(name)', desc:'Changes how the turtle looks: "turtle", "arrow", "circle", "square", "triangle" or "classic".', ex:'t.shape("turtle")'},
  {id:'hideturtle', g:0, keys:['hideturtle','ht','showturtle','st'], name:'hideturtle() and showturtle()', sig:'t.hideturtle()', desc:'Hides the turtle so only the drawing shows. showturtle() brings it back.', ex:'t.hideturtle()'},
  {id:'forward', g:1, keys:['forward','fd'], name:'forward()', sig:'t.forward(distance)', desc:'Moves the turtle forward by that many pixels in the direction it faces. The short name is fd().', ex:'t.forward(100)'},
  {id:'backward', g:1, keys:['backward','back','bk'], name:'backward()', sig:'t.backward(distance)', desc:'Moves the turtle backwards by that many pixels, without turning around. The short name is bk().', ex:'t.backward(50)'},
- {id:'left', g:1, keys:['left','lt'], name:'left()', sig:'t.left(angle)', desc:'Turns the turtle left (anticlockwise) by that many degrees. 90 is a quarter turn and 360 is a full turn.', ex:'t.left(90)'},
+ {id:'left', g:1, keys:['left','lt'], name:'left()', sig:'t.left(angle)', desc:'Turns the turtle left (counterclockwise) by that many degrees. 90 is a quarter turn and 360 is a full turn.', ex:'t.left(90)'},
  {id:'right', g:1, keys:['right','rt'], name:'right()', sig:'t.right(angle)', desc:'Turns the turtle right (clockwise) by that many degrees.', ex:'t.right(45)'},
  {id:'goto', g:1, keys:['goto','setpos','setposition'], name:'goto()', sig:'t.goto(x, y)', desc:'Moves straight to the point (x, y). The center of the paper is (0, 0), x grows to the right and y grows upwards. It draws a line unless the pen is up.', ex:'t.penup()\nt.goto(-100, 50)\nt.pendown()'},
  {id:'setheading', g:1, keys:['setheading','seth'], name:'setheading()', sig:'t.setheading(angle)', desc:'Points the turtle in an exact direction: 0 is right, 90 is up, 180 is left and 270 is down.', ex:'t.setheading(90)'},
  {id:'home', g:1, keys:['home'], name:'home()', sig:'t.home()', desc:'Sends the turtle back to the center, facing right.', ex:'t.home()'},
  {id:'position', g:1, keys:['position','pos','xcor','ycor'], name:'position()', sig:'t.position()', desc:'Gives back where the turtle is as (x, y). xcor() and ycor() give just one of them.', ex:'print(t.position())'},
+ {id:'heading', g:1, keys:['heading','distance','towards'], name:'heading(), distance() and towards()', sig:'t.heading()', desc:'heading() gives back the direction the turtle faces in degrees: 0 is right and 90 is up. distance(x, y) gives how far away a point is, and towards(x, y) gives the direction to it.', ex:'print(t.heading())\nprint(t.distance(0, 0))'},
  {id:'penup', g:2, keys:['penup','pu','pendown','pd'], name:'penup() and pendown()', sig:'t.penup()', desc:'penup() lifts the pen so the turtle moves without drawing. pendown() puts the pen back on the paper.', ex:'t.penup()\nt.forward(50)\nt.pendown()\nt.forward(50)'},
  {id:'color', g:2, keys:['color','pencolor','fillcolor'], name:'color()', sig:'t.color(line, fill)', desc:'Sets the line color, and optionally a fill color. Use names like "red" or codes like "#3366ff". pencolor() and fillcolor() set just one of them.', ex:'t.color("navy", "gold")'},
  {id:'pensize', g:2, keys:['pensize','width'], name:'pensize()', sig:'t.pensize(width)', desc:'Sets how thick the line is. 1 is thin; try 5 or 10 for bold lines.', ex:'t.pensize(5)'},
@@ -1360,6 +1396,7 @@ const DOCS = [
  {id:'dot', g:3, keys:['dot'], name:'dot()', sig:'t.dot(size, color)', desc:'Draws a filled dot where the turtle is standing.', ex:'t.dot(20, "red")'},
  {id:'stamp', g:3, keys:['stamp'], name:'stamp()', sig:'t.stamp()', desc:'Leaves a copy of the turtle’s shape on the paper.', ex:'t.shape("turtle")\nt.stamp()'},
  {id:'write', g:3, keys:['write'], name:'write()', sig:'t.write(text)', desc:'Writes text on the paper where the turtle is.', ex:'t.write("Hello!")'},
+ {id:'clear', g:3, keys:['clear','reset'], name:'clear() and reset()', sig:'t.clear()', desc:'clear() wipes this turtle’s drawing but leaves the turtle where it is. reset() wipes the drawing too, and also sends the turtle back to the center.', ex:'t.clear()'},
  {id:'print', g:4, keys:['print'], name:'print()', sig:'print(value, ...)', desc:'Shows values in the Output panel. Separate several values with commas and print puts spaces between them.', ex:'print("Score:", 10)'},
  {id:'input', g:4, keys:['input'], name:'input()', sig:'input(question)', desc:'Asks a question and waits for an answer typed in the box under Output. The answer is always text, so use int() to turn it into a number.', ex:'age = int(input("How old are you? "))'},
  {id:'variables', g:4, keys:[], name:'Variables', sig:'name = value', desc:'A variable is a name that stores a value. Use one = to store something, then use the name later without quotes.', ex:'size = 100\nt.forward(size)'},
@@ -1377,6 +1414,25 @@ const DOCS = [
  {id:'random', g:7, keys:['random','randint','choice'], name:'random', sig:'random.randint(a, b)', desc:'randint(a, b) picks a whole number from a to b, including both. choice(list) picks one item from a list.', ex:'import random\n\nroll = random.randint(1, 6)\ncolor = random.choice(["red", "blue"])'},
  {id:'math', g:7, keys:['math','sqrt','pi'], name:'math', sig:'math.sqrt(x)', desc:'Math tools: math.sqrt() finds a square root and math.pi is 3.14159…', ex:'import math\n\nprint(math.sqrt(16))'}
 ];
+const ALSO = {
+  hideturtle: ['t.showturtle()'], position: ['t.xcor()', 't.ycor()'], heading: ['t.distance(x, y)', 't.towards(x, y)'],
+  penup: ['t.pendown()'], color: ['t.pencolor(color)', 't.fillcolor(color)'], begin_fill: ['t.end_fill()'],
+  clear: ['t.reset()'], int: ['str(value)', 'float(value)'], if: ['elif condition:', 'else:'],
+  lists: ['items.append(value)', 'len(items)'], random: ['random.choice(list)'], math: ['math.pi']
+};
+const PY_DOCS = 'https://docs.python.org/3/';
+const DOC_LINKS = {
+  Turtle: 'library/turtle.html#turtle.Turtle', backward: 'library/turtle.html#turtle.back', Screen: 'library/turtle.html#turtle.bgcolor', done: 'library/turtle.html#turtle.done',
+  variables: 'tutorial/introduction.html', indentation: 'reference/lexical_analysis.html#indentation', comments: 'tutorial/introduction.html',
+  print: 'library/functions.html#print', input: 'library/functions.html#input', int: 'library/functions.html#int', range: 'library/functions.html#func-range',
+  for: 'tutorial/controlflow.html#for-statements', while: 'reference/compound_stmts.html#while', if: 'tutorial/controlflow.html#if-statements',
+  def: 'tutorial/controlflow.html#defining-functions', return: 'tutorial/controlflow.html#defining-functions', lists: 'tutorial/introduction.html#lists',
+  import: 'tutorial/modules.html', random: 'library/random.html', math: 'library/math.html'
+};
+DOCS.forEach(d => {
+  d.sigs = [d.sig, ...(ALSO[d.id] || [])];
+  d.url = PY_DOCS + (DOC_LINKS[d.id] || (d.g <= 3 ? 'library/turtle.html#turtle.' + d.id : 'tutorial/'));
+});
 const DOC_BY_ID = new Map(DOCS.map(d => [d.id, d]));
 const KEYMAP = new Map();
 DOCS.forEach(d => d.keys.forEach(k => KEYMAP.set(k, d)));
@@ -1404,13 +1460,15 @@ function contextWord(){
   return '';
 }
 let tipDoc = null;
+let tipSig = '';
 function updateTip(){
-  const d = KEYMAP.get(contextWord()) || null;
-  if (d === tipDoc) return;
-  tipDoc = d;
+  const w = contextWord(), d = KEYMAP.get(w) || null;
+  const sig = d ? (d.sigs.find(s => new RegExp('\\b' + w + '\\b').test(s)) || d.sig) : '';
+  if (d === tipDoc && sig === tipSig) return;
+  tipDoc = d; tipSig = sig;
   $('tip').hidden = !d;
   $('keys').hidden = !!d;
-  if (d) { $('tipSig').textContent = d.sig; $('tipText').textContent = firstSentence(d.desc); }
+  if (d) { $('tipSig').textContent = sig; $('tipText').textContent = firstSentence(d.desc); }
 }
 $('tipMore').addEventListener('click', () => { if (tipDoc) openRef(tipDoc.id); });
 
@@ -1658,13 +1716,40 @@ $('lessonsView').addEventListener('click', e => {
 function renderRefList(q){
   $('refSearchWrap').hidden = false;
   q = (q || '').trim().toLowerCase();
-  const items = DOCS.filter(d => !q || (d.name + ' ' + d.sig + ' ' + d.desc + ' ' + d.keys.join(' ') + ' ' + GROUPS[d.g]).toLowerCase().includes(q));
-  if (!items.length) { $('refList').innerHTML = `<p>Nothing matches “${esc(q)}”. Try a shorter word, like circle or loop.</p>`; return; }
-  $('refList').innerHTML = GROUPS.map((g, gi) => {
+  const items = DOCS.filter(d => !q || (d.name + ' ' + d.sigs.join(' ') + ' ' + d.desc + ' ' + d.keys.join(' ') + ' ' + GROUPS[d.g]).toLowerCase().includes(q));
+  const links = `<p class="ref-links">Full documentation: <a href="${PY_DOCS}library/turtle.html" target="_blank" rel="noopener noreferrer">turtle</a> and <a href="${PY_DOCS}tutorial/" target="_blank" rel="noopener noreferrer">the Python tutorial</a> on python.org. A few advanced commands there may not work in this editor.</p>`;
+  if (!items.length) { $('refList').innerHTML = `<p>Nothing matches “${esc(q)}”. Try a shorter word, like circle or loop.</p>` + links; return; }
+  $('refList').innerHTML = (q ? '' : links) + GROUPS.map((g, gi) => {
     const its = items.filter(d => d.g === gi);
     if (!its.length) return '';
-    return `<div class="ref-group"><h4>${esc(g)}</h4>${its.map(d => `<button class="ref-item" data-ref="${d.id}"><b>${esc(d.sig)}</b><span>${esc(firstSentence(d.desc))}</span></button>`).join('')}</div>`;
-  }).join('');
+    return `<div class="ref-group"><h4>${esc(g)}</h4>${its.map(d => `<button class="ref-item" data-ref="${d.id}"><b>${d.sigs.map(esc).join('<br>')}</b><span>${esc(firstSentence(d.desc))}</span></button>`).join('')}</div>`;
+  }).join('') + (q ? '' : quickList());
+}
+// Every turtle command on one line each, closed by default so the Reference stays short.
+const QUICK = [
+  ['Moving', [['t.forward(d)', 'move forward d pixels (fd)'], ['t.backward(d)', 'move back d pixels (bk)'], ['t.left(a)', 'turn left a degrees (lt)'],
+              ['t.right(a)', 'turn right a degrees (rt)'], ['t.goto(x, y)', 'move to a point'], ['t.setx(x)', 'move to a new x'], ['t.sety(y)', 'move to a new y'],
+              ['t.setheading(a)', 'face an exact direction (seth)'], ['t.home()', 'back to the center'], ['t.circle(r)', 'draw a circle; circle(r, 180) draws half'],
+              ['t.speed(n)', '1 slowest, 10 fast, 0 instant']]],
+  ['Pen and color', [['t.penup()', 'stop drawing (pu)'], ['t.pendown()', 'start drawing (pd)'], ['t.pensize(w)', 'line thickness (width)'],
+              ['t.color(line, fill)', 'line and fill colors'], ['t.pencolor(c)', 'line color only'], ['t.fillcolor(c)', 'fill color only'],
+              ['t.begin_fill()', 'start a shape to fill'], ['t.end_fill()', 'finish and fill the shape']]],
+  ['Drawing and text', [['t.dot(size, c)', 'a filled dot'], ['t.stamp()', 'leave a copy of the turtle'], ['t.write(text)', 'write text on the paper'],
+              ['t.clear()', 'wipe this turtle’s drawing'], ['t.reset()', 'wipe and go back to the center']]],
+  ['The turtle itself', [['t.shape(name)', '"turtle", "arrow", "circle", "square", "triangle" or "classic"'], ['t.hideturtle()', 'hide the turtle (ht)'],
+              ['t.showturtle()', 'show it again (st)']]],
+  ['Where it is', [['t.position()', 'where it is, as (x, y) (pos)'], ['t.xcor()', 'just x'], ['t.ycor()', 'just y'], ['t.heading()', 'the direction it faces'],
+              ['t.distance(x, y)', 'how far away a point is'], ['t.towards(x, y)', 'the direction to a point']]],
+  ['Screen', [['turtle.Screen().bgcolor(c)', 'background color'], ['turtle.done()', 'keep the window open (Python on a computer)']]]
+];
+function quickList(){
+  const row = ([code, what]) => {
+    const name = (code.match(/\.(\w+)\(/) || code.match(/^(\w+)\(/) || [])[1];
+    const d = name && KEYMAP.get(name);
+    const c = `<code>${esc(code)}</code>`;
+    return `<tr><td>${d ? `<button class="qlink" data-ref="${d.id}">${c}</button>` : c}</td><td>${esc(what)}</td></tr>`;
+  };
+  return `<details class="quick"><summary>All turtle commands</summary>${QUICK.map(([g, rows]) => `<h4>${esc(g)}</h4><table>${rows.map(row).join('')}</table>`).join('')}</details>`;
 }
 function renderRefDetail(id){
   const d = DOC_BY_ID.get(id); if (!d) return;
@@ -1673,11 +1758,12 @@ function renderRefDetail(id){
   LESSONS.forEach(L => L.steps.forEach((s, i) => { if (s.refs.includes(id)) uses.push(`<button class="chip plain" data-goto="${L.id}:${i}">${esc(L.title)}, step ${i + 1}</button>`); }));
   $('refList').innerHTML = `<button class="link" data-action="refBack">‹ All topics</button>
     <h3>${esc(d.name)}</h3>
-    <pre class="sig">${esc(d.sig)}</pre>
+    <pre class="sig">${d.sigs.map(esc).join('\n')}</pre>
     <p>${md(d.desc)}</p>
     <div class="note">Example</div>
     <pre>${highlight(d.ex)}</pre>
-    ${uses.length ? `<div class="refs">Practice it in ${uses.slice(0, 3).join('')}</div>` : ''}`;
+    ${uses.length ? `<div class="refs">Practice it in ${uses.slice(0, 3).join('')}</div>` : ''}
+    <p class="ref-links"><a href="${d.url}" target="_blank" rel="noopener noreferrer">Full documentation on python.org</a></p>`;
 }
 $('refList').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
@@ -1722,8 +1808,10 @@ $('expandLearn').addEventListener('click', () => setLearnOpen(true, true));
 function initLearn(){
   if (progress.learnOpen === null || progress.learnOpen === undefined) progress.learnOpen = true;
   renderLessons(); renderRefList('');
-  const fromLink = parseProblemCode(decodeURIComponent((location.hash || '').slice(1)));
-  if (fromLink) { openProblemCode(location.hash.slice(1)); progress.tab = 'practice'; }
+  let hash = '';
+  try { hash = decodeURIComponent((location.hash || '').slice(1)); } catch (e) {}
+  const fromLink = parseProblemCode(hash);
+  if (fromLink) { openProblemCode(hash); progress.tab = 'practice'; }
   setTab(['ref', 'practice'].includes(progress.tab) ? progress.tab : 'lessons');
   setLearnOpen(fromLink ? true : progress.learnOpen);
   updateTip();

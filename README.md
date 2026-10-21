@@ -7,7 +7,9 @@ Features:
 - Learn panel with six step-by-step lessons (printing, turtle movement, loops,
   color and pens, functions, if/else and random). Each step checks the student's
   code when they press Run.
-- Searchable reference for turtle and Python basics, with examples.
+- Searchable reference for turtle and Python basics, with examples. Each entry links to
+  the official Python documentation, and a collapsible "All turtle commands" list shows
+  every turtle command on one line.
 - The lessons panel can be hidden with the arrow button next to the tabs, giving the
   editor and output more room. A slim "Lessons" strip brings it back. While the panel is
   hidden, runs are free coding: lesson and practice checks pause until it's shown again.
@@ -85,21 +87,45 @@ Then change the two `<script src="...">` tags in `index.html` to
   rather than make it impossible.
 
 ## Privacy and security
-- There is no server and no account. Code, names, lesson progress and the typing record
-  stay in the browser's localStorage until a student downloads a report.
-- The page loads Skulpt from cdn.jsdelivr.net and fonts from Google Fonts. Those services
-  can see visitors' IP addresses. To avoid any third-party requests, host the two Skulpt
-  files in a `vendor/` folder (see above) and remove the Google Fonts link (the page falls
-  back to system fonts).
+- There is no server, login or database. Code, names, lesson progress and the typing
+  record stay in the browser's localStorage until a student downloads a report.
+- Student code runs in Skulpt inside the student's own browser tab, so it can't reach
+  other students' computers or any server. Skulpt modules that could change the page or
+  use the network (`document`, `urllib`, `image`, `webgl`, `processing` and similar) are
+  blocked, and the `jseval` built-in is removed. Students can import turtle, math, random
+  and time.
+- Everything the page displays from student code, saved data, error messages or links is
+  escaped first, so text such as `<script>` shows as text and never runs. Problem codes
+  from links are checked against a strict pattern, and malformed links are ignored.
+- The only links are fixed python.org documentation links, opened in a new tab with
+  `rel="noopener noreferrer"`.
 - localStorage is shared by every page on the same address. All of a user's GitHub Pages
-  projects share `username.github.io`, so code from your other projects there can read
-  Turtle Desk data. For full separation, use a separate GitHub account or a custom domain.
-- On shared computers, the next student sees the previous student's work unless they click
-  "Start a new session" in the Typing record.
-- Student code runs inside Skulpt in the student's own browser tab, so it can't reach
-  other students' computers or any server.
-- Reports are HTML files made on the student's computer, so a student could edit one. Treat
-  reports as evidence, not proof, and open them like any file from a student.
-- The page source is public, so a determined student could read how the practice
-  problems are built and work out solutions from it.
+  projects share `username.github.io`. The app checks saved data before using it, but for
+  full separation use a separate GitHub account or a custom domain for Turtle Desk.
 
+### Recommended before using it with a class
+1. **Host Skulpt yourself.** Download the two Skulpt files into a `vendor/` folder (see
+   "Optional: host Skulpt yourself" above). This removes the dependency on jsDelivr, so a
+   compromised or blocked CDN can't affect your students, and school web filters that block
+   CDNs won't break the app. If you keep the CDN instead, add Subresource Integrity hashes:
+   run `openssl dgst -sha384 -binary skulpt.min.js | openssl base64 -A` on each downloaded
+   file, then add `integrity="sha384-<hash>" crossorigin="anonymous"` to its `<script>` tag.
+2. **Optionally remove Google Fonts** (the `<link>` tags at the top of index.html). The
+   page falls back to system fonts, and no third party sees students' IP addresses.
+3. **Turn on "Enforce HTTPS"** in the repository's Settings → Pages.
+
+### Chromebooks
+- When students sign in with their own school accounts, each student's work is stored
+  separately. In Guest mode, everything is erased when they sign out, so students should
+  download their report first.
+- On a shared sign-in, the next student sees the previous student's work unless they
+  click "Start a new session" in the Typing record.
+- Downloaded reports go to the Files app and can be uploaded to Google Classroom.
+
+### Reports
+- Reports are HTML files made on the student's computer, so a student could edit one. Treat
+  reports as evidence, not proof. An edited report can't reach the teacher's other files,
+  but it could show fake content. Open reports in the browser like any student file, and
+  never type a password into one. "Copy as text" gives a plain-text version instead.
+- The page source is public, so a determined student could read how the practice problems
+  are built and work out solutions from it.
