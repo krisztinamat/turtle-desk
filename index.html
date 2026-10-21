@@ -209,6 +209,53 @@ ol.log li.flag span{color:var(--warn);font-weight:600}
 .status{border-radius:10px;padding:10px 12px;margin:0 0 12px;background:var(--surface-2);color:var(--muted);font-size:14.5px}
 .status.pass{background:var(--ok-bg);color:var(--ok-ink);font-weight:600}
 .status.fail{background:var(--warn-bg);color:var(--warn)}
+.learn-pane[hidden],.learn-rail[hidden]{display:none}
+.desk.collapsed{grid-template-columns:44px minmax(360px,1.05fr) minmax(320px,1fr)}
+.collapse-btn{flex:none;width:36px;border:0;background:transparent;border-radius:8px;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.collapse-btn:hover{background:var(--surface-2);color:var(--ink)}
+.learn-rail{display:flex;min-height:0}
+.learn-rail button{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;color:var(--muted);cursor:pointer;font:600 14px var(--ui)}
+.learn-rail button:hover{color:var(--ink);border-color:var(--muted)}
+.rail-label{writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:.02em}
+@media (max-width:960px){
+  .desk.collapsed{grid-template-columns:1fr}
+  .learn-rail button{flex-direction:row;justify-content:center;padding:10px 14px}
+  .rail-label{writing-mode:horizontal-tb;transform:none}
+}
+.pr-levels{display:flex;gap:3px;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:3px;margin:2px 0 10px}
+.pr-levels button{flex:1 1 auto;border:0;background:transparent;border-radius:7px;padding:6px 4px;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;min-height:32px}
+.pr-levels button[aria-checked="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(10,20,30,.15)}
+.pr-chal{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+.pr-label{font-size:13px;color:var(--muted);width:100%}
+.chal{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);min-height:28px}
+.chal[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.chal:disabled{opacity:.4;cursor:default}
+.chal.met{border-color:var(--go);color:var(--go)}
+.chal.met[aria-pressed="true"]{background:var(--go);border-color:var(--go);color:var(--on-go)}
+.pr-met-note{width:100%;font-size:12.5px;color:var(--muted);margin-top:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pr-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.pr-head h3{margin:0 auto 0 0}
+.pr-code{font:600 12.5px var(--mono);color:var(--muted);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;cursor:pointer}
+figure.goal{margin:4px 0 10px}
+figure.goal svg{display:block;width:100%;height:auto;max-height:250px;border-radius:8px;box-shadow:0 0 0 1px #C9D3DE}
+figure.goal .bg{fill:#FBFCFD}
+figure.goal .gr{stroke:#E6ECF2;stroke-width:1;vector-effect:non-scaling-stroke}
+figure.goal .ax{stroke:#B8C4D2;stroke-width:1;vector-effect:non-scaling-stroke}
+figure.goal .gl{stroke-width:2.2;vector-effect:non-scaling-stroke;stroke-linecap:round}
+figure.goal .gl.dim{stroke:#B9C4D1;stroke-width:6}
+figure.goal .yl{stroke:#2457A6;stroke-width:2.2;vector-effect:non-scaling-stroke;stroke-linecap:round}
+figure.goal .st{fill:#1E7F55}
+figure.goal figcaption{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:13px;color:var(--muted);margin-top:6px}
+.key{display:inline-block;width:16px;height:5px;border-radius:3px}.key.kg{background:#B9C4D1}.key.ky{background:#2457A6;margin-left:8px}
+.reqs{list-style:none;margin:0 0 10px;padding:0}
+.reqs li{display:flex;gap:8px;align-items:baseline;font-size:14px;padding:2px 0}
+.reqs .ic{width:16px;flex:none;text-align:center;font-weight:700}
+.reqs li.pass .ic{color:var(--go)}.reqs li.fail .ic{color:var(--stop)}.reqs li.todo .ic{color:var(--muted)}
+.hints-list p{background:var(--surface-2);border-radius:8px;padding:8px 10px;margin:8px 0 0}
+.pr-load{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.pr-load label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.pr-load .row{flex-wrap:nowrap}.pr-load .search{margin:0;min-width:0}
 .status.advice{background:var(--surface-2);color:var(--ink);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;margin-top:-4px}
 .status code{background:transparent;border-color:currentColor}
 .search{width:100%;font:16px var(--ui);padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);margin:0 0 12px}
@@ -225,6 +272,13 @@ ol.log li.flag span{color:var(--warn);font-weight:600}
 .tip code{font:700 14px var(--mono);color:var(--fn);white-space:nowrap}
 .tip span{color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
+@media (max-width:600px){
+  .lock-text,#pos,#coords{display:none}
+  .lock{padding:4px 8px}
+  .pane-head{gap:6px;padding-left:12px}
+  .editor-pane .pane-head .run-group{margin-left:auto}
+  #coords + #clearTurtle{margin-left:auto}
+}
 @media (prefers-reduced-motion:reduce){.drawer,.scrim,.toast{transition:none}}
 @media (max-width:960px){
   html,body{height:auto}
@@ -265,12 +319,23 @@ ol.log li.flag span{color:var(--warn);font-weight:600}
 </header>
 
 <main class="desk" id="desk">
+  <div class="learn-rail" id="learnRail" hidden>
+    <button id="expandLearn" title="Show lessons, practice and reference" aria-label="Show lessons, practice and reference" aria-controls="learn" aria-expanded="false">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="rail-label">Lessons</span>
+    </button>
+  </div>
   <section class="pane learn-pane" id="learn" aria-label="Lessons and reference">
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" id="tabLessons" aria-selected="true" aria-controls="lessonsView">Lessons</button>
+      <button class="tab" role="tab" id="tabPractice" aria-selected="false" aria-controls="practiceView">Practice</button>
       <button class="tab" role="tab" id="tabRef" aria-selected="false" aria-controls="refView">Reference</button>
+      <button class="collapse-btn" id="collapseLearn" title="Hide this panel to make room for coding" aria-label="Hide lessons panel" aria-controls="learn" aria-expanded="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8 10 12.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
     <div class="learn-body" id="lessonsView" role="tabpanel" aria-labelledby="tabLessons"></div>
+    <div class="learn-body" id="practiceView" role="tabpanel" aria-labelledby="tabPractice" hidden></div>
     <div class="learn-body" id="refView" role="tabpanel" aria-labelledby="tabRef" hidden>
       <div id="refSearchWrap"><input class="search" type="search" id="refSearch" placeholder="Search, for example circle or loop" aria-label="Search the reference" autocomplete="off"></div>
       <div id="refList"></div>
@@ -402,7 +467,7 @@ for side in range(4):
 `;
 const EXAMPLES = [
   {name:'Square', code:STARTER},
-  {name:'Colour spiral', code:`import turtle
+  {name:'Color spiral', code:`import turtle
 
 t = turtle.Turtle()
 t.speed(0)
@@ -572,6 +637,7 @@ function load(){
     state = Object.assign(newState(), d.state);
     snaps = Array.isArray(d.snaps) ? d.snaps : [];
     progress = Object.assign(defaultProgress(), d.progress || {});
+    progress.practice = Object.assign(defaultProgress().practice, progress.practice || {});
     ta.value = typeof d.code === 'string' ? d.code : STARTER;
     return true;
   } catch (e) { return false; }
@@ -881,14 +947,25 @@ function readTrace(mod){
   } catch (e) { return null; }
 }
 
-// Replays the logged turtle commands to measure what was drawn.
+// Replays turtle commands to measure what was drawn. Also keeps the drawn lines and fills,
+// so practice problems can compare a student's drawing with the goal picture.
+function cssColor(a){
+  if (typeof a[0] === 'string') return a[0].toLowerCase();
+  if (a.length >= 3 && a.every(v => typeof v === 'number')) {
+    const k = a.some(v => v > 1) ? 1 : 255;
+    return `rgb(${a.slice(0, 3).map(v => Math.round(Math.max(0, Math.min(255, v * k)))).join(',')})`;
+  }
+  return null;
+}
 function turtleMetrics(log){
   if (!log) return null;
   const num = v => (typeof v === 'number' && isFinite(v)) ? v : 0;
   const m = {calls: log.length, segs: 0, length: 0, maxSeg: 0, turns: [], closed: 0, closedSides: [], fills: 0,
-             jumps: 0, circles: 0, segLens: new Set(), colors: new Set(), fillColors: new Set(), pensize: 1, width: 0, height: 0};
+             jumps: 0, circles: 0, segLens: new Set(), colors: new Set(), fillColors: new Set(), pensize: 1,
+             width: 0, height: 0, lines: [], polys: []};
   let x = 0, y = 0, h = 0, down = true, inked = false, minX = 0, maxX = 0, minY = 0, maxY = 0;
-  let start = {x: 0, y: 0}, pathSegs = 0, fillOpen = false, fillWork = 0;
+  let start = {x: 0, y: 0}, pathSegs = 0, fillOpen = false, fillWork = 0, fillPts = [];
+  let pen = 'black', fill = 'black';
   const ink = (px, py) => {
     if (!inked) { minX = maxX = px; minY = maxY = py; inked = true; }
     else { minX = Math.min(minX, px); maxX = Math.max(maxX, px); minY = Math.min(minY, py); maxY = Math.max(maxY, py); }
@@ -898,12 +975,14 @@ function turtleMetrics(log){
     if (d > 0.5) {
       if (down) {
         ink(x, y); ink(nx, ny);
+        m.lines.push([x, y, nx, ny, pen]);
         m.segs++; m.length += d; m.maxSeg = Math.max(m.maxSeg, d); m.segLens.add(Math.round(d)); pathSegs++;
         if (fillOpen) fillWork++;
         if (pathSegs >= 3 && Math.hypot(nx - start.x, ny - start.y) < 2) { m.closed++; m.closedSides.push(pathSegs); pathSegs = 0; start = {x: nx, y: ny}; }
       } else m.jumps++;
     }
     x = nx; y = ny;
+    if (fillOpen) fillPts.push([x, y]);
     if (!down) { start = {x, y}; pathSegs = 0; }
   };
   const turn = a => { if (a) { h += a; m.turns.push(a); } };
@@ -922,26 +1001,36 @@ function turtleMetrics(log){
       case 'home': moveTo(0, 0); h = 0; break;
       case 'circle': {
         const r = a0, ext = a.length > 1 ? a1 : 360;
-        if (!r) break;
+        if (!r || !ext) break;
         const hr = h * Math.PI / 180, cx = x - r * Math.sin(hr), cy = y + r * Math.cos(hr);
-        const turnDeg = ext * Math.sign(r), end = (h + turnDeg) * Math.PI / 180;
-        const nx = cx + r * Math.sin(end), ny = cy - r * Math.cos(end);
-        if (down) { ink(cx - Math.abs(r), cy - Math.abs(r)); ink(cx + Math.abs(r), cy + Math.abs(r)); m.circles++; m.length += Math.abs(2 * Math.PI * r * ext / 360); if (fillOpen) fillWork += 3; }
-        x = nx; y = ny; h += turnDeg;
+        const turnDeg = ext * Math.sign(r), n = Math.max(4, Math.ceil(Math.abs(ext) / 6));
+        for (let k = 1; k <= n; k++) {
+          const ang = (h + turnDeg * k / n) * Math.PI / 180;
+          const px = cx + r * Math.sin(ang), py = cy - r * Math.cos(ang);
+          if (down) { m.lines.push([x, y, px, py, pen]); ink(x, y); ink(px, py); }
+          x = px; y = py;
+          if (fillOpen) fillPts.push([x, y]);
+        }
+        if (down) { m.circles++; m.length += Math.abs(2 * Math.PI * r * ext / 360); if (fillOpen) fillWork += 3; }
+        h += turnDeg;
         break;
       }
       case 'dot': ink(x, y); break;
       case 'penup': case 'pu': case 'up': down = false; break;
       case 'pendown': case 'pd': case 'down': if (!down) { start = {x, y}; pathSegs = 0; } down = true; break;
-      case 'color':
-        if (typeof a[0] === 'string') m.colors.add(a[0].toLowerCase()); else if (a.length >= 3) m.colors.add('rgb');
-        if (typeof a[1] === 'string') m.fillColors.add(a[1].toLowerCase()); else if (typeof a[0] === 'string' && a.length === 1) m.fillColors.add(a[0].toLowerCase());
+      case 'color': {
+        const c = cssColor(a);
+        if (typeof a[0] === 'string' && typeof a[1] === 'string') { pen = a[0].toLowerCase(); fill = a[1].toLowerCase(); m.colors.add(pen); m.fillColors.add(fill); }
+        else if (c) { pen = fill = c; m.colors.add(c); m.fillColors.add(c); }
         break;
-      case 'pencolor': if (typeof a[0] === 'string') m.colors.add(a[0].toLowerCase()); else if (a.length) m.colors.add('rgb'); break;
-      case 'fillcolor': if (typeof a[0] === 'string') m.fillColors.add(a[0].toLowerCase()); else if (a.length) m.fillColors.add('rgb'); break;
+      }
+      case 'pencolor': { const c = cssColor(a); if (c) { pen = c; m.colors.add(c); } break; }
+      case 'fillcolor': { const c = cssColor(a); if (c) { fill = c; m.fillColors.add(c); } break; }
       case 'pensize': case 'width': if (a.length) m.pensize = a0; break;
-      case 'begin_fill': fillOpen = true; fillWork = 0; break;
-      case 'end_fill': if (fillOpen && fillWork >= 2) m.fills++; fillOpen = false; break;
+      case 'begin_fill': fillOpen = true; fillWork = 0; fillPts = [[x, y]]; break;
+      case 'end_fill':
+        if (fillOpen && fillWork >= 2) { m.fills++; m.polys.push({pts: fillPts, color: fill}); }
+        fillOpen = false; break;
     }
   }
   m.width = inked ? maxX - minX : 0; m.height = inked ? maxY - minY : 0;
@@ -955,28 +1044,103 @@ function builtinRead(x){
   if (Sk.builtinFiles === undefined || Sk.builtinFiles.files[x] === undefined) throw "File not found: '" + x + "'";
   return Sk.builtinFiles.files[x];
 }
-function friendlyHint(msg){
-  const name = (msg.match(/(?:attribute|name) '([A-Za-z_0-9]+)'/) || [])[1];
-  const guess = name ? closestName(name) : '';
-  const tryThis = guess ? ` Did you mean \`${guess}\`?` : '';
-  if (/IndentationError|indented block|unindent|indent/i.test(msg)) return 'Check the indentation of this line and the line above it.';
-  if (/SyntaxError|TokenError|bad input/i.test(msg)) return 'Python couldn’t read this line. Look for a missing colon, bracket or quote here or on the line above.';
-  if (/NameError/.test(msg)) return name ? `Python doesn’t know \`${name}\`.` + (tryThis || ' Check the spelling, or create it before you use it.') : 'Python doesn’t know that name.';
-  if (/AttributeError/.test(msg)) return name ? `\`${name}\` isn’t a command here.` + (tryThis || ' Check the spelling.') : 'That command doesn’t exist here. Check the spelling.';
-  if (/TypeError/.test(msg)) return 'Two kinds of values got mixed up, like adding a number to text. Use `str()` or `int()` to convert.';
-  if (/ValueError/.test(msg)) return 'That value has the wrong content, for example `int("hello")`.';
-  if (/ZeroDivisionError/.test(msg)) return 'You can’t divide by zero.';
-  if (/IndexError/.test(msg)) return 'That list position doesn’t exist. Positions start at 0.';
-  if (/ImportError|ModuleNotFound/.test(msg)) return 'That module isn’t available here. Try turtle, math, random or time.';
-  return '';
+/* ---------- Explaining runtime errors ---------- */
+// Each known Python message gets a specific explanation. Anything unrecognized shows Python's own
+// words, plus one line saying what that kind of error means, rather than a vague guess.
+const TYPE_WORDS = {int:'a whole number', float:'a decimal number', str:'text', list:'a list', tuple:'a tuple',
+  dict:'a dictionary', bool:'True or False', NoneType:'None (nothing)', function:'a function', Turtle:'a turtle', module:'a module'};
+const typeWord = t => TYPE_WORDS[t] || `a ${t}`;
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const ERROR_GLOSS = {
+  TypeError: 'A TypeError means a value is the wrong kind, or a command got the wrong number of values.',
+  ValueError: 'A ValueError means a value is the right kind but has the wrong content.',
+  NameError: 'A NameError means Python doesn’t know a name.',
+  AttributeError: 'An AttributeError means something doesn’t have the command or value you asked for.',
+  IndexError: 'An IndexError means a position in a list doesn’t exist.',
+  KeyError: 'A KeyError means a dictionary doesn’t have that key.',
+  RecursionError: 'A RecursionError means a function kept calling itself without stopping.',
+  ImportError: 'An ImportError means a module couldn’t be loaded.'
+};
+// Names the student created: variables, functions, parameters, loop variables and imports.
+function userNames(code){
+  const c = strip(code), s = new Set();
+  for (const m of c.matchAll(/^\s*([A-Za-z_]\w*)\s*=(?!=)/gm)) s.add(m[1]);
+  for (const m of c.matchAll(/\bdef\s+([A-Za-z_]\w*)\s*\(([^)]*)\)/g)) { s.add(m[1]); m[2].split(',').forEach(p => { const n = p.split('=')[0].trim(); if (n) s.add(n); }); }
+  for (const m of c.matchAll(/\bfor\s+([A-Za-z_]\w*)\s+in\b/g)) s.add(m[1]);
+  for (const m of c.matchAll(/\bimport\s+([A-Za-z_]\w*)/g)) s.add(m[1]);
+  return s;
 }
+function exampleFor(fn){
+  const d = KEYMAP.get(fn); if (!d) return '';
+  const line = d.ex.split('\n').find(l => new RegExp('\\b' + fn + '\\(').test(l));
+  return (line || d.sig).trim();
+}
+function explainError(raw, code){
+  const msg = raw.replace(/\s+on line -?\d+\s*$/, '').trim();
+  const type = (msg.match(/^(\w+(?:Error|Exception|Warning))\b/) || [])[1] || '';
+  const body = msg.replace(/^\w+:\s*/, '');
+  const known = new Set([...userNames(code)]);
+  let m;
+  if ((m = body.match(/(\w+)\(\) missing (\d+) required (?:positional |keyword-only )?arguments?:?\s*(.*)$/))) {
+    const names = m[3].replace(/['"]/g, '').replace(/\s+and\s+/g, ', ').split(/\s*,\s*/).filter(Boolean);
+    const what = names.length === 1 ? `a value for ${names[0]}` : names.length > 1 ? `values for ${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`
+               : `${m[2]} more value${m[2] === '1' ? '' : 's'}`;
+    const ex = exampleFor(m[1]);
+    return {text: `\`${m[1]}()\` needs ${what} inside the brackets.` + (ex ? ` For example: \`${ex}\`` : '')};
+  }
+  if ((m = body.match(/(\w+)\(\) takes (?:exactly |at most |at least |from \d+ to )?(\d+) (?:positional )?arguments? (?:\((\d+) given\)|but (\d+) (?:were|was) given)/))) {
+    const ex = exampleFor(m[1]), many = +(m[3] || m[4]) > +m[2];
+    return {text: `\`${m[1]}()\` got ${many ? 'too many' : 'too few'} values inside the brackets.` + (ex ? ` For example: \`${ex}\`` : ' Check the commas between the values.')};
+  }
+  if (/can only concatenate str|cannot concatenate 'str'|must be str, not/.test(body))
+    return {text: 'Text can only be joined to more text with `+`. Turn the number into text with `str()`, for example `"Score: " + str(score)`.'};
+  if ((m = body.match(/unsupported operand type\(s\) for (\S+?):? '(\w+)' and '(\w+)'/))) {
+    const OPS = {Add:'+', Sub:'-', Mult:'*', Div:'/', FloorDiv:'//', Mod:'%', Pow:'**'};
+    const [, rawOp, a, b] = m, op = OPS[rawOp] || rawOp, mix = [a, b].includes('str') && [a, b].some(t => t === 'int' || t === 'float');
+    return {text: `Python can’t use \`${op}\` with ${typeWord(a)} and ${typeWord(b)}.` +
+      (mix ? (op === '+' ? ' To join them, turn the number into text with `str()`. To add them, turn the text into a number with `int()`.' : ' Turn the text into a number with `int()` first.') : '')};
+  }
+  if ((m = body.match(/'(\w+)' object is not callable/)))
+    return {text: `${cap(typeWord(m[1]))} is followed by brackets, as if it were a command. Check for a missing \`*\` (write \`2 * (3 + 4)\`, not \`2(3 + 4)\`), or a variable with the same name as a command.`};
+  if ((m = body.match(/'(\w+)' object is not iterable/)))
+    return {text: m[1] === 'int' ? 'A `for` loop needs something to count through. To repeat 4 times, write `range(4)`, not just `4`.' : `A \`for\` loop can’t go through ${typeWord(m[1])}.`};
+  if ((m = body.match(/'(\w+)' object (?:is not subscriptable|has no attribute '__getitem__')/)))
+    return {text: `Square brackets like \`x[0]\` only work on lists and text, not on ${typeWord(m[1])}.`};
+  if ((m = body.match(/invalid literal for int\(\) with base 10: (.*)$/)))
+    return {text: `\`int()\` can only turn whole-number text into a number, but it got ${m[1]}.` + (/\binput\s*\(/.test(code) ? ' Check what was typed in.' : '')};
+  if ((m = body.match(/could not convert string to float: (.*)$/)))
+    return {text: `\`float()\` can only turn number text into a number, but it got ${m[1]}.`};
+  if ((m = body.match(/name '(\w+)' is not defined/))) {
+    const g = closestName(m[1], known);
+    return {text: `Python doesn’t know \`${m[1]}\`.` + (g ? ` Did you mean \`${g}\`?` : ' Check the spelling and capital letters, and create it before you use it. If it’s meant to be text, put it in quotes.')};
+  }
+  if ((m = body.match(/module '(\w+)' has no attribute '(\w+)'/))) {
+    const g = closestName(m[2]);
+    return {text: `The ${m[1]} module has no \`${m[2]}\`.` + (g ? ` Did you mean \`${m[1]}.${g}\`?` : ' Check the spelling.')};
+  }
+  if ((m = body.match(/'(\w+)' object has no attribute '(\w+)'/))) {
+    const g = closestName(m[2]);
+    return {text: `\`${m[2]}\` isn’t something ${m[1] === 'Turtle' ? 'a turtle' : typeWord(m[1])} can do.` + (g ? ` Did you mean \`${g}\`?` : ' Check the spelling.')};
+  }
+  if ((m = body.match(/No module named '?(\w+)'?/)))
+    return {text: `There’s no module called \`${m[1]}\` here. You can use turtle, math, random and time.`};
+  if (type === 'ZeroDivisionError') return {text: 'A number was divided by zero, which isn’t possible.'};
+  if (/list index out of range/.test(body)) return {text: 'That list position doesn’t exist. Positions start at 0, so a list of 3 items has positions 0, 1 and 2.'};
+  if (/string index out of range/.test(body)) return {text: 'That position in the text doesn’t exist. Positions start at 0.'};
+  if (/maximum recursion depth/.test(body)) return {text: 'A function kept calling itself and never stopped. Make sure there’s a case where it doesn’t call itself.'};
+  if (type === 'IndentationError' || /indent/i.test(body)) return {text: 'Check the indentation of this line and the line above it.'};
+  if (type === 'SyntaxError' || /bad input|TokenError/.test(msg)) return {text: 'Python couldn’t read this line. Look for a missing colon, bracket or quote here or on the line above.'};
+  return {text: '', gloss: ERROR_GLOSS[type] || ''};
+}
+
 function showError(err){
-  const shift = n => n - lineOffset;
-  const raw = ((err && err.toString) ? err.toString() : String(err)).replace(/line (\d+)/g, (m, n) => 'line ' + Math.max(1, shift(+n)));
+  const original = (err && err.toString) ? err.toString() : String(err);
+  // Find the student's line. The first traceback entries can point into the hidden turtle-tracking lines.
   let line = 0;
-  for (const tb of (err && err.traceback) || []) { const n = shift(tb.lineno); if (n > 0) { line = n; break; } }
-  if (!line) { const m = raw.match(/line (\d+)/); if (m) line = +m[1]; }
-  let text = '', note = '';
+  for (const tb of (err && err.traceback) || []) { const n = tb.lineno - lineOffset; if (n > 0) { line = n; break; } }
+  if (!line) { const m = original.match(/line (\d+)/); if (m && +m[1] - lineOffset > 0) line = +m[1] - lineOffset; }
+  const raw = original.replace(/on line -?\d+/, line ? `on line ${line}` : '').trim();
+  let text = '', note = '', gloss = '';
   // Python often reports structure problems a line late, so ask the checker where the real cause is.
   if (/SyntaxError|IndentationError|TokenError|EOF|indent|bad input/i.test(raw)) {
     const issues = lintCode(ta.value);
@@ -986,13 +1150,14 @@ function showError(err){
       line = x.line; text = x.msg;
     }
   }
-  if (!text) text = friendlyHint(raw);
+  if (!text) { const ex = explainError(raw, ta.value); text = ex.text; gloss = ex.gloss || ''; }
   if (!hasOutput) { out.textContent = ''; hasOutput = true; }
   const box = document.createElement('div'); box.className = 'errbox';
   const main = document.createElement('div'); main.className = 'err-main';
-  main.innerHTML = (line ? `<b>Line ${line}:</b> ` : '') + (text ? md(text) : esc(raw));
+  const pyMsg = raw.replace(/\s+on line \d+\s*$/, '');
+  main.innerHTML = (line ? `<b>Line ${line}:</b> ` : '') + (text ? md(text) : `<code>${esc(pyMsg)}</code>`);
   box.appendChild(main);
-  if (note) { const n = document.createElement('div'); n.className = 'err-note'; n.textContent = note; box.appendChild(n); }
+  for (const t of [note, gloss]) if (t) { const n = document.createElement('div'); n.className = 'err-note'; n.textContent = t; box.appendChild(n); }
   if (text) {
     const d = document.createElement('details');
     d.innerHTML = '<summary>Show Python’s message</summary><pre></pre>';
@@ -1035,8 +1200,13 @@ async function run(){
   }
   if (ok) outWrite((hasOutput ? '\n' : '') + 'Program finished.\n', 'sys');
   log('run', ok ? `Ran the program (${code.split('\n').length} lines)` : 'Ran the program and got an error');
-  const turtleDid = ok && track ? turtleMetrics(readTrace(mod)) : null;
-  if (!stopRequested) checkLesson({code, ok, output: runOutput, turtle: turtleDid && turtleDid.calls ? turtleDid : null});
+  const trace = ok && track ? readTrace(mod) : null;
+  const turtleDid = trace ? turtleMetrics(trace) : null;
+  // While the panel is hidden, runs are free coding: no lesson or practice checks.
+  if (!stopRequested && progress.learnOpen) {
+    if (progress.mode === 'practice') checkPractice({code, ok, output: runOutput, turtle: turtleDid});
+    else checkLesson({code, ok, output: runOutput, turtle: turtleDid && turtleDid.calls ? turtleDid : null});
+  }
 }
 $('runBtn').addEventListener('click', run);
 $('stopBtn').addEventListener('click', () => { stopRequested = true; hideInput(); });
@@ -1089,6 +1259,8 @@ function statRows(){
     ['Pastes of code from this file', state.ownPastes],
     ['Examples loaded', state.examples],
     ['Programs run', state.runs],
+    ['Practice problems solved', Object.keys(progress.practice.solved).length],
+    ['Practice hints used', Object.values(progress.practice.hints).reduce((a, b) => a + b, 0)],
   ];
 }
 function verdictText(){
@@ -1165,26 +1337,26 @@ $('resetBtn').addEventListener('click', () => {
 });
 
 /* ---------- Reference documentation ---------- */
-const GROUPS = ['Turtle: getting started','Turtle: moving','Turtle: pen and colour','Turtle: shapes and text','Python basics','Loops and decisions','Functions and lists','Modules'];
+const GROUPS = ['Turtle: getting started','Turtle: moving','Turtle: pen and color','Turtle: shapes and text','Python basics','Loops and decisions','Functions and lists','Modules'];
 const DOCS = [
  {id:'Turtle', g:0, keys:['Turtle','turtle'], name:'turtle.Turtle()', sig:'t = turtle.Turtle()', desc:'Makes a new turtle and names it t. Every turtle program needs import turtle at the top first.', ex:'import turtle\n\nt = turtle.Turtle()\nt.forward(100)'},
- {id:'Screen', g:0, keys:['Screen','bgcolor'], name:'Screen().bgcolor()', sig:'turtle.Screen().bgcolor(color)', desc:'Changes the background colour of the drawing area.', ex:'import turtle\n\nturtle.Screen().bgcolor("lightblue")'},
+ {id:'Screen', g:0, keys:['Screen','bgcolor'], name:'Screen().bgcolor()', sig:'turtle.Screen().bgcolor(color)', desc:'Changes the background color of the drawing area.', ex:'import turtle\n\nturtle.Screen().bgcolor("lightblue")'},
  {id:'speed', g:0, keys:['speed'], name:'speed()', sig:'t.speed(n)', desc:'Sets how fast the turtle moves: 1 is slowest, 10 is fast and 0 is instant. Use 0 for big drawings.', ex:'t.speed(0)'},
  {id:'shape', g:0, keys:['shape'], name:'shape()', sig:'t.shape(name)', desc:'Changes how the turtle looks: "turtle", "arrow", "circle", "square", "triangle" or "classic".', ex:'t.shape("turtle")'},
  {id:'hideturtle', g:0, keys:['hideturtle','ht','showturtle','st'], name:'hideturtle() and showturtle()', sig:'t.hideturtle()', desc:'Hides the turtle so only the drawing shows. showturtle() brings it back.', ex:'t.hideturtle()'},
- {id:'forward', g:1, keys:['forward','fd'], name:'forward()', sig:'t.forward(distance)', desc:'Moves the turtle forward by that many steps in the direction it faces. One step is one pixel. The short name is fd().', ex:'t.forward(100)'},
- {id:'backward', g:1, keys:['backward','back','bk'], name:'backward()', sig:'t.backward(distance)', desc:'Moves the turtle backwards without turning around. The short name is bk().', ex:'t.backward(50)'},
+ {id:'forward', g:1, keys:['forward','fd'], name:'forward()', sig:'t.forward(distance)', desc:'Moves the turtle forward by that many pixels in the direction it faces. The short name is fd().', ex:'t.forward(100)'},
+ {id:'backward', g:1, keys:['backward','back','bk'], name:'backward()', sig:'t.backward(distance)', desc:'Moves the turtle backwards by that many pixels, without turning around. The short name is bk().', ex:'t.backward(50)'},
  {id:'left', g:1, keys:['left','lt'], name:'left()', sig:'t.left(angle)', desc:'Turns the turtle left (anticlockwise) by that many degrees. 90 is a quarter turn and 360 is a full turn.', ex:'t.left(90)'},
  {id:'right', g:1, keys:['right','rt'], name:'right()', sig:'t.right(angle)', desc:'Turns the turtle right (clockwise) by that many degrees.', ex:'t.right(45)'},
- {id:'goto', g:1, keys:['goto','setpos','setposition'], name:'goto()', sig:'t.goto(x, y)', desc:'Moves straight to the point (x, y). The centre of the paper is (0, 0), x grows to the right and y grows upwards. It draws a line unless the pen is up.', ex:'t.penup()\nt.goto(-100, 50)\nt.pendown()'},
+ {id:'goto', g:1, keys:['goto','setpos','setposition'], name:'goto()', sig:'t.goto(x, y)', desc:'Moves straight to the point (x, y). The center of the paper is (0, 0), x grows to the right and y grows upwards. It draws a line unless the pen is up.', ex:'t.penup()\nt.goto(-100, 50)\nt.pendown()'},
  {id:'setheading', g:1, keys:['setheading','seth'], name:'setheading()', sig:'t.setheading(angle)', desc:'Points the turtle in an exact direction: 0 is right, 90 is up, 180 is left and 270 is down.', ex:'t.setheading(90)'},
- {id:'home', g:1, keys:['home'], name:'home()', sig:'t.home()', desc:'Sends the turtle back to the centre, facing right.', ex:'t.home()'},
+ {id:'home', g:1, keys:['home'], name:'home()', sig:'t.home()', desc:'Sends the turtle back to the center, facing right.', ex:'t.home()'},
  {id:'position', g:1, keys:['position','pos','xcor','ycor'], name:'position()', sig:'t.position()', desc:'Gives back where the turtle is as (x, y). xcor() and ycor() give just one of them.', ex:'print(t.position())'},
  {id:'penup', g:2, keys:['penup','pu','pendown','pd'], name:'penup() and pendown()', sig:'t.penup()', desc:'penup() lifts the pen so the turtle moves without drawing. pendown() puts the pen back on the paper.', ex:'t.penup()\nt.forward(50)\nt.pendown()\nt.forward(50)'},
- {id:'color', g:2, keys:['color','pencolor','fillcolor'], name:'color()', sig:'t.color(line, fill)', desc:'Sets the line colour, and optionally a fill colour. Use names like "red" or codes like "#3366ff". pencolor() and fillcolor() set just one of them.', ex:'t.color("navy", "gold")'},
+ {id:'color', g:2, keys:['color','pencolor','fillcolor'], name:'color()', sig:'t.color(line, fill)', desc:'Sets the line color, and optionally a fill color. Use names like "red" or codes like "#3366ff". pencolor() and fillcolor() set just one of them.', ex:'t.color("navy", "gold")'},
  {id:'pensize', g:2, keys:['pensize','width'], name:'pensize()', sig:'t.pensize(width)', desc:'Sets how thick the line is. 1 is thin; try 5 or 10 for bold lines.', ex:'t.pensize(5)'},
- {id:'begin_fill', g:2, keys:['begin_fill','end_fill'], name:'begin_fill() and end_fill()', sig:'t.begin_fill()', desc:'Fills a shape with colour. Call begin_fill(), draw a closed shape, then call end_fill().', ex:'t.color("black", "yellow")\nt.begin_fill()\nfor side in range(4):\n    t.forward(80)\n    t.left(90)\nt.end_fill()'},
- {id:'circle', g:3, keys:['circle'], name:'circle()', sig:'t.circle(radius)', desc:'Draws a circle whose centre is radius steps to the turtle’s left. Add a second number to draw part of one: circle(50, 180) draws half.', ex:'t.circle(50)'},
+ {id:'begin_fill', g:2, keys:['begin_fill','end_fill'], name:'begin_fill() and end_fill()', sig:'t.begin_fill()', desc:'Fills a shape with color. Call begin_fill(), draw a closed shape, then call end_fill().', ex:'t.color("black", "yellow")\nt.begin_fill()\nfor side in range(4):\n    t.forward(80)\n    t.left(90)\nt.end_fill()'},
+ {id:'circle', g:3, keys:['circle'], name:'circle()', sig:'t.circle(radius)', desc:'Draws a circle whose center is radius pixels to the turtle’s left. Add a second number to draw part of one: circle(50, 180) draws half.', ex:'t.circle(50)'},
  {id:'dot', g:3, keys:['dot'], name:'dot()', sig:'t.dot(size, color)', desc:'Draws a filled dot where the turtle is standing.', ex:'t.dot(20, "red")'},
  {id:'stamp', g:3, keys:['stamp'], name:'stamp()', sig:'t.stamp()', desc:'Leaves a copy of the turtle’s shape on the paper.', ex:'t.shape("turtle")\nt.stamp()'},
  {id:'write', g:3, keys:['write'], name:'write()', sig:'t.write(text)', desc:'Writes text on the paper where the turtle is.', ex:'t.write("Hello!")'},
@@ -1203,13 +1375,13 @@ const DOCS = [
  {id:'lists', g:6, keys:['append','len'], name:'Lists', sig:'items = [a, b, c]', desc:'A list stores several values in order. items[0] is the first one, items.append(x) adds to the end and len(items) counts them.', ex:'colors = ["red", "green"]\ncolors.append("blue")\nprint(len(colors))'},
  {id:'import', g:7, keys:['import'], name:'import', sig:'import module', desc:'Loads extra tools. In this editor you can use turtle, random, math and time.', ex:'import turtle\nimport random'},
  {id:'random', g:7, keys:['random','randint','choice'], name:'random', sig:'random.randint(a, b)', desc:'randint(a, b) picks a whole number from a to b, including both. choice(list) picks one item from a list.', ex:'import random\n\nroll = random.randint(1, 6)\ncolor = random.choice(["red", "blue"])'},
- {id:'math', g:7, keys:['math','sqrt','pi'], name:'math', sig:'math.sqrt(x)', desc:'Maths tools: math.sqrt() finds a square root and math.pi is 3.14159…', ex:'import math\n\nprint(math.sqrt(16))'}
+ {id:'math', g:7, keys:['math','sqrt','pi'], name:'math', sig:'math.sqrt(x)', desc:'Math tools: math.sqrt() finds a square root and math.pi is 3.14159…', ex:'import math\n\nprint(math.sqrt(16))'}
 ];
 const DOC_BY_ID = new Map(DOCS.map(d => [d.id, d]));
 const KEYMAP = new Map();
 DOCS.forEach(d => d.keys.forEach(k => KEYMAP.set(k, d)));
 const firstSentence = s => (s.match(/^.*?\.(?=\s|$)/) || [s])[0];
-const md = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+const md = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
 
 /* In-editor tip: explains the function under (or around) the cursor */
 function contextWord(){
@@ -1247,14 +1419,16 @@ function lev(a, b){
   const d = Array.from({length: a.length + 1}, (_, i) => [i]);
   for (let j = 1; j <= b.length; j++) d[0][j] = j;
   for (let i = 1; i <= a.length; i++)
-    for (let j = 1; j <= b.length; j++)
+    for (let j = 1; j <= b.length; j++) {
       d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+      if (i > 1 && j > 1 && a[i-1] === b[j-2] && a[i-2] === b[j-1]) d[i][j] = Math.min(d[i][j], d[i-2][j-2] + 1);
+    }
   return d[a.length][b.length];
 }
-function closestName(w){
+function closestName(w, extra){
   if (w.length < 3) return '';
   let best = '', bd = 3;
-  for (const c of new Set([...KEYMAP.keys(), ...BI])) {
+  for (const c of new Set([...(extra || []), ...KEYMAP.keys(), ...BI])) {
     if (c === w) continue;
     const x = lev(w, c);
     if (x < bd) { bd = x; best = c; }
@@ -1305,7 +1479,7 @@ const LESSONS = [
    check:r => !has(r.code, /\binput\s*\(/) ? 'Use `input()` to ask a question.' : !printsVariable(r.code) ? 'Store the answer in a variable, then print it.' : ''}
  ]},
  {id:'move', title:'Move the turtle', intro:'Make the turtle walk and turn.', steps:[
-  {title:'Take a first step', text:'Every turtle program starts by importing turtle and making a turtle called `t`. Then `t.forward(150)` walks it 150 steps.', sample:'import turtle\n\nt = turtle.Turtle()\nt.forward(150)', hint:'The second Turtle in `turtle.Turtle()` starts with a capital T.', refs:['Turtle','forward'],
+  {title:'Take a first step', text:'Every turtle program starts by importing turtle and making a turtle called `t`. Then `t.forward(150)` moves it forward 150 pixels.', sample:'import turtle\n\nt = turtle.Turtle()\nt.forward(150)', hint:'The second Turtle in `turtle.Turtle()` starts with a capital T.', refs:['Turtle','forward'],
    check:r => !has(r.code, /^\s*import\s+turtle/m) ? 'Start with `import turtle` on the first line.'
      : !has(r.code, FWD) ? 'Use `t.forward()` to move the turtle.'
      : (r.turtle && !r.turtle.drew) ? 'The turtle didn’t draw a line. Check that the number in `t.forward()` isn’t 0.' : '',
@@ -1364,12 +1538,12 @@ const LESSONS = [
    },
    note:r => { const s = r.turtle && r.turtle.closedSides[0]; return s && s !== 6 ? `Nice ${s}-sided shape! The step suggested a hexagon (6 sides, 60°), and any shape works when the turn is 360 ÷ sides.` : ''; }}
  ]},
- {id:'pens', title:'Colour and pens', intro:'Change colours, fill shapes and move without drawing.', steps:[
-  {title:'Pick a colour', text:'`t.color("red")` sets the line colour and `t.pensize(5)` makes the line thicker. Set them before the turtle draws.', sample:'import turtle\n\nt = turtle.Turtle()\nt.color("red")\nt.pensize(5)\nt.circle(60)', hint:'Colour names go in quotes. Try "orange", "purple" or "teal".', refs:['color','pensize','circle'],
-   check:r => !has(r.code, /\.(color|pencolor)\s*\(/) ? 'Set a colour with `t.color()`.' : !has(r.code, /\.(pensize|width)\s*\(/) ? 'Change the line thickness with `t.pensize()`.' : (r.turtle && !r.turtle.drew) ? 'Set the colour, then draw something, like `t.circle(60)`.' : '',
+ {id:'pens', title:'Color and pens', intro:'Change colors, fill shapes and move without drawing.', steps:[
+  {title:'Pick a color', text:'`t.color("red")` sets the line color and `t.pensize(5)` makes the line thicker. Set them before the turtle draws.', sample:'import turtle\n\nt = turtle.Turtle()\nt.color("red")\nt.pensize(5)\nt.circle(60)', hint:'Color names go in quotes. Try "orange", "purple" or "teal".', refs:['color','pensize','circle'],
+   check:r => !has(r.code, /\.(color|pencolor)\s*\(/) ? 'Set a color with `t.color()`.' : !has(r.code, /\.(pensize|width)\s*\(/) ? 'Change the line thickness with `t.pensize()`.' : (r.turtle && !r.turtle.drew) ? 'Set the color, then draw something, like `t.circle(60)`.' : '',
    note:r => {
      const T = r.turtle; if (!T) return '';
-     if (T.colors.size && [...T.colors].every(c => c === 'black')) return 'Black is the normal colour, so you won’t see a change. Try "red" or "teal".';
+     if (T.colors.size && [...T.colors].every(c => c === 'black')) return 'Black is the normal color, so you won’t see a change. Try "red" or "teal".';
      if (T.pensize <= 1) return '`pensize(1)` is the normal thickness. Try 5 to see the difference.';
      return '';
    }},
@@ -1381,8 +1555,8 @@ const LESSONS = [
      if (r.turtle && !r.turtle.fills) return 'Nothing got filled. Draw the whole shape between `begin_fill()` and `end_fill()`.';
      return '';
    },
-   note:r => { const T = r.turtle; return T && T.fills && !T.fillColors.size ? 'The fill uses the normal colour. Give `color()` two colours, like `t.color("black", "yellow")`.' : ''; }},
-  {title:'Jump without drawing', text:'`t.penup()` lifts the pen so the turtle moves without drawing, and `t.pendown()` puts it back. Use `t.goto(x, y)` to jump. Point at the paper to read x and y.', sample:'import turtle\n\nt = turtle.Turtle()\nt.penup()\nt.goto(-120, 0)\nt.pendown()\nt.circle(40)\n\nt.penup()\nt.goto(80, 0)\nt.pendown()\nt.circle(40)', hint:'The centre of the paper is (0, 0). Negative x is to the left and negative y is down.', refs:['penup','goto'],
+   note:r => { const T = r.turtle; return T && T.fills && !T.fillColors.size ? 'The fill uses the normal color. Give `color()` two colors, like `t.color("black", "yellow")`.' : ''; }},
+  {title:'Jump without drawing', text:'`t.penup()` lifts the pen so the turtle moves without drawing, and `t.pendown()` puts it back. Use `t.goto(x, y)` to jump. Point at the paper to read x and y.', sample:'import turtle\n\nt = turtle.Turtle()\nt.penup()\nt.goto(-120, 0)\nt.pendown()\nt.circle(40)\n\nt.penup()\nt.goto(80, 0)\nt.pendown()\nt.circle(40)', hint:'The center of the paper is (0, 0). Negative x is to the left and negative y is down.', refs:['penup','goto'],
    check:r => {
      if (!has(r.code, /\.(penup|pu|up)\s*\(/) || !has(r.code, /\.(pendown|pd|down)\s*\(/)) return 'Use `t.penup()` before moving and `t.pendown()` before drawing again.';
      if (r.turtle) return !r.turtle.jumps ? 'The turtle didn’t move while the pen was up. Use `t.goto()` between `penup()` and `pendown()`.' : !r.turtle.drew ? 'Put the pen down and draw something after the jump.' : '';
@@ -1406,7 +1580,8 @@ const LESSONS = [
  ]}
 ];
 const ERR = 'The program stopped with an error. Read the message in Output, fix that line, and run again.';
-function defaultProgress(){ return {done:{}, lesson:null, step:0, learnOpen:null, tab:'lessons'}; }
+function defaultProgress(){ return {done:{}, lesson:null, step:0, learnOpen:null, tab:'lessons', mode:'lessons',
+  practice:{level:0, flags:'', code:null, attempts:{}, hints:{}, solved:{}, viewed:{}, open:{}, met:{}}}; }
 let progress = defaultProgress();
 const stepKey = (L, i) => L.id + ':' + i;
 const stepResults = {};
@@ -1502,7 +1677,7 @@ function renderRefDetail(id){
     <p>${md(d.desc)}</p>
     <div class="note">Example</div>
     <pre>${highlight(d.ex)}</pre>
-    ${uses.length ? `<div class="refs">Practise it in ${uses.slice(0, 3).join('')}</div>` : ''}`;
+    ${uses.length ? `<div class="refs">Practice it in ${uses.slice(0, 3).join('')}</div>` : ''}`;
 }
 $('refList').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
@@ -1518,24 +1693,44 @@ $('refSearch').addEventListener('input', e => renderRefList(e.target.value));
 
 function setTab(t){
   progress.tab = t;
-  $('tabLessons').setAttribute('aria-selected', String(t === 'lessons'));
-  $('tabRef').setAttribute('aria-selected', String(t === 'ref'));
-  $('lessonsView').hidden = t !== 'lessons';
-  $('refView').hidden = t !== 'ref';
+  if (t === 'lessons' || t === 'practice') progress.mode = t;
+  [['lessons', 'tabLessons', 'lessonsView'], ['practice', 'tabPractice', 'practiceView'], ['ref', 'tabRef', 'refView']].forEach(([id, tab, view]) => {
+    $(tab).setAttribute('aria-selected', String(t === id));
+    $(view).hidden = t !== id;
+  });
+  if (t === 'practice') renderPractice();
   scheduleSave();
 }
 function openRef(id){
+  if (!progress.learnOpen) setLearnOpen(true);
   setTab('ref'); renderRefDetail(id); $('refView').scrollTop = 0;
   if (window.innerWidth <= 960) $('learn').scrollIntoView({behavior:'smooth', block:'start'});
 }
+function setLearnOpen(open, focus){
+  progress.learnOpen = open;
+  $('learn').hidden = !open;
+  $('learnRail').hidden = open;
+  $('desk').classList.toggle('collapsed', !open);
+  $('collapseLearn').setAttribute('aria-expanded', String(open));
+  $('expandLearn').setAttribute('aria-expanded', String(open));
+  if (!running && !turtleDiv.children.length) requestAnimationFrame(sizeTurtle);
+  if (focus) (open ? $('collapseLearn') : $('expandLearn')).focus();
+  scheduleSave();
+}
+$('collapseLearn').addEventListener('click', () => setLearnOpen(false, true));
+$('expandLearn').addEventListener('click', () => setLearnOpen(true, true));
 function initLearn(){
-  progress.learnOpen = true;
+  if (progress.learnOpen === null || progress.learnOpen === undefined) progress.learnOpen = true;
   renderLessons(); renderRefList('');
-  setTab(progress.tab === 'ref' ? 'ref' : 'lessons');
+  const fromLink = parseProblemCode(decodeURIComponent((location.hash || '').slice(1)));
+  if (fromLink) { openProblemCode(location.hash.slice(1)); progress.tab = 'practice'; }
+  setTab(['ref', 'practice'].includes(progress.tab) ? progress.tab : 'lessons');
+  setLearnOpen(fromLink ? true : progress.learnOpen);
   updateTip();
 }
 $('tabLessons').addEventListener('click', () => setTab('lessons'));
 $('tabRef').addEventListener('click', () => setTab('ref'));
+$('tabPractice').addEventListener('click', () => setTab('practice'));
 
 /* ---------- Indentation and structure checker ---------- */
 const BLOCK_RE = /^(if|elif|else|for|while|def|class|try|except|finally|with)\b/;
@@ -1675,6 +1870,491 @@ function lintCode(code){
   return [...best.values()].sort((a, b) => a.line - b.line);
 }
 
+/* ---------- Practice problem generator ---------- */
+// Problems are made from templates with random numbers. A problem code such as "I4821-LC" stores
+// the level (B, I or A), the random seed and the challenges, so the same code always gives the same problem.
+function seededRandom(seed){
+  let a = seed >>> 0;
+  return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+const pick = (R, arr) => arr[Math.floor(R() * arr.length)];
+const rint = (R, lo, hi, step = 1) => lo + step * Math.floor(R() * (Math.floor((hi - lo) / step) + 1));
+const FILL_COLORS = ['red', 'orange', 'gold', 'green', 'teal', 'blue', 'purple', 'pink'];
+const LEVELS = ['Basic', 'Intermediate', 'Advanced'];
+const LEVEL_DEFAULT_FLAGS = ['', 'L', 'LF'];
+const CHALLENGES = [
+  {id:'L', label:'Use a loop'},
+  {id:'F', label:'Use a function'},
+  {id:'S', label:'Short code'},
+  {id:'O', label:'One forward()'},
+  {id:'C', label:'Color fill'}
+];
+const SHAPE_NAMES = {3:'triangle', 4:'square', 5:'pentagon', 6:'hexagon'};
+const fmt = n => String(+n.toFixed(2));
+
+// Helpers that record turtle commands, for drawing the goal picture.
+function recorder(){
+  const c = [];
+  return {cmds: c,
+    fd: d => c.push(['forward', d]), lt: a => c.push(['left', a]), rt: a => c.push(['right', a]),
+    pu: () => c.push(['penup']), pd: () => c.push(['pendown']), go: (x, y) => c.push(['goto', x, y]),
+    circle: r => c.push(['circle', r]), color: (p, f) => c.push(['color', p, f]),
+    bf: () => c.push(['begin_fill']), ef: () => c.push(['end_fill'])};
+}
+const poly = (t, n, s, turn) => { for (let i = 0; i < n; i++) { t.fd(s); t.lt(turn == null ? 360 / n : turn); } };
+const unroll = (n, pair) => Array.from({length: n}, () => pair).flat();
+
+// Each family: level, title, make(R) -> params, prompt(p), draw(t, p), sol(p, loop) -> code lines,
+// hints(p), and which challenges apply: repeats (loop), oneFwd, fillable, ownDef (always has a function).
+const FAMILIES = [
+ {id:'corner', level:0, repeats:false, title:'Corner',
+  make: R => ({a: rint(R, 60, 160, 10), b: rint(R, 60, 140, 10)}),
+  prompt: p => `Draw a corner: a line of **${p.a}** pixels to the right, then turn left and draw a line of **${p.b}** pixels up.`,
+  draw: (t, p) => { t.fd(p.a); t.lt(90); t.fd(p.b); },
+  sol: p => [`t.forward(${p.a})`, 't.left(90)', `t.forward(${p.b})`],
+  hints: p => ['Use `t.forward()` for each line and `t.left(90)` for the corner.']},
+ {id:'square', level:0, repeats:true, oneFwd:true, fillable:true, title:'Square',
+  make: R => ({s: rint(R, 60, 140, 10)}),
+  prompt: p => `Draw a square with sides of **${p.s}** pixels.`,
+  draw: (t, p) => poly(t, 4, p.s),
+  sol: (p, loop) => loop ? ['for side in range(4):', `    t.forward(${p.s})`, '    t.left(90)'] : unroll(4, [`t.forward(${p.s})`, 't.left(90)']),
+  hints: p => ['A square has 4 equal sides and 4 corners of 90°.', `Repeat \`t.forward(${p.s})\` and \`t.left(90)\` four times.`]},
+ {id:'rect', level:0, repeats:true, fillable:true, title:'Rectangle',
+  make: R => { const w = rint(R, 90, 160, 10); return {w, h: rint(R, 40, w - 30, 10)}; },
+  prompt: p => `Draw a rectangle **${p.w}** pixels wide and **${p.h}** pixels tall.`,
+  draw: (t, p) => { for (let i = 0; i < 2; i++) { t.fd(p.w); t.lt(90); t.fd(p.h); t.lt(90); } },
+  sol: (p, loop) => loop ? ['for half in range(2):', `    t.forward(${p.w})`, '    t.left(90)', `    t.forward(${p.h})`, '    t.left(90)'] : unroll(2, [`t.forward(${p.w})`, 't.left(90)', `t.forward(${p.h})`, 't.left(90)']),
+  hints: p => ['Go along the bottom first, then up the side.', 'The pattern wide, turn, tall, turn happens twice.']},
+ {id:'triangle', level:0, repeats:true, oneFwd:true, fillable:true, title:'Triangle',
+  make: R => ({s: rint(R, 80, 160, 10)}),
+  prompt: p => `Draw a triangle with all three sides **${p.s}** pixels long.`,
+  draw: (t, p) => poly(t, 3, p.s),
+  sol: (p, loop) => loop ? ['for side in range(3):', `    t.forward(${p.s})`, '    t.left(120)'] : unroll(3, [`t.forward(${p.s})`, 't.left(120)']),
+  hints: p => ['The turtle turns at all three corners.', 'Each turn is 120°, because 3 × 120 = 360.']},
+ {id:'stairs', level:0, repeats:true, title:'Staircase',
+  make: R => ({n: rint(R, 3, 5), s: rint(R, 20, 40, 5)}),
+  prompt: p => `Draw a staircase with **${p.n}** steps. Each step goes **${p.s}** pixels to the right, then **${p.s}** pixels up.`,
+  draw: (t, p) => { for (let i = 0; i < p.n; i++) { t.fd(p.s); t.lt(90); t.fd(p.s); t.rt(90); } },
+  sol: (p, loop) => loop ? [`for step in range(${p.n}):`, `    t.forward(${p.s})`, '    t.left(90)', `    t.forward(${p.s})`, '    t.right(90)'] : unroll(p.n, [`t.forward(${p.s})`, 't.left(90)', `t.forward(${p.s})`, 't.right(90)']),
+  hints: p => ['After going up, turn back to face right before the next step.', 'Each step is: forward, left 90, forward, right 90.']},
+ {id:'circle', level:0, repeats:false, fillable:true, title:'Circle',
+  make: R => ({r: rint(R, 40, 100, 10)}),
+  prompt: p => `Draw a circle with a radius of **${p.r}** pixels.`,
+  draw: (t, p) => t.circle(p.r),
+  sol: p => [`t.circle(${p.r})`],
+  hints: p => ['`t.circle()` takes the radius: the distance from the middle to the edge.']},
+
+ {id:'polygon', level:1, repeats:true, oneFwd:true, fillable:true, title:'Regular shape',
+  make: R => { const n = pick(R, [5, 6, 8, 9, 10, 12]); return {n, s: Math.max(20, Math.round(rint(R, 360, 480, 40) / n / 5) * 5)}; },
+  prompt: p => `Draw a shape with **${p.n}** equal sides, each **${p.s}** pixels long.`,
+  draw: (t, p) => poly(t, p.n, p.s),
+  sol: (p, loop) => loop ? [`for side in range(${p.n}):`, `    t.forward(${p.s})`, `    t.left(${fmt(360 / p.n)})`] : unroll(p.n, [`t.forward(${p.s})`, `t.left(${fmt(360 / p.n)})`]),
+  hints: p => ['All the turns together add up to 360°.', `Each turn is 360 ÷ ${p.n} = ${fmt(360 / p.n)}°.`]},
+ {id:'star', level:1, repeats:true, oneFwd:true, title:'Star',
+  make: R => ({s: rint(R, 100, 180, 20)}),
+  prompt: p => `Draw a 5-pointed star with lines **${p.s}** pixels long.`,
+  draw: (t, p) => poly(t, 5, p.s, 144),
+  sol: (p, loop) => loop ? ['for point in range(5):', `    t.forward(${p.s})`, '    t.left(144)'] : unroll(5, [`t.forward(${p.s})`, 't.left(144)']),
+  hints: p => ['A star is 5 lines with the same sharp turn after each one.', 'Each turn is 144°.']},
+ {id:'spiral', level:1, repeats:true, oneFwd:true, fast:true, title:'Square spiral',
+  make: R => ({n: rint(R, 8, 16), k: rint(R, 6, 12, 2)}),
+  prompt: p => `Draw a square spiral of **${p.n}** lines. The first line is **${p.k}** pixels long, and each line is **${p.k}** pixels longer than the one before.`,
+  draw: (t, p) => { for (let i = 1; i <= p.n; i++) { t.fd(i * p.k); t.lt(90); } },
+  sol: (p, loop) => loop ? [`for i in range(1, ${p.n + 1}):`, `    t.forward(i * ${p.k})`, '    t.left(90)'] : Array.from({length: p.n}, (_, i) => [`t.forward(${(i + 1) * p.k})`, 't.left(90)']).flat(),
+  hints: p => ['The lines get longer, so use the loop variable inside `t.forward()`.', `\`range(1, ${p.n + 1})\` counts 1, 2, 3… up to ${p.n}.`]},
+ {id:'row', level:1, repeats:true, title:'Row of squares',
+  make: R => ({m: rint(R, 3, 4), s: rint(R, 30, 50, 5), g: rint(R, 10, 30, 5)}),
+  prompt: p => `Draw **${p.m}** squares in a row. Each square has sides of **${p.s}** pixels, with a gap of **${p.g}** pixels between squares.`,
+  draw: (t, p) => { for (let j = 0; j < p.m; j++) { if (j) { t.pu(); t.fd(p.s + p.g); t.pd(); } poly(t, 4, p.s); } },
+  sol: (p, loop) => {
+    const sq = ['for side in range(4):', `    t.forward(${p.s})`, '    t.left(90)'];
+    const jump = ['t.penup()', `t.forward(${p.s + p.g})`, 't.pendown()'];
+    return loop ? [`for n in range(${p.m}):`, ...sq.map(l => '    ' + l), ...jump.map(l => '    ' + l)]
+                : Array.from({length: p.m}, (_, j) => [...sq, ...(j < p.m - 1 ? jump : [])]).flat();
+  },
+  hints: p => ['Use `t.penup()` to move to the next square without drawing.', `From the start of one square to the next is ${p.s} + ${p.g} = ${p.s + p.g} pixels.`]},
+ {id:'dashes', level:1, repeats:true, title:'Dashed line',
+  make: R => ({n: rint(R, 5, 8), d: rint(R, 15, 30, 5), g: rint(R, 10, 20, 5)}),
+  prompt: p => `Draw a dashed line with **${p.n}** dashes. Each dash is **${p.d}** pixels long, with a gap of **${p.g}** pixels between dashes.`,
+  draw: (t, p) => { for (let i = 0; i < p.n; i++) { t.fd(p.d); t.pu(); t.fd(p.g); t.pd(); } },
+  sol: (p, loop) => loop ? [`for dash in range(${p.n}):`, `    t.forward(${p.d})`, '    t.penup()', `    t.forward(${p.g})`, '    t.pendown()'] : unroll(p.n, [`t.forward(${p.d})`, 't.penup()', `t.forward(${p.g})`, 't.pendown()']),
+  hints: p => ['Draw a dash, lift the pen for the gap, then put it back down.']},
+
+ {id:'flower', level:2, repeats:true, ownDef:true, fast:true, title:'Square flower',
+  make: R => ({n: pick(R, [6, 8, 9, 10, 12, 18]), s: rint(R, 50, 80, 10)}),
+  prompt: p => `Draw a flower made of **${p.n}** squares, each with sides of **${p.s}** pixels. After each square, turn left so the squares spread evenly all the way round.`,
+  draw: (t, p) => { for (let i = 0; i < p.n; i++) { poly(t, 4, p.s); t.lt(360 / p.n); } },
+  sol: p => ['def square(size):', '    for side in range(4):', '        t.forward(size)', '        t.left(90)', '', `for petal in range(${p.n}):`, `    square(${p.s})`, `    t.left(${fmt(360 / p.n)})`],
+  hints: p => ['Write a `square(size)` function first.', `Turn 360 ÷ ${p.n} = ${fmt(360 / p.n)}° after each square.`]},
+ {id:'shaperow', level:2, repeats:true, ownDef:true, needsParams:true, title:'Shape family',
+  make: R => { const k = rint(R, 3, 4), s = rint(R, 35, 50, 5); return {sides: Array.from({length: k}, (_, i) => i + 3), s, w: Math.round(s * 2.4 / 5) * 5}; },
+  prompt: p => `Write a function \`polygon(sides, size)\` and use it to draw a ${p.sides.map(n => SHAPE_NAMES[n]).join(', ').replace(/, ([^,]*)$/, ' and $1')} in a row, all with sides of **${p.s}** pixels. Each shape starts **${p.w}** pixels to the right of the one before.`,
+  draw: (t, p) => p.sides.forEach((n, j) => { if (j) { t.pu(); t.fd(p.w); t.pd(); } poly(t, n, p.s); }),
+  sol: p => ['def polygon(sides, size):', '    for side in range(sides):', '        t.forward(size)', '        t.left(360 / sides)', '',
+             `for sides in range(3, ${p.sides.length + 3}):`, `    polygon(sides, ${p.s})`, '    t.penup()', `    t.forward(${p.w})`, '    t.pendown()'],
+  hints: p => ['Inside the function, turn `360 / sides` degrees.', 'After each shape, lift the pen and move forward to the next start.']},
+ {id:'grid', level:2, repeats:true, nested:true, fast:true, title:'Grid',
+  make: R => ({r: rint(R, 2, 4), c: rint(R, 2, 4), s: rint(R, 30, 45, 5)}),
+  prompt: p => `Use nested loops (a loop inside a loop) to draw a grid of **${p.r}** rows and **${p.c}** columns of squares, each with sides of **${p.s}** pixels. The bottom-left square starts where the turtle starts.`,
+  draw: (t, p) => { for (let r = 0; r < p.r; r++) for (let c = 0; c < p.c; c++) { t.pu(); t.go(c * p.s, r * p.s); t.pd(); poly(t, 4, p.s); } },
+  sol: p => [`for row in range(${p.r}):`, `    for col in range(${p.c}):`, '        t.penup()', `        t.goto(col * ${p.s}, row * ${p.s})`, '        t.pendown()', '        for side in range(4):', `            t.forward(${p.s})`, '            t.left(90)'],
+  hints: p => ['The outer loop counts rows and the inner loop counts columns.', `Each square starts at \`t.goto(col * ${p.s}, row * ${p.s})\`.`]},
+ {id:'nested', level:2, repeats:true, title:'Growing squares',
+  make: R => ({n: rint(R, 4, 7), k: rint(R, 15, 25, 5)}),
+  prompt: p => `Draw **${p.n}** squares that all start at the same corner. The smallest has sides of **${p.k}** pixels, and each square is **${p.k}** pixels bigger than the last.`,
+  draw: (t, p) => { for (let i = 1; i <= p.n; i++) poly(t, 4, i * p.k); },
+  sol: p => [`for i in range(1, ${p.n + 1}):`, '    for side in range(4):', `        t.forward(i * ${p.k})`, '        t.left(90)'],
+  hints: p => ['Every square ends where it started, so the next one starts at the same corner.', 'Use the outer loop variable for the size.']},
+ {id:'circleflower', level:2, repeats:true, oneFwd:false, fast:true, title:'Circle flower',
+  make: R => ({n: pick(R, [6, 8, 10, 12, 18]), r: rint(R, 40, 70, 10)}),
+  prompt: p => `Draw **${p.n}** circles with a radius of **${p.r}** pixels, turning between them so they spread evenly all the way round.`,
+  draw: (t, p) => { for (let i = 0; i < p.n; i++) { t.circle(p.r); t.lt(360 / p.n); } },
+  sol: p => [`for i in range(${p.n}):`, `    t.circle(${p.r})`, `    t.left(${fmt(360 / p.n)})`],
+  hints: p => [`Turn 360 ÷ ${p.n} = ${fmt(360 / p.n)}° after each circle.`]},
+ {id:'bigstar', level:2, repeats:true, oneFwd:true, title:'Many-pointed star',
+  make: R => ({n: pick(R, [7, 9]), s: rint(R, 150, 200, 10)}),
+  prompt: p => `Draw a **${p.n}**-pointed star with lines **${p.s}** pixels long.`,
+  draw: (t, p) => poly(t, p.n, p.s, 180 * (p.n - 1) / p.n),
+  sol: p => [`for point in range(${p.n}):`, `    t.forward(${p.s})`, `    t.left(180 * ${p.n - 1} / ${p.n})`],
+  hints: p => ['A 5-pointed star turns 144° each time, which is 180 × 4 ÷ 5.', `For ${p.n} points, try 180 × ${p.n - 1} ÷ ${p.n}.`]}
+];
+
+function parseProblemCode(code){
+  const m = String(code || '').trim().toUpperCase().match(/^([BIA])(\d{3,6})(?:-([LFSOC]*))?$/);
+  return m ? {level: 'BIA'.indexOf(m[1]), seed: +m[2], flags: m[3] || ''} : null;
+}
+function familiesFor(level){ return FAMILIES.filter(f => f.level === level); }
+function applicable(fam, id){
+  return id === 'L' ? fam.repeats : id === 'O' ? !!fam.oneFwd : id === 'C' ? !!fam.fillable : id === 'F' ? true : id === 'S';
+}
+const codeLines = code => strip(code).split('\n').filter(l => l.trim()).length;
+function makeProblem(level, seed, wanted){
+  const R = seededRandom(seed * 7919 + level * 104729);
+  const fam = pick(R, familiesFor(level));
+  const p = fam.make(R);
+  p.color = pick(R, FILL_COLORS);
+  const flags = CHALLENGES.map(c => c.id).filter(id => wanted.includes(id) && applicable(fam, id)).join('');
+  const f = {L: flags.includes('L') || (fam.level > 0 && fam.repeats), F: flags.includes('F'), C: flags.includes('C')};
+  const t = recorder();
+  if (f.C) { t.color('black', p.color); t.bf(); }
+  fam.draw(t, p);
+  if (f.C) t.ef();
+  const solution = buildSolution(fam, p, f);
+  const reqs = [];
+  if (flags.includes('L')) reqs.push({id:'L', text:'Use a loop', test: r => has(r.code, /^\s*(for|while)\b.*:\s*$/m) && loopBodyHas(r.code, /\.(forward|fd|circle|goto)\s*\(|^\s*\w+\s*\(/)});
+  if (fam.nested) reqs.push({id:'N', text:'Use a loop inside a loop', test: r => nestedLoop(r.code)});
+  if (fam.needsParams) reqs.push({id:'P', text:'Write `polygon(sides, size)` with two parameters', test: r => has(r.code, /^\s*def\s+\w+\s*\(\s*\w+\s*,\s*\w+\s*\)\s*:/m)});
+  if (flags.includes('F') || fam.ownDef) reqs.push({id:'F', text: fam.ownDef ? 'Write a function and use it' : 'Put your drawing in a function and call it',
+    test: r => { const n = funcName(r.code); return !!n && callsOf(r.code, n) >= 1; }});
+  if (flags.includes('O')) reqs.push({id:'O', text:'Use `t.forward()` only once in your code', test: r => countOf(r.code, /\.(forward|fd)\s*\(/g) === 1});
+  if (flags.includes('C')) reqs.push({id:'C', text:`Fill the shape with ${p.color}`, test: r => !!r.turtle && r.turtle.polys.some(q => q.color === p.color)});
+  if (flags.includes('S')) { const max = codeLines(solution) + 2; reqs.push({id:'S', text:`Use at most ${max} lines of code`, test: r => codeLines(r.code) <= max}); }
+  return {code: `${'BIA'[level]}${seed}${flags ? '-' + flags : ''}`, level, seed, flags, fam, p, title: fam.title,
+          prompt: fam.prompt(p) + (f.C ? ` Fill it with **${p.color}**.` : ''), goal: t.cmds, reqs, solution,
+          hints: fam.hints(p)};
+}
+function nestedLoop(code){
+  const lines = strip(code).split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^(\s*)(for|while)\b.*:\s*$/); if (!m) continue;
+    for (let j = i + 1; j < lines.length; j++) {
+      if (!lines[j].trim()) continue;
+      const ind = lines[j].match(/^\s*/)[0].length;
+      if (ind <= m[1].length) break;
+      if (/^\s*(for|while)\b/.test(lines[j])) return true;
+    }
+  }
+  // A loop that calls a function containing a loop also counts.
+  const fn = funcName(code);
+  return !!fn && loopBodyHas(code, new RegExp('^\\s*' + fn + '\\s*\\(')) && loopBodyHas(code, /^\s*(for|while)\b/);
+}
+function buildSolution(fam, p, f){
+  let body = fam.sol(p, f.L);
+  if (f.F && !fam.ownDef) body = ['def draw():', ...body.map(l => '    ' + l), '', 'draw()'];
+  if (f.C) {
+    const callAt = body.indexOf('draw()');
+    const open = [`t.color("black", "${p.color}")`, 't.begin_fill()'];
+    body = callAt >= 0 ? [...body.slice(0, callAt), ...open, 'draw()', 't.end_fill()'] : [...open, ...body, 't.end_fill()'];
+  }
+  return ['import turtle', '', 't = turtle.Turtle()', ...(fam.fast ? ['t.speed(0)'] : []), '', ...body].join('\n');
+}
+
+/* Comparing drawings: sample points along each line and check they lie on the other drawing. */
+function samplePoints(lines, step){
+  const pts = [];
+  for (const [x1, y1, x2, y2] of lines) {
+    const n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / step));
+    for (let k = 0; k <= n; k++) pts.push([x1 + (x2 - x1) * k / n, y1 + (y2 - y1) * k / n]);
+  }
+  return pts;
+}
+function coverage(pts, lines, tol){
+  if (!pts.length) return {frac: lines.length ? 0 : 1, miss: 0, n: 0};
+  const C = 25, grid = new Map(), key = (i, j) => i + ',' + j;
+  for (const L of lines) {
+    const [x1, y1, x2, y2] = L;
+    for (let i = Math.floor((Math.min(x1, x2) - tol) / C); i <= Math.floor((Math.max(x1, x2) + tol) / C); i++)
+      for (let j = Math.floor((Math.min(y1, y2) - tol) / C); j <= Math.floor((Math.max(y1, y2) + tol) / C); j++) {
+        const k = key(i, j); if (!grid.has(k)) grid.set(k, []); grid.get(k).push(L);
+      }
+  }
+  let hit = 0;
+  for (const [px, py] of pts) {
+    const cell = grid.get(key(Math.floor(px / C), Math.floor(py / C))) || [];
+    if (cell.some(([x1, y1, x2, y2]) => {
+      const dx = x2 - x1, dy = y2 - y1, len = dx * dx + dy * dy;
+      const u = len ? Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / len)) : 0;
+      return Math.hypot(px - (x1 + u * dx), py - (y1 + u * dy)) <= tol;
+    })) hit++;
+  }
+  return {frac: hit / pts.length, miss: pts.length - hit, n: pts.length};
+}
+function bbox(lines){
+  let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity;
+  for (const [x1, y1, x2, y2] of lines) { a = Math.min(a, x1, x2); b = Math.min(b, y1, y2); c = Math.max(c, x1, x2); d = Math.max(d, y1, y2); }
+  return {x: a, y: b, w: c - a, h: d - b};
+}
+function compareDrawings(goalLines, gotLines){
+  const tol = 2.5, step = 4;
+  const gp = samplePoints(goalLines, step);
+  const test = lines => ({goal: coverage(gp, lines, tol), got: coverage(samplePoints(lines, step), goalLines, tol)});
+  // Allow only a few unmatched points (rounding differences), however big the drawing is.
+  const fine = c => c.miss <= Math.max(2, Math.ceil(c.n * 0.004));
+  const ok = c => fine(c.goal) && fine(c.got);
+  if (!gotLines.length) return {match: false, kind: 'empty'};
+  const exact = test(gotLines);
+  if (ok(exact)) return {match: true, kind: 'exact'};
+  const mirror = gotLines.map(([a, b, c, d, k]) => [a, -b, c, -d, k]);
+  if (ok(test(mirror))) return {match: true, kind: 'mirror'};
+  const G = bbox(goalLines);
+  const shiftTo = ls => { const B = bbox(ls); return ls.map(([a, b, c, d, k]) => [a - B.x + G.x, b - B.y + G.y, c - B.x + G.x, d - B.y + G.y, k]); };
+  if (ok(test(shiftTo(gotLines))) || ok(test(shiftTo(mirror)))) return {match: true, kind: 'shifted'};
+  const B = bbox(gotLines), big = Math.max(B.w, B.h), gbig = Math.max(G.w, G.h);
+  if (big > 1 && Math.abs(big - gbig) > 3) {
+    const k = gbig / big;
+    for (const ls of [gotLines, mirror]) {
+      const Bs = bbox(ls);
+      const scaled = ls.map(([a, b, c, d, col]) => [(a - Bs.x) * k + G.x, (b - Bs.y) * k + G.y, (c - Bs.x) * k + G.x, (d - Bs.y) * k + G.y, col]);
+      if (ok(test(scaled))) return {match: false, kind: 'size'};
+    }
+  }
+  return {match: false, kind: fine(exact.goal) ? 'extra' : fine(exact.got) ? 'missing' : 'different', goalCovered: exact.goal.frac};
+}
+
+/* The goal picture (and the student's drawing on top after a run), as SVG. */
+function drawingSVG(goalM, gotM){
+  const all = [...goalM.lines, ...(gotM ? gotM.lines : []), [0, 0, 0, 0]];
+  const B = bbox(all), pad = Math.max(16, Math.max(B.w, B.h) * 0.08);
+  const vx = B.x - pad, vy = B.y - pad, vw = Math.max(80, B.w + pad * 2), vh = Math.max(80, B.h + pad * 2);
+  const Y = y => -y;  // turtle y grows upwards; SVG y grows downwards
+  const grid = [];
+  for (let gx = Math.ceil(vx / 25) * 25; gx <= vx + vw; gx += 25) grid.push(`<line x1="${gx}" y1="${Y(vy)}" x2="${gx}" y2="${Y(vy + vh)}" class="${gx === 0 ? 'ax' : 'gr'}"/>`);
+  for (let gy = Math.ceil(vy / 25) * 25; gy <= vy + vh; gy += 25) grid.push(`<line x1="${vx}" y1="${Y(gy)}" x2="${vx + vw}" y2="${Y(gy)}" class="${gy === 0 ? 'ax' : 'gr'}"/>`);
+  const safe = c => /^[a-z]+$|^rgb\(\d+,\d+,\d+\)$|^#[0-9a-f]{3,8}$/i.test(c || '') ? c : 'black';
+  const polys = goalM.polys.map(q => `<polygon points="${q.pts.map(([x, y]) => `${x},${Y(y)}`).join(' ')}" fill="${safe(q.color)}" fill-rule="nonzero" opacity="${gotM ? 0.25 : 1}"/>`).join('');
+  const goal = goalM.lines.map(([a, b, c, d, k]) => `<line x1="${a}" y1="${Y(b)}" x2="${c}" y2="${Y(d)}" stroke="${gotM ? '' : safe(k)}" class="${gotM ? 'gl dim' : 'gl'}"/>`).join('');
+  const got = gotM ? gotM.lines.map(([a, b, c, d]) => `<line x1="${a}" y1="${Y(b)}" x2="${c}" y2="${Y(d)}" class="yl"/>`).join('') : '';
+  const s = Math.max(vw, vh) / 28;
+  const start = `<polygon points="0,${-s * 0.55} ${s * 1.1},0 0,${s * 0.55}" class="st"/>`;
+  return `<svg viewBox="${vx} ${Y(vy + vh)} ${vw} ${vh}" role="img" aria-label="${gotM ? 'Goal drawing with your drawing on top' : 'Goal drawing'}" preserveAspectRatio="xMidYMid meet">
+    <rect x="${vx}" y="${Y(vy + vh)}" width="${vw}" height="${vh}" class="bg"/>${grid.join('')}${polys}${goal}${got}${start}</svg>`;
+}
+
+/* ---------- Practice tab ---------- */
+let currentProblem = null, practiceResult = null;
+function goalMetrics(P){ if (!P.goalM) P.goalM = turtleMetrics(P.goal); return P.goalM; }
+function ensureProblem(){
+  const pr = progress.practice;
+  if (!currentProblem || currentProblem.code !== pr.code) {
+    const c = parseProblemCode(pr.code);
+    currentProblem = c ? makeProblem(c.level, c.seed, c.flags) : null;
+  }
+  if (!currentProblem) newProblem();
+  return currentProblem;
+}
+function newProblem(){
+  const pr = progress.practice;
+  currentProblem = makeProblem(pr.level, 1000 + Math.floor(Math.random() * 9000), pr.flags);
+  pr.code = currentProblem.code; practiceResult = null; scheduleSave();
+}
+function openProblemCode(code){
+  const c = parseProblemCode(code); if (!c) return false;
+  const pr = progress.practice;
+  currentProblem = makeProblem(c.level, c.seed, c.flags);
+  pr.code = currentProblem.code; pr.level = c.level; pr.flags = c.flags; practiceResult = null;
+  scheduleSave(); return true;
+}
+const DRAWING_MSG = {
+  empty: 'Nothing was drawn yet. Make sure your code imports turtle, makes a turtle and moves it.',
+  size: 'Right shape, but a different size. Check the lengths in the problem.',
+  extra: 'Your drawing has the goal in it, plus some extra lines. Look for a loop that runs too many times, or moves that should have the pen up.',
+  missing: 'You’re part of the way there, but some of the goal is still missing.',
+  different: 'Your drawing doesn’t match the goal yet. Compare the two pictures: gray is the goal and blue is yours.',
+  unknown: 'Your drawing couldn’t be checked automatically here. Compare it with the goal yourself.',
+  error: 'Fix the error shown in Output, then run again.'
+};
+const DRAWING_NOTE = {
+  mirror: 'Your drawing is a mirror image of the goal. Turning left instead of right would match it exactly.',
+  shifted: 'Right drawing, but in a different place. Start where the turtle starts to match it exactly.'
+};
+// Hints go from general to specific. The last one is an outline of a solution with every number
+// blanked out: it shows the structure, but the student still has to work out the values.
+function blankNumbers(code){
+  return code.split('\n').map(l => /^\s*t\.speed\(/.test(l) ? l : l.replace(/(^|[^\w.])(\d+(?:\.\d+)?)/g, '$1___')).join('\n');
+}
+function practiceHints(P){
+  return [...P.hints.map(t => ({html: `<p>${md(t)}</p>`, needsTries: 0})),
+          {html: `<p>Fill in the blanks. Each <code>___</code> is a number you work out from the problem:</p><pre>${highlight(blankNumbers(P.solution))}</pre>`, needsTries: 2}];
+}
+// The last run for each problem (level + seed). Changing challenges keeps the same drawing,
+// so the last run can be re-checked straight away instead of running the code again.
+const lastPracticeRun = new Map();
+const problemKey = P => `${P.level}:${P.seed}`;
+// Runs and hints are counted per problem (e.g. I4821), so adding a challenge doesn't reset them.
+const baseCode = code => String(code).split('-')[0];
+function evaluatePractice(P, r){
+  const res = {code: P.code, got: r.turtle || null, ranCode: r.code};
+  if (!r.ok) res.kind = 'error';
+  else if (!/\bturtle\b/.test(r.code) || (r.turtle && !r.turtle.lines.length)) res.kind = 'empty';
+  else if (!r.turtle) res.kind = 'unknown';
+  else { const d = compareDrawings(goalMetrics(P).lines, r.turtle.lines); res.kind = d.kind; res.drawn = d.match; }
+  res.reqs = P.reqs.map(q => { let ok = false; try { ok = r.ok && !!q.test(r); } catch (e) {} return {id: q.id, text: q.text, pass: ok}; });
+  res.pass = !!res.drawn && res.reqs.every(q => q.pass);
+  // Every challenge this run meets, whether or not it was selected.
+  res.met = new Set();
+  if (r.ok) for (const c of CHALLENGES) {
+    if (!applicable(P.fam, c.id)) continue;
+    const Q = P.flags.includes(c.id) ? P : makeProblem(P.level, P.seed, P.flags + c.id);
+    const q = Q.reqs.find(x => x.id === c.id);
+    try { if (q && q.test(r)) res.met.add(c.id); } catch (e) {}
+  }
+  return res;
+}
+function recordSolved(P, res, how){
+  const pr = progress.practice;
+  pr.met[P.code] = [...res.met].join('');
+  if (pr.solved[P.code]) return;
+  pr.solved[P.code] = Date.now();
+  const hints = pr.hints[baseCode(P.code)] || 0;
+  const extra = CHALLENGES.filter(c => res.met.has(c.id) && !P.flags.includes(c.id)).map(c => c.label.toLowerCase());
+  log('info', `Solved practice problem ${P.code} (${P.title})${how || ''}` +
+    (hints ? `, using ${hints} hint${hints === 1 ? '' : 's'}` : '') +
+    (extra.length ? `. Also met: ${extra.join(', ')}` : ''));
+}
+function checkPractice(r){
+  const P = ensureProblem(), pr = progress.practice;
+  const base = baseCode(P.code);
+  pr.attempts[base] = (pr.attempts[base] || 0) + 1;
+  lastPracticeRun.set(problemKey(P), r);
+  const res = evaluatePractice(P, r);
+  if (res.pass) recordSolved(P, res);
+  practiceResult = res; renderPractice(); scheduleSave();
+}
+function renderPractice(){
+  const v = $('practiceView'); if (!v) return;
+  const P = ensureProblem(), pr = progress.practice;
+  const res = practiceResult && practiceResult.code === P.code ? practiceResult : null;
+  const hintList = practiceHints(P), tries = pr.attempts[baseCode(P.code)] || 0, shown = Math.min(pr.hints[baseCode(P.code)] || 0, hintList.length);
+  const solved = !!pr.solved[P.code], showSolution = solved && !!pr.open[P.code];
+  const icon = s => s === true ? '✓' : s === false ? '✗' : '○';
+  const cls = s => s === true ? 'pass' : s === false ? 'fail' : 'todo';
+  const drawState = res ? (res.kind === 'unknown' ? null : !!res.drawn) : null;
+  const reqs = [{text: 'Your drawing matches the goal', state: drawState},
+                ...P.reqs.map(q => ({text: q.text, state: res ? (res.reqs.find(x => x.id === q.id) || {}).pass : null}))];
+  let status = `<div class="status">${solved ? 'You’ve solved this one. Try a new problem, or add a challenge.' : 'Write your code in the editor, then press Run to check it.'}</div>`;
+  if (res && res.pass) {
+    status = `<div class="status pass">Solved! Nice work.</div>` + (DRAWING_NOTE[res.kind] ? `<div class="status advice">${md(DRAWING_NOTE[res.kind])}</div>` : '');
+  } else if (res) {
+    const firstReq = res.reqs.find(q => !q.pass);
+    const msg = !res.drawn ? DRAWING_MSG[res.kind] || DRAWING_MSG.different : `Your drawing is right. Now: ${firstReq.text.charAt(0).toLowerCase() + firstReq.text.slice(1)}.`;
+    status = `<div class="status ${res.kind === 'unknown' ? '' : 'fail'}">${md(msg)}</div>` + (res.drawn && DRAWING_NOTE[res.kind] ? `<div class="status advice">${md(DRAWING_NOTE[res.kind])}</div>` : '');
+  }
+  const nextLocked = shown < hintList.length && hintList[shown].needsTries > tries;
+  const canEase = !solved && tries >= 3 && (P.flags || P.level > 0);
+  v.innerHTML = `
+    <div class="pr-levels" role="radiogroup" aria-label="Difficulty">${LEVELS.map((l, i) => `<button role="radio" aria-checked="${i === P.level}" data-level="${i}">${l}</button>`).join('')}</div>
+    <div class="pr-chal" role="group" aria-label="Challenges"><span class="pr-label">Challenges</span>${CHALLENGES.map(c => {
+      const can = applicable(P.fam, c.id), on = P.flags.includes(c.id), met = can && res && res.met.has(c.id);
+      const tip = !can ? 'Doesn’t apply to this problem' : met ? (on ? 'Your last run meets this challenge' : 'Your last run already does this. Click to add it.') : '';
+      return `<button class="chal${met ? ' met' : ''}" data-flag="${c.id}" aria-pressed="${on}"${can ? '' : ' disabled'}${tip ? ` title="${tip}"` : ''}>${met ? '<span aria-hidden="true">✓ </span>' : ''}${esc(c.label)}${met ? '<span class="sr"> (done in your last run)</span>' : ''}</button>`;
+    }).join('')}${res && CHALLENGES.some(c => res.met.has(c.id) && !P.flags.includes(c.id)) ? '<span class="pr-met-note">✓ means your last run already does this. Click one to add it, no need to run again.</span>' : ''}</div>
+    <div class="pr-head"><h3>${esc(P.title)}</h3><button class="pr-code" data-pa="copy" title="Copy this problem code">${esc(P.code)}</button></div>
+    <p>${md(P.prompt)}</p>
+    <figure class="goal">${drawingSVG(goalMetrics(P), res && res.got && res.got.lines.length ? res.got : null)}
+      <figcaption>${res && res.got && res.got.lines.length ? '<span class="key kg"></span>Goal <span class="key ky"></span>Your drawing' : 'Goal. The green arrow is where the turtle starts, facing right.'}</figcaption></figure>
+    <ul class="reqs">${reqs.map(q => `<li class="${cls(q.state)}"><span class="ic" aria-hidden="true">${icon(q.state)}</span><span>${md(q.text)}</span></li>`).join('')}</ul>
+    ${status}
+    <div class="row">
+      ${shown < hintList.length && !nextLocked ? `<button class="btn small" data-pa="hint">${shown ? 'Another hint' : 'Show a hint'}</button>` : ''}
+      ${canEase ? `<button class="btn small" data-pa="easier">Try an easier version</button>` : ''}
+      ${solved && !showSolution ? `<button class="btn small" data-pa="solution">Compare with one solution</button>` : ''}
+    </div>
+    ${nextLocked ? `<p class="small-note">One more hint unlocks after ${hintList[shown].needsTries} runs.</p>` : ''}
+    ${shown ? `<div class="hints-list">${hintList.slice(0, shown).map(x => x.html).join('')}</div>` : ''}
+    ${showSolution ? `<h4>One way to solve it</h4><pre>${highlight(P.solution)}</pre><p class="small-note">There are many ways to solve each problem. How is this one different from yours?</p>` : ''}
+    <div class="row" style="margin-top:14px"><button class="btn run" data-pa="new">New problem</button></div>
+    <div class="pr-load">
+      <label for="prCode">Have a problem code?</label>
+      <div class="row"><input id="prCode" class="search" placeholder="For example I4821-L" autocomplete="off" spellcheck="false"><button class="btn" data-pa="open">Open</button></div>
+    </div>`;
+}
+$('practiceView').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || b.disabled) return;
+  const pr = progress.practice, P = ensureProblem();
+  if (b.dataset.level) { pr.level = +b.dataset.level; pr.flags = LEVEL_DEFAULT_FLAGS[pr.level]; newProblem(); }
+  else if (b.dataset.flag) {
+    const id = b.dataset.flag, on = P.flags.includes(id);
+    pr.flags = CHALLENGES.map(c => c.id).filter(x => x === id ? !on : (P.flags.includes(x) || (pr.flags.includes(x) && !applicable(P.fam, x)))).join('');
+    currentProblem = makeProblem(P.level, P.seed, pr.flags); pr.code = currentProblem.code; practiceResult = null;
+    const last = lastPracticeRun.get(problemKey(currentProblem));
+    if (last) {
+      practiceResult = evaluatePractice(currentProblem, last);
+      if (practiceResult.pass) recordSolved(currentProblem, practiceResult, on ? '' : ' (challenge added after the run)');
+    }
+  }
+  else if (b.dataset.pa === 'new') newProblem();
+  else if (b.dataset.pa === 'hint') {
+    const n = (pr.hints[baseCode(P.code)] || 0) + 1, total = practiceHints(P).length;
+    pr.hints[baseCode(P.code)] = n;
+    log('info', `Used hint ${n} of ${total} on practice problem ${P.code} (${P.title})`);
+  }
+  else if (b.dataset.pa === 'solution') { if (!pr.solved[P.code]) return; pr.open[P.code] = true; }
+  else if (b.dataset.pa === 'easier') {
+    if (P.flags) { pr.flags = ''; currentProblem = makeProblem(P.level, P.seed, ''); pr.code = currentProblem.code; practiceResult = null; }
+    else { pr.level = Math.max(0, P.level - 1); pr.flags = LEVEL_DEFAULT_FLAGS[pr.level]; newProblem(); }
+    log('info', `Switched to an easier practice problem: ${currentProblem.code}`);
+  }
+  else if (b.dataset.pa === 'copy') { copyText(P.code).then(ok => toast(ok ? `Problem code ${P.code} copied.` : `The problem code is ${P.code}.`)); return; }
+  else if (b.dataset.pa === 'open') {
+    const val = $('prCode').value;
+    if (!openProblemCode(val)) { toast('That isn’t a problem code. Codes look like B1234, I4821-L or A5120-LF.'); return; }
+    log('info', `Opened practice problem ${currentProblem.code}`);
+  }
+  else return;
+  scheduleSave(); renderPractice();
+  if (b.dataset.level || b.dataset.pa === 'new' || b.dataset.pa === 'open') $('practiceView').scrollTop = 0;
+});
+$('practiceView').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'prCode') { e.preventDefault(); const btn = $('practiceView').querySelector('[data-pa="open"]'); if (btn) btn.click(); } });
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
+  const tmp = document.createElement('textarea'); tmp.value = text; tmp.style.position = 'fixed'; tmp.style.opacity = '0';
+  document.body.appendChild(tmp); tmp.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+  tmp.remove(); return ok;
+}
+function practiceHistory(){
+  const pr = progress.practice;
+  const bases = new Set([...Object.keys(pr.attempts), ...Object.keys(pr.solved), ...Object.keys(pr.hints)].map(baseCode));
+  return [...bases].map(base => {
+    const c = parseProblemCode(base), P = c ? makeProblem(c.level, c.seed, '') : null;
+    const solvedCodes = Object.keys(pr.solved).filter(k => baseCode(k) === base).sort((a, b) => pr.solved[a] - pr.solved[b]);
+    const metIds = new Set(solvedCodes.flatMap(k => [...(pr.met[k] || '')]));
+    const met = CHALLENGES.filter(x => metIds.has(x.id)).map(x => x.label).join(', ');
+    const t = solvedCodes.length ? pr.solved[solvedCodes[0]] : 0;
+    return {code: base, title: P ? P.title : '', level: P ? LEVELS[P.level] : '', t, met,
+            result: solvedCodes.length ? `Solved (${solvedCodes.join(', ')})` : 'Not solved yet',
+            tries: pr.attempts[base] || 0, hints: pr.hints[base] || 0, ofHints: P ? practiceHints(P).length : 0};
+  }).sort((a, b) => (a.t || Infinity) - (b.t || Infinity));
+}
 /* ---------- Downloadable report for the teacher ---------- */
 $('studentName').addEventListener('input', e => { state.studentName = e.target.value.slice(0, 80); scheduleSave(); });
 $('studentName').addEventListener('change', e => { const n = e.target.value.trim(); if (n) log('info', `Name set to ${n}`); });
@@ -1694,6 +2374,7 @@ function buildReport(){
   const f = flags();
   const rows = statRows().map(([k, v, hot]) => `<tr${hot ? ' class="hot"' : ''}><th>${esc(k)}</th><td>${esc(String(v))}</td></tr>`).join('');
   const lessons = lessonsDoneList();
+  const practice = practiceHistory();
   const events = state.events.map(e => `<tr${e.type === 'flag' ? ' class="hot"' : ''}><td>${esc(fmtDate(e.t))}</td><td>${esc(e.msg)}</td></tr>`).join('');
   const css = `:root{color-scheme:light;--bg:#F3F6F9;--card:#fff;--ink:#1A2633;--muted:#5A6A7A;--line:#D2DBE5;--warn:#8A5A00;--warn-bg:#FFF1CC;--ok:#1B5E3F;--ok-bg:#DDF3E7;--kw:#7A36B0;--str:#1C7547;--num:#B0510A;--com:#7A8796;--fn:#2457A6;--bi:#0B6F86;--self:#B0245A;--dec:#9A6B00;--op:#556677;--b0:#2457A6;--b1:#B0510A;--b2:#7A36B0;--guide:rgba(26,38,51,.12)}
 @media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#10161D;--card:#17202A;--ink:#E2E9F1;--muted:#93A3B4;--line:#2A3745;--warn:#F2C766;--warn-bg:#3A2F14;--ok:#9BE0BC;--ok-bg:#163327;--kw:#C79BF5;--str:#8FD3A4;--num:#F2A867;--com:#7E8C9B;--fn:#8DB3FF;--bi:#5FCBDB;--self:#F58BB2;--dec:#E5C46B;--op:#9AABBC;--b0:#8DB3FF;--b1:#F2A867;--b2:#C79BF5;--guide:rgba(226,233,241,.1)}}
@@ -1728,6 +2409,8 @@ button{font:600 14px system-ui,sans-serif;padding:7px 14px;border-radius:8px;bor
 <div class="card"><table class="stats">${rows}</table></div>
 <h2>Lesson steps completed</h2>
 <div class="card">${lessons.length ? `<table>${lessons.map(([t, s]) => `<tr><td style="width:170px">${esc(fmtDate(t))}</td><td>${esc(s)}</td></tr>`).join('')}</table>` : '<p style="margin:0">None yet.</p>'}</div>
+<h2>Practice problems</h2>
+<div class="card">${practice.length ? `<table><tr><th>Code</th><th>Problem</th><th>Result</th><th>Runs</th><th>Hints used</th><th>Challenges met</th></tr>${practice.map(q => `<tr><td>${esc(q.code)}</td><td>${esc(q.title)} (${esc(q.level)})</td><td>${esc(q.result)}</td><td>${q.tries}</td><td>${q.hints} of ${q.ofHints}</td><td>${esc(q.met || '–')}</td></tr>`).join('')}</table>` : '<p style="margin:0">None yet.</p>'}</div>
 <h2>Everything that happened</h2>
 <div class="card"><table>${events}</table></div>
 <p class="foot">The editor blocks pasting from outside, text that arrives all at once, and typing sent by scripts. It notes very fast typing and time spent away from the page. These checks run on the student’s own device, so read this record as supporting evidence rather than proof.</p>
@@ -1769,7 +2452,7 @@ $('downloadReport').addEventListener('click', async () => {
   const result = await saveFile(`typing-record-${slug(name) || 'student'}-${day}.html`, buildReport());
   btn.disabled = false;
   if (result === 'saved') { toast('Report downloaded. Send that file to your teacher.'); log('info', 'Downloaded the typing report'); }
-  else if (result === 'declined') toast('Download cancelled.');
+  else if (result === 'declined') toast('Download canceled.');
   else if (result === 'busy') toast('A save prompt is already open.');
   else toast('Downloads don’t work here. Use Copy as text and paste it into an email instead.');
 });
