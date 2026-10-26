@@ -3,6 +3,11 @@
 A browser-based Python editor for beginners with turtle graphics, syntax highlighting,
 smart indentation, and paste blocking with a typing record for teachers.
 
+Layout: lessons, practice and reference on the left (the panel can be hidden), the
+editor in the middle, and the turtle drawing with the program's output underneath on the
+right. Keyboard shortcuts are behind the "?" button above the editor, starter programs are
+in the Lessons tab, and the Typing record opens from the page icon at the top right.
+
 Features:
 - Learn panel with six step-by-step lessons (printing, turtle movement, loops,
   color and pens, functions, if/else and random). Each step checks the student's
@@ -25,10 +30,32 @@ Features:
   what the turtle actually drew (lines, turns, closed shapes, fills, jumps). Steps pass
   when the concept is right; if values differ from the example (for example a smaller
   loop), the student still passes and gets a short note about the difference.
-- Downloadable typing report: students add their name in Typing record and click
+- Downloadable typing report: students open the Typing record (the page icon at the top right), add their name and click
   "Download report". They get a single .html file with their final code, a replay
   of the code being typed, a summary, completed lesson steps and a full event log.
   Students email it or upload it to the class page, and teachers open it in any browser.
+
+## Turtle commands without `t.`
+Students call turtle commands directly: `forward(100)`, `left(90)`, `color("red")`.
+Before running a turtle program, the app adds hidden setup lines that define these
+commands for one default turtle. That turtle is created the first time a command is used.
+Error line numbers are corrected automatically.
+
+- `t = Turtle()` and `t.forward(100)` still work, for extra turtles or older code.
+- `from turtle import *` and `done()` also work, so programs copied into Python on a
+  computer (for example IDLE) run there unchanged once those two lines are added.
+
+## Downloading code
+The download button above the editor saves the program as a `.py` file named after the
+student (for example `ada-lovelace.py`, or `main.py` if no name is set in the Typing
+record). The file starts with the student's name and the date. For turtle programs,
+`from turtle import *` is added at the top and `done()` at the end when they're missing,
+so the file runs unchanged in Python on a computer (for example IDLE). A comment in the
+file says what was added. Students can upload the file to Google Classroom or another
+class page, alongside or instead of the typing report.
+
+(`.py` downloads work on GitHub Pages. The preview inside Claude only allows certain file
+types, so there the button explains that code downloads work on the GitHub copy.)
 
 ## Practice problems
 The Practice tab makes turtle drawing problems from 17 templates with random numbers.
@@ -122,7 +149,12 @@ Then change the two `<script src="...">` tags in `index.html` to
   click "Start a new session" in the Typing record.
 - Downloaded reports go to the Files app and can be uploaded to Google Classroom.
 
-### Reports
+### Reports and code files
+- Student code is sandboxed inside Turtle Desk, but a downloaded `.py` file run in Python
+  on a computer (for example IDLE) has full access to that computer. Read a student's file
+  before running it. Turtle Desk programs only need `turtle`, `math`, `random` and `time`;
+  any other import (such as `os`, `shutil`, `subprocess`, `sys`, `socket`, `requests` or
+  `urllib`), or use of `open()`, `eval()` or `exec()`, is worth a closer look first.
 - Reports are HTML files made on the student's computer, so a student could edit one. Treat
   reports as evidence, not proof. An edited report can't reach the teacher's other files,
   but it could show fake content. Open reports in the browser like any student file, and
